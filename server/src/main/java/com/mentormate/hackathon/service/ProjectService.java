@@ -12,6 +12,8 @@ import java.util.stream.Collectors;
 
 /**
  * Represents the project service. Contains all of the business logic.
+ * 
+ * @author Polina Usheva
  */
 @Service
 @RequiredArgsConstructor

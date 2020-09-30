@@ -1,20 +1,21 @@
 package com.mentormate.hackathon.service.dto;
 
-import lombok.Getter;
+import io.swagger.v3.oas.annotations.media.Schema;
+import lombok.Data;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
 
 /**
  * This class represents the Project response dto
  *
  * @author Polina Usheva
  */
-@Getter
-@Setter
+@Data
 @NoArgsConstructor
 public class ProjectResponseDTO {
 
+    @Schema(name = "id", description = "Id of project")
     private Long id;
 
+    @Schema(name = "name", description = "Name of project")
     private String name;
 }
