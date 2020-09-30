@@ -12,7 +12,7 @@ import javax.persistence.MappedSuperclass;
 /**
  * This is basic class for each entity, because they must have id.
  * <p>
- * Created by Vladislav Penchev on 2020/09/10
+ * Created by Vladislav Penchev on 2020/09/30
  */
 @Data
 @MappedSuperclass
