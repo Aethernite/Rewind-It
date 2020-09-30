@@ -6,6 +6,7 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Table;
 import javax.validation.constraints.NotBlank;
@@ -26,5 +27,6 @@ public class Project extends BaseEntity {
 
     @NotNull
     @NotBlank
+    @Column(unique=true)
     private String name;
 }

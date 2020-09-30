@@ -1,7 +1,7 @@
 package com.mentormate.hackathon.service;
 
 import com.mentormate.hackathon.persistence.repository.ProjectRepository;
-import com.mentormate.hackathon.service.dto.ProjectDto;
+import com.mentormate.hackathon.service.dto.ProjectResponseDTO;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.data.domain.PageRequest;
@@ -27,11 +27,11 @@ public class ProjectService {
      * @param size the number of entities per page
      * @return list of response dto's
      */
-    public List<ProjectDto> findAll(int page, int size) {
+    public List<ProjectResponseDTO> findAll(int page, int size) {
 
         return projectRepository.findAll(PageRequest.of(page, size))
                 .stream()
-                .map(feature -> modelMapper.map(feature, ProjectDto.class))
+                .map(feature -> modelMapper.map(feature, ProjectResponseDTO.class))
                 .collect(Collectors.toUnmodifiableList());
 
     }

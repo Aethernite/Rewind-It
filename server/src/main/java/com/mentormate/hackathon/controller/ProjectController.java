@@ -1,7 +1,7 @@
 package com.mentormate.hackathon.controller;
 
 import com.mentormate.hackathon.service.ProjectService;
-import com.mentormate.hackathon.service.dto.ProjectDto;
+import com.mentormate.hackathon.service.dto.ProjectResponseDTO;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
@@ -43,7 +43,7 @@ public class ProjectController {
                     @ApiResponse(responseCode = "500", description = "Internal Server Error")
             })
     @GetMapping(params = {"page", "size"})
-    public ResponseEntity<List<ProjectDto>> getAllProjects(
+    public ResponseEntity<List<ProjectResponseDTO>> getAllProjects(
             @RequestParam("page") int page, @RequestParam("size") int size) {
 
         return new ResponseEntity<>(projectService.findAll(page, size), HttpStatus.OK);
