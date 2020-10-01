@@ -4,6 +4,7 @@ import com.mentormate.hackathon.controller.handler.exception.EntityAlreadyExists
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.AuthenticationException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -49,6 +50,17 @@ public class HttpExceptionHandlers {
     public ResponseEntity<Map<String, String>> entityAlreadyExists(Exception e) {
         log.info("Entity already exists.");
         return new ResponseEntity<>(Map.of("message", e.getMessage()), HttpStatus.CONFLICT);
+    }
+
+    /**
+     * Handle {@link AuthenticationException} when user is not authorized
+     *
+     * @param e current exception
+     * @return json with message about existing error
+     */
+    @ExceptionHandler(AuthenticationException.class)
+    public ResponseEntity<Map<String, String>> unauthorizedException(AuthenticationException e) {
+        return new ResponseEntity<>(Map.of("message", "Unauthorized"), HttpStatus.UNAUTHORIZED);
     }
 
 }
