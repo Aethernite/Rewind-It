@@ -6,13 +6,18 @@ import {Formik} from 'formik';
 import "../../../css/Animation.css";
 import classNames from 'classnames';
 import {RegisterValidationSchema} from "../../../validations/schemas/RegisterValidationSchema";
+import "../../../css/forms.scss";
 
 const Title = styled.h1`
   font-family: 'Lobster', cursive;
   letter-spacing: 0.2rem;
-  font-size: 3em;
-  //color: #f0eeee;
-  color: #2e2e2e;
+  font-size: 4rem;
+  transition: transform 0.2s;
+
+&:hover{
+    transform: scale(1.2);
+    cursor: pointer;
+}
 `
 
 const Label = styled.label`
@@ -75,9 +80,6 @@ export const RegisterPage = () => {
                 <div className="wave"/>
             </div>
             <Col className="d-flex justify-content-center">
-                {/*<div className="d-flex justify-content-center">*/}
-
-                {/*</div>*/}
                 <Formik
                     initialValues={{username: "", password: "", confirmPassword: ""}}
                     onSubmit={(values, actions) => {
@@ -89,7 +91,7 @@ export const RegisterPage = () => {
                         return (<Form className="myform shadow">
                             <div className="logo mb-3">
                                 <div className="col-md-12 text-center">
-                                    <Title>REWIND</Title>
+                                    <Title>Rewind</Title>
                                     <Header>REGISTER</Header>
                                 </div>
                             </div>
@@ -150,7 +152,9 @@ export const RegisterPage = () => {
                             </FormGroup>
                             <FormGroup className="form-group">
                                 <div className="col-md-12 text-center ">
-                                    <Button type="submit" className="btn-block btn-dark shadow-none">Register</Button>
+                                        <a href="#" className="btn-flip mb-3" data-back="Login" data-front="Login"></a>
+                                    </div>
+                                    {/*<Button type="submit" className="btn-block btn-dark shadow-none">Register</Button>*/}
                                     {/*<div className="svg-wrapper">*/}
                                     {/*    <svg height="40" width="150" xmlns="http://www.w3.org/2000/svg">*/}
                                     {/*        <rect id="shape" height="40" width="150"/>*/}
@@ -159,7 +163,7 @@ export const RegisterPage = () => {
                                     {/*        </div>*/}
                                     {/*    </svg>*/}
                                     {/*</div>*/}
-                                </div>
+
                             </FormGroup>
                             <FormGroup className="form-group">
                                 <p className="text-center">Already have account? <a href="#signin">Sign in here</a></p>
