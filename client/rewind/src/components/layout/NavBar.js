@@ -1,6 +1,5 @@
 import React from "react";
 import {Navbar, Nav} from "react-bootstrap";
-import rewind from "./rewind-logo.png"
 import {Link, NavLink} from "react-router-dom";
 import styled from "styled-components";
 
@@ -40,7 +39,7 @@ export const NavBar = () => {
                     </Nav.Link>
                     <Nav.Link style={{backgroundColor: "transparent", width: "12rem"}} eventKey="3" as={NavLink}
                               to="/timesheet/create" exact>
-                        All Timesheets
+                        Create Timesheets
                     </Nav.Link>
                     <Nav.Link style={{backgroundColor: "transparent", width: "12rem"}} eventKey="4" as={NavLink}
                               to="/timesheet/edit" exact>
