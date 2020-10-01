@@ -49,21 +49,6 @@ const Form = styled.form`
      }
 `;
 
-
-
-const Button = styled.button`
-  height: 2.50rem;
-  border-radius: 10px;
-  border-color: #FFFFFF;
-  outline: none;
-  border-style: none;
-  transition: border 0.3s ease;
-  &:hover{
-  border: 2px solid #81D9FF;
-  cursor: pointer;
-  }
-`
-
 const Header = styled.h2`
 font-family: 'Roboto', sans-serif;
 font-weight: 300;
