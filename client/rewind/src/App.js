@@ -1,12 +1,12 @@
 import React from 'react';
-import Background from './components/Background';
-import TimesheetTable from './components/TimeSheetTable';
+import {RegisterPage} from "./components/pages/auth/RegisterPage";
+import LoginPage from "./components/pages/auth/LoginPage";
 
 function App() {
     return (
         <div>
-            <Background />
-            <TimesheetTable />
+            <LoginPage/>
+            {/*<RegisterPage/>*/}
         </div>
     );
 }
