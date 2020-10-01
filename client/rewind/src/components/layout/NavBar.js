@@ -1,5 +1,5 @@
 import React from "react";
-import {Navbar, Nav, NavDropdown} from "react-bootstrap";
+import {Navbar, Nav} from "react-bootstrap";
 import rewind from "./rewind-logo.png"
 import {NavLink} from "react-router-dom";
 import styled from "styled-components";
