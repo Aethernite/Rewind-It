@@ -1,5 +1,6 @@
 package com.mentormate.hackathon.service;
 
+import com.mentormate.hackathon.controller.handler.exception.NotFoundException;
 import com.mentormate.hackathon.persistence.entity.Project;
 import com.mentormate.hackathon.persistence.entity.Task;
 import com.mentormate.hackathon.persistence.entity.TypeOfTask;
@@ -62,7 +63,7 @@ public class ProjectService {
 
         if (projectRepository.findAll().isEmpty()) {
 
-            Task learning = taskService.getByName(TypeOfTask.LEARNING);
+            Task learning = taskService.findByName(TypeOfTask.LEARNING);
 
             Project clientSatisfaction1 =
                     new Project("MentorMate L&D : Client Satisfaction & Communication Part 1 Training",
@@ -82,5 +83,29 @@ public class ProjectService {
             projectRepository.save(devcamp2);
 
         }
+    }
+
+    /**
+     * Returns a project, when searched by id.
+     *
+     * @param id the id of the wanted project
+     * @return the project entity
+     */
+    public Project find(Long id) {
+        return projectRepository
+                .findById(id)
+                .orElseThrow(() -> new NotFoundException(String.format("Project with id: %s - not found", id)));
+    }
+
+    /**
+     * Returns a project, when searched by name.
+     *
+     * @param name the name of the wanted project
+     * @return the project entity
+     */
+    public Project findByName(String name) {
+        return projectRepository
+                .findByName(name)
+                .orElseThrow(() -> new NotFoundException(String.format("Project with name: %s - not found ", name)));
     }
 }

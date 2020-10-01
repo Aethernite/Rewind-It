@@ -1,6 +1,7 @@
 package com.mentormate.hackathon.controller.handler;
 
 import com.mentormate.hackathon.controller.handler.exception.EntityAlreadyExists;
+import com.mentormate.hackathon.controller.handler.exception.IncorrectDataInput;
 import com.mentormate.hackathon.controller.handler.exception.NotFoundException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -53,7 +54,7 @@ public class HttpExceptionHandlers {
     }
 
     /**
-     * Handles a custom entity not found exception 
+     * Handles a custom entity not found exception
      *
      * @param e current exception
      * @return json with message about existing error
@@ -62,5 +63,17 @@ public class HttpExceptionHandlers {
     public ResponseEntity<Map<String, String>> entityNotFound(Exception e) {
         log.info("Entity not found.");
         return new ResponseEntity<>(Map.of("message", e.getMessage()), HttpStatus.NOT_FOUND);
+    }
+
+    /**
+     * Handles a custom incorrect data input exception
+     *
+     * @param e current exception
+     * @return json with message about existing error
+     */
+    @ExceptionHandler(IncorrectDataInput.class)
+    public ResponseEntity<Map<String, String>> badRequest(Exception e) {
+        log.info("Bad Request.");
+        return new ResponseEntity<>(Map.of("message", e.getMessage()), HttpStatus.BAD_REQUEST);
     }
 }
