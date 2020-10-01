@@ -16,6 +16,7 @@ const Icon = styled.i`
 display: inline-block;
 color: #2e2e2e;
 transition: transform 0.2s;
+float: right;
 
 
 &:hover{
