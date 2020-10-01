@@ -4,7 +4,6 @@ import com.mentormate.hackathon.persistence.entity.Task;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -14,7 +13,6 @@ import java.util.Set;
  *
  * @author Polina Usheva
  */
-@Slf4j
 @Data
 @NoArgsConstructor
 public class ProjectResponseDTO {
