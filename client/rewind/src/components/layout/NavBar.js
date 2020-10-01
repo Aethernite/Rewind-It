@@ -15,10 +15,6 @@ const Title = styled.div`
   margin-left: 0.2rem;
 `
 
-const CustomNavLink = styled(Nav.Link)`
-  background-color: black;
-`
-
 export const NavBar = () => {
     return (
         <Navbar bg="dark" variant="dark" expand="sm" collapseOnSelect>
