@@ -6,16 +6,13 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
-import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.ManyToMany;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.Table;
-import java.util.HashSet;
-import java.util.Set;
 
 /**
- * The Project entity class.
+ * The Task entity class.
  *
  * @author Polina Usheva
  */
@@ -24,12 +21,9 @@ import java.util.Set;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
 @EqualsAndHashCode(callSuper = true)
-@Table(name = "projects")
-public class Project extends BaseEntity {
-    
-    @Column(unique = true)
-    private String name;
+@Table(name = "tasks")
+public class Task extends BaseEntity{
 
-    @ManyToMany(fetch = FetchType.LAZY)
-    private Set<Task> tasks = new HashSet<>();
+    @Enumerated(EnumType.STRING)
+    private TypeOfTask name;
 }
