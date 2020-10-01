@@ -11,6 +11,5 @@ public enum TypeOfTask {
     ADMINISTRATIVE,
     TRAINING,
     RESEARCH,
-    BENCH_TIME,
-    MATERNITY_LEAVE;
+    BENCH_TIME;
 }

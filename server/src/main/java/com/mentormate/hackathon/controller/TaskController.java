@@ -46,6 +46,6 @@ public class TaskController {
     public ResponseEntity<List<TaskResponseDTO>> getAllTasks(
             @RequestParam("page") int page, @RequestParam("size") int size) {
 
-        return new ResponseEntity<>(taskService.findAll(page, size), HttpStatus.OK);
+        return new ResponseEntity<>(taskService.getAll(page, size), HttpStatus.OK);
     }
 }
