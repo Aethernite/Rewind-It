@@ -1,11 +1,11 @@
 import React from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import styled from 'styled-components';
-import { FormGroup, Button, Container, Col, Alert } from 'react-bootstrap';
+import { FormGroup, Container, Col, Alert } from 'react-bootstrap';
 import { useFormik } from 'formik';
-import * as Yup from 'yup';
 import classNames from 'classnames';
-
+import '../../../css/forms.scss';
+import {LoginValidationSchema} from "../../../validations/schemas/LoginValidationSchema";
 
 const FormLabel = styled.label`
 font-family: 'Roboto', sans-serif;
@@ -40,6 +40,12 @@ const Logo = styled.h1`
   font-family: 'Lobster', cursive;
   letter-spacing: 0.2rem;
   font-size: 4rem;
+  transition: transform 0.2s;
+
+&:hover{
+    transform: scale(1.2);
+    cursor: pointer;
+}
 `;
 
 const Header = styled.h2`
@@ -56,12 +62,6 @@ const LoginPage = () => {
     ///const dispatch = useDispatch();
     const error = "Error Invalid Login!";
 
-
-    const validationSchema = Yup.object({
-        username: Yup.string().required('Username is required'),
-        password: Yup.string().required('Password is required')
-    });
-
     const formik = useFormik({
         initialValues: {
             username: '',
@@ -71,19 +71,22 @@ const LoginPage = () => {
         onSubmit: (values) => {
             console.log("Submitting");
         },
-        validationSchema: validationSchema,
+        validationSchema: LoginValidationSchema,
     });
 
 
     return (
         <Container className="mt-5">
-            <Col className="col-md-5 mx-auto">
-                <div className="d-flex justify-content-center">
-                    <Logo>Rewind</Logo>
-                </div>
+            <div className="ocean">
+                <div className="wave" />
+                <div className="wave" />
+                <div className="wave" />
+            </div>
+            <Col className="d-flex justify-content-center">
                 <Form onSubmit={formik.handleSubmit}>
                     <div className="logo mb-3">
                         <div className="col-md-12 text-center">
+                            <Logo>Rewind</Logo>
                             <Header>LOGIN</Header>
                         </div>
                         {error && <Alert variant="danger">{error}</Alert>
@@ -117,14 +120,14 @@ const LoginPage = () => {
                         <p className="text-center">By signing up you accept our <a href="#TermsOfUse">Terms Of Use</a></p>
                     </FormGroup>
                     <div className="col-md-12 text-center ">
-                        <Button type="submit" className="btn-block btn-dark">Login</Button>
+                        <a href="#" class="btn-flip mb-3" data-back="Login" data-front="Login"></a>
                     </div>
                     <div className="form-group">
                         <p className="text-center">Don't have account? <a href="#signup">Sign up here</a></p>
                     </div>
                 </Form>
             </Col>
-        </Container>
+        </Container >
     );
 }
 export default LoginPage;
