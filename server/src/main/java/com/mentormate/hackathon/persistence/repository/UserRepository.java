@@ -15,9 +15,9 @@ import java.util.Optional;
 public interface UserRepository extends JpaRepository<User, Long> {
 
     /**
-     * @param username check if exists
+     * @param email check if exists
      * @return {@link User} that is saved in our database
      */
-    Optional<User> findByUsername(String username);
+    Optional<User> findByEmail(String email);
 }
 

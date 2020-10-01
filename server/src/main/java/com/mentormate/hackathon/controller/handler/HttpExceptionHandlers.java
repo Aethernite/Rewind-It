@@ -5,6 +5,7 @@ import com.mentormate.hackathon.controller.handler.exception.NotFoundException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.AuthenticationException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -53,14 +54,26 @@ public class HttpExceptionHandlers {
     }
 
     /**
+     * Handle {@link AuthenticationException} when user is not authorized
+     *
+     * @param e current exception
+     * @return json with message about existing error
+     */
+    @ExceptionHandler(AuthenticationException.class)
+    public ResponseEntity<Map<String, String>> unauthorizedException(AuthenticationException e) {
+        return new ResponseEntity<>(Map.of("message", "Unauthorized"), HttpStatus.UNAUTHORIZED);
+    }
+
+    /**
      * Handles a custom entity not found exception 
      *
      * @param e current exception
      * @return json with message about existing error
      */
     @ExceptionHandler(NotFoundException.class)
-    public ResponseEntity<Map<String, String>> entityNotFound(Exception e) {
+    public ResponseEntity<Map<String, String>> entityNotFound(NotFoundException e) {
         log.info("Entity not found.");
         return new ResponseEntity<>(Map.of("message", e.getMessage()), HttpStatus.NOT_FOUND);
     }
+
 }

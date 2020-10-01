@@ -33,8 +33,9 @@ public class User extends BaseEntity implements UserDetails {
 
     @NotBlank
     @Column(unique = true)
-    @Size(min = 5, max = 30)
-    private String username;
+    @Size(min = 5, max = 50)
+    private String email;
+
 
     @NotBlank
     @Size(min = 6, max = 80)
@@ -49,6 +50,16 @@ public class User extends BaseEntity implements UserDetails {
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return roles;
+    }
+
+    /**
+     * {@inheritDoc}
+     *
+     * @return email of user
+     */
+    @Override
+    public String getUsername() {
+        return email;
     }
 
     /**
