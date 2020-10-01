@@ -1,11 +1,11 @@
 import * as yup from "yup";
 
 const RegisterValidationSchema = yup.object({
-    username: yup
+    email: yup
         .string()
-        .min(5, "Username must be at least 5 characters!")
-        .max(30, "Username must not be longer than 30 characters!")
-        .required("Username is required!"),
+        .min(5, "Email must be at least 5 characters!")
+        .max(30, "Email must not be longer than 30 characters!")
+        .required("Email is required!"),
     password: yup
         .string()
         .min(6, "Password must be at least 6 characters!")
