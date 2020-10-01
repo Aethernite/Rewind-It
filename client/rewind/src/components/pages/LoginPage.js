@@ -99,13 +99,11 @@ const LoginPage = () => {
                 <div className="wave" />
                 <div className="wave" />
             </div>
-            <Col className="col-md-5 mx-auto">
-                <div className="d-flex justify-content-center">
-                    <Logo>Rewind</Logo>
-                </div>
+            <Col className="d-flex justify-content-center">
                 <Form onSubmit={formik.handleSubmit}>
                     <div className="logo mb-3">
                         <div className="col-md-12 text-center">
+                            <Logo>Rewind</Logo>
                             <Header>LOGIN</Header>
                         </div>
                         {error && <Alert variant="danger">{error}</Alert>
