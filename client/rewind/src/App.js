@@ -1,14 +1,17 @@
 import React from 'react';
-import Background from './components/Background';
-import TimesheetTable from './components/TimeSheetTable';
-import LoginPage from './components/pages/auth/LoginPage';
+import { NavBar } from "./components/layout/NavBar";
+import { BrowserRouter } from "react-router-dom";
+import { Content } from "./components/layout/Content";
+import { AppRoutes } from "./AppRoutes";
 
 function App() {
     return (
-        <div>
-            <Background />
-            <LoginPage />
-        </div>
+        <BrowserRouter>
+            <NavBar />
+            <Content>
+                <AppRoutes />
+            </Content>
+        </BrowserRouter>
     );
 }
 
