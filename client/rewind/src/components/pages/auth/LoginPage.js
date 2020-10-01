@@ -5,7 +5,11 @@ import { FormGroup, Container, Col, Alert } from 'react-bootstrap';
 import { useFormik } from 'formik';
 import classNames from 'classnames';
 import '../../../css/forms.scss';
+<<<<<<< HEAD
 import { LoginValidationSchema } from "../../../validations/schemas/LoginValidationSchema";
+=======
+import {LoginValidationSchema} from "../../../validations/schemas/LoginValidationSchema";
+>>>>>>> e6b5fce2d1545897eea074ead5d8f553a7025017
 
 const FormLabel = styled.label`
 font-family: 'Roboto', sans-serif;
@@ -64,7 +68,11 @@ const LoginPage = () => {
 
     const formik = useFormik({
         initialValues: {
+<<<<<<< HEAD
             email: '',
+=======
+            username: '',
+>>>>>>> e6b5fce2d1545897eea074ead5d8f553a7025017
             password: ''
         },
 
@@ -77,6 +85,14 @@ const LoginPage = () => {
 
     return (
         <Container className="mt-5">
+<<<<<<< HEAD
+=======
+            <div className="ocean">
+                <div className="wave" />
+                <div className="wave" />
+                <div className="wave" />
+            </div>
+>>>>>>> e6b5fce2d1545897eea074ead5d8f553a7025017
             <Col className="d-flex justify-content-center">
                 <Form onSubmit={formik.handleSubmit}>
                     <div className="logo mb-3">
@@ -88,6 +104,7 @@ const LoginPage = () => {
                         }
                     </div>
                     <FormGroup>
+<<<<<<< HEAD
                         <FormLabel className="form-label">Email</FormLabel>
                         <input
                             type="text"
@@ -95,6 +112,15 @@ const LoginPage = () => {
                             className={"form-control " + classNames(formik.touched.email && !formik.errors.email && 'is-valid', formik.touched.email && formik.errors.email && 'is-invalid')}
                             id="email"
                             placeholder="Enter Email"
+=======
+                        <FormLabel className="form-label">Username</FormLabel>
+                        <input
+                            type="text"
+                            name="username"
+                            className={"form-control " + classNames(formik.touched.username && !formik.errors.username && 'is-valid', formik.touched.username && formik.errors.username && 'is-invalid')}
+                            id="username"
+                            placeholder="Enter Username"
+>>>>>>> e6b5fce2d1545897eea074ead5d8f553a7025017
                             onBlur={formik.handleBlur}
                             onChange={formik.handleChange}
                         />
