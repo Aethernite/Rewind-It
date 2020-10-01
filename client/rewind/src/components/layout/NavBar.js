@@ -1,7 +1,7 @@
 import React from "react";
 import {Navbar, Nav} from "react-bootstrap";
 import rewind from "./rewind-logo.png"
-import {NavLink} from "react-router-dom";
+import {Link, NavLink} from "react-router-dom";
 import styled from "styled-components";
 
 const Container = styled.div`
@@ -18,34 +18,45 @@ const Title = styled.div`
 export const NavBar = () => {
     return (
         <Navbar bg="dark" variant="dark" expand="sm" collapseOnSelect>
-            <Navbar.Brand href="#home">
-                <Container>
-                    <img
-                        alt=""
-                        src={rewind}
-                        width="30"
-                        height="30"
-                        className="d-inline-block align-top"
-                    />{' '}
-                    <Title>REWIND</Title>
-                </Container>
-            </Navbar.Brand>
-            <Navbar.Toggle aria-controls="basic-navbar-nav" />
+            <Container>
+                <Navbar.Brand href="#home">
+                    <Link to={"/"} style={{textDecoration: "none", color: "white"}}>
+                        <i style={{color: "cornflowerblue", display: "inline-block"}}
+                           className="fa mt-1 fa-history"></i>
+                        <Title style={{display: "inline-block"}}>REWIND</Title>
+                    </Link>
+                </Navbar.Brand>
+            </Container>
+            <Navbar.Toggle aria-controls="basic-navbar-nav"/>
             <Navbar.Collapse>
                 <Nav fill variant="tabs" defaultActiveKey="1">
                     <Nav.Link style={{backgroundColor: "transparent", width: "12rem"}} eventKey="1" as={NavLink}
                               to="/login" exact>
-                        All Timesheets
+                        Login
                     </Nav.Link>
                     <Nav.Link style={{backgroundColor: "transparent", width: "12rem"}} eventKey="2" as={NavLink}
                               to="/register" exact>
-                        Create Timesheet
+                        Register
+                    </Nav.Link>
+                    <Nav.Link style={{backgroundColor: "transparent", width: "12rem"}} eventKey="3" as={NavLink}
+                              to="/timesheet/create" exact>
+                        All Timesheets
+                    </Nav.Link>
+                    <Nav.Link style={{backgroundColor: "transparent", width: "12rem"}} eventKey="4" as={NavLink}
+                              to="/timesheet/edit" exact>
+                        All Timesheets
                     </Nav.Link>
                 </Nav>
                 <Navbar.Collapse className="justify-content-end">
                     <Navbar.Text>
                         Signed in as: <a href="#logout">Mark Otto</a>
                     </Navbar.Text>
+                    <Nav fill variant="tabs" className="ml-2" defaultActiveKey="1">
+                        <Nav.Link style={{backgroundColor: "transparent", width: "6rem"}} eventKey="5" as={NavLink}
+                                  to="/" exact>
+                            Logout
+                        </Nav.Link>
+                    </Nav>
                 </Navbar.Collapse>
             </Navbar.Collapse>
         </Navbar>

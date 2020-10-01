@@ -60,13 +60,7 @@ export const CreateTimesheet = () => {
 
     return (
         <Container className="mt-5">
-            <div className="ocean">
-                <div className="wave"/>
-                <div className="wave"/>
-                <div className="wave"/>
-            </div>
-
-            <Col style={{marginTop: "20rem"}} className="d-flex justify-content-center">
+            <Col className="d-flex justify-content-center">
                 <Form>
                     <div className="col-md-12 text-center">
                         <Header>Create new timesheet:</Header>

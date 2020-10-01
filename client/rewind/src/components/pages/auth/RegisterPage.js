@@ -84,11 +84,6 @@ export const RegisterPage = () => {
 
     return (
         <Container className="mt-5">
-            <div className="ocean">
-                <div className="wave" />
-                <div className="wave" />
-                <div className="wave" />
-            </div>
             <Col className="d-flex justify-content-center">
                 <Form id="myform" className="myform shadow" onSubmit={formik.handleSubmit}>
                     <div className="logo mb-3">
