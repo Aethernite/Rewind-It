@@ -45,18 +45,21 @@ const StyledButton = styled(Button)`
 
 export const CreateTimesheet = () => {
 
-    let allMondays = [];
+    let fullWeek = [];
     let monday = moment()
         .day("Monday").subtract(7, 'd');
+    let sunday = moment()
+        .day("Sunday").add(7, 'd').subtract(7, 'd');
 
     for (let i = 0; i < 4; i++) {
-        allMondays.push(monday.format("DD/MM/YYYY"));
+        fullWeek.push(monday.format("DD/MM/YYYY") + " - " + sunday.format("DD/MM/YYYY"));
         monday.add(7, 'd');
+        sunday.add(7, 'd');
     }
 
-    allMondays.map((monday) => (
-        <Week week={monday} />
-    ))
+    // fullWeek.map((monday) => (
+    //     <Week week={monday}/>
+    // ))
 
     return (
         <Container className="mt-5">
@@ -68,7 +71,7 @@ export const CreateTimesheet = () => {
                     <div>
                         <select title="Choose week" className="form-control">
                             <option>Choose week...</option>
-                            {allMondays.map(monday => <Week week={monday} />)}
+                            {fullWeek.map(monday => <Week week={monday} />)}
                         </select>
                     </div>
                     <StyledButton>Save</StyledButton>
