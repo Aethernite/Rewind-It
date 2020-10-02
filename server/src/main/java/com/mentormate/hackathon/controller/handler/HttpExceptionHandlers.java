@@ -1,6 +1,7 @@
 package com.mentormate.hackathon.controller.handler;
 
 import com.mentormate.hackathon.controller.handler.exception.EntityAlreadyExists;
+import com.mentormate.hackathon.controller.handler.exception.ForbiddenException;
 import com.mentormate.hackathon.controller.handler.exception.NotFoundException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -74,6 +75,17 @@ public class HttpExceptionHandlers {
     public ResponseEntity<Map<String, String>> entityNotFound(NotFoundException e) {
         log.info("Entity not found.");
         return new ResponseEntity<>(Map.of("message", e.getMessage()), HttpStatus.NOT_FOUND);
+    }
+
+    /**
+     * Handle {@link ForbiddenException} when operation is forbidden
+     *
+     * @param e current exception
+     * @return json with message about existing error
+     */
+    @ExceptionHandler(ForbiddenException.class)
+    public ResponseEntity<Map<String, String>> forbiddenException(ForbiddenException e) {
+        return new ResponseEntity<>(Map.of("message", e.getMessage()), HttpStatus.FORBIDDEN);
     }
 
 }
