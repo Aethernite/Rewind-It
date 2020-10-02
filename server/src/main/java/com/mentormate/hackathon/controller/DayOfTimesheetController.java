@@ -51,7 +51,7 @@ public class DayOfTimesheetController {
 
         return new ResponseEntity<>(dayOfTimesheetService.getAll(page, size), HttpStatus.OK);
     }
-    
+
     /**
      * Gets a day of timesheet by id.
      *
