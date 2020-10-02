@@ -5,8 +5,11 @@ import {RegisterPage} from "./components/pages/auth/RegisterPage";
 import {CreateTimesheet} from "./components/pages/timesheets/CreateTimesheet";
 import TimesheetTable from "./components/TimeSheetTable";
 import Background from "./components/Background";
+import {useSelector} from "react-redux";
 
 export const AppRoutes = () => {
+    const user = useSelector((state) => state.auth.user);
+
     return (
         <>
         <Background/>
