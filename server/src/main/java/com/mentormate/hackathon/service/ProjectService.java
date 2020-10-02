@@ -84,6 +84,22 @@ public class ProjectService {
 
         }
     }
+    
+    /**
+     * Gets project by an id.
+     *
+     * @param id the project id
+     * @return the project response dto by id
+     */
+    public ProjectResponseDTO getById(Long id) {
+        log.info("Get project by id: {}", id);
+
+        return this.projectRepository
+                .findById(id)
+                .map(project -> this.modelMapper.map(project, ProjectResponseDTO.class))
+                .orElseThrow(() -> new NotFoundException(String.format("Project with id %s - not found", id)));
+
+    }
 
     /**
      * Returns a project, when searched by id.
@@ -108,4 +124,5 @@ public class ProjectService {
                 .findByName(name)
                 .orElseThrow(() -> new NotFoundException(String.format("Project with name: %s - not found ", name)));
     }
+
 }
