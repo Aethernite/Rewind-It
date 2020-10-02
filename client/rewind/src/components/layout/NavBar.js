@@ -2,7 +2,7 @@ import React, {useState} from "react";
 import {Navbar, Nav} from "react-bootstrap";
 import {Link, NavLink} from "react-router-dom";
 import styled from "styled-components";
-import { useDispatch } from 'react-redux';
+import {useDispatch, useSelector} from 'react-redux';
 import { logout } from '../../store/slices/auth';
 
 const Container = styled.div`
@@ -19,6 +19,11 @@ const Title = styled.div`
 export const NavBar = () => {
     const [activeKey, setActiveKey] = useState({activeKey: 1});
     const dispatch = useDispatch();
+    const userEmail = useSelector((state) => state?.auth?.user?.email);
+
+    const emailMatch = /([@][a-zA-Z]+[.][a-zA-Z]+)/;
+
+    let userNameFromEmail = userEmail.replace(emailMatch, "");
 
     const handleSelect = (selectedKey) => {
         if (!isNaN(selectedKey)) {
@@ -42,29 +47,29 @@ export const NavBar = () => {
             <Navbar.Toggle aria-controls="basic-navbar-nav"/>
             <Navbar.Collapse>
                 <Nav fill variant="tabs" activeKey={activeKey} style={{border: "none"}} onSelect={handleSelect}>
+                    {/*<Nav.Link style={{backgroundColor: "transparent", width: "12rem", borderRadius: "5px"}} eventKey={1} as={NavLink}*/}
+                    {/*          to="/login" exact>*/}
+                    {/*    Login*/}
+                    {/*</Nav.Link>*/}
+                    {/*<Nav.Link style={{backgroundColor: "transparent", width: "12rem", borderRadius: "5px"}} eventKey={2} as={NavLink}*/}
+                    {/*          to="/register" exact>*/}
+                    {/*    Register*/}
+                    {/*</Nav.Link>*/}
                     <Nav.Link style={{backgroundColor: "transparent", width: "12rem", borderRadius: "5px"}} eventKey={1} as={NavLink}
-                              to="/login" exact>
-                        Login
-                    </Nav.Link>
-                    <Nav.Link style={{backgroundColor: "transparent", width: "12rem", borderRadius: "5px"}} eventKey={2} as={NavLink}
-                              to="/register" exact>
-                        Register
-                    </Nav.Link>
-                    <Nav.Link style={{backgroundColor: "transparent", width: "12rem", borderRadius: "5px"}} eventKey={3} as={NavLink}
-                              to="/timesheet/create" exact>
-                        Create Timesheets
-                    </Nav.Link>
-                    <Nav.Link style={{backgroundColor: "transparent", width: "12rem", borderRadius: "5px"}} eventKey={4} as={NavLink}
                               to="/timesheet/edit" exact>
                         All Timesheets
+                    </Nav.Link>
+                    <Nav.Link style={{backgroundColor: "transparent", width: "12rem", borderRadius: "5px"}} eventKey={2} as={NavLink}
+                              to="/timesheet/create" exact>
+                        Create Timesheets
                     </Nav.Link>
                 </Nav>
                 <Navbar.Collapse className="justify-content-end">
                     <Navbar.Text>
-                        Signed in as: <a href="#logout">Mark Otto</a>
+                        Signed in as: <span style={{color: "white"}}>{userNameFromEmail}</span>
                     </Navbar.Text>
                     <Nav fill variant="tabs" className="ml-2" style={{border: "none"}} activeKey={activeKey} onSelect={handleSelect}>
-                        <Nav.Link onClick={() => dispatch(logout())} style={{backgroundColor: "transparent", width: "6rem", borderRadius: "5px"}} eventKey={5} as={NavLink}
+                        <Nav.Link onClick={() => dispatch(logout())} style={{backgroundColor: "transparent", width: "6rem", borderRadius: "5px"}} eventKey={3} as={NavLink}
                                   to="/" exact>
                             Logout
                         </Nav.Link>

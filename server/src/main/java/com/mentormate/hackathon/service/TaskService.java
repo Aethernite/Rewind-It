@@ -33,22 +33,21 @@ public class TaskService {
      * @return list of tasks
      */
     public List<Task> findAll() {
-
         return taskRepository.findAll();
     }
 
     /**
-     * Finds a task by a name
+     * Finds a task by an enum name
      *
      * @param name the name of the task
      * @return the task
      */
-    public Task getByName(TypeOfTask name) {
+    public Task findByName(TypeOfTask name) {
 
         Optional<Task> taskOptional = taskRepository.findByName(name);
 
         if (taskOptional.isEmpty()) {
-            throw new NotFoundException(String.format("Task with name %s not found ", name));
+            throw new NotFoundException(String.format("Task with name %s - not found ", name));
         }
 
         return taskOptional.get();
@@ -85,7 +84,35 @@ public class TaskService {
 
             Task research = new Task(TypeOfTask.RESEARCH);
             taskRepository.save(research);
-
         }
+    }
+
+    /**
+     * Returns a task, when searched by id.
+     *
+     * @param id the id of the wanted task
+     * @return the task entity
+     */
+    public Task find(Long id) {
+        return taskRepository
+                .findById(id)
+                .orElseThrow(() -> new NotFoundException(String.format("Task with id: %s - not found ", id)));
+    }
+
+    /**
+     * Finds a task by a name
+     *
+     * @param name the name of the task
+     * @return the task
+     */
+    public Task getByName(TypeOfTask name) {
+
+        Optional<Task> taskOptional = taskRepository.findByName(name);
+
+        if (taskOptional.isEmpty()) {
+            throw new NotFoundException(String.format("Task with name %s not found ", name));
+        }
+
+        return taskOptional.get();
     }
 }

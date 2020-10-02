@@ -51,8 +51,7 @@ public class ProjectService {
      * @return list of response dto's
      */
     public List<ProjectResponseDTO> findAll(int page, int size) {
-        log.info("Return all projects");
-        
+
         return projectRepository.findAll(PageRequest.of(page, size))
                 .stream()
                 .map(feature -> modelMapper.map(feature, ProjectResponseDTO.class))
@@ -66,7 +65,7 @@ public class ProjectService {
 
         if (projectRepository.findAll().isEmpty()) {
 
-            Task learning = taskService.getByName(TypeOfTask.LEARNING);
+            Task learning = taskService.findByName(TypeOfTask.LEARNING);
 
             Project clientSatisfaction1 =
                     new Project("MentorMate L&D : Client Satisfaction & Communication Part 1 Training",
@@ -87,7 +86,7 @@ public class ProjectService {
 
         }
     }
-
+    
     /**
      * Gets project by an id.
      *
@@ -96,11 +95,36 @@ public class ProjectService {
      */
     public ProjectResponseDTO getById(Long id) {
         log.info("Get project by id: {}", id);
-        
+
         return this.projectRepository
                 .findById(id)
                 .map(project -> this.modelMapper.map(project, ProjectResponseDTO.class))
                 .orElseThrow(() -> new NotFoundException(String.format("Project with id %s - not found", id)));
 
     }
+
+    /**
+     * Returns a project, when searched by id.
+     *
+     * @param id the id of the wanted project
+     * @return the project entity
+     */
+    public Project find(Long id) {
+        return projectRepository
+                .findById(id)
+                .orElseThrow(() -> new NotFoundException(String.format("Project with id: %s - not found", id)));
+    }
+
+    /**
+     * Returns a project, when searched by name.
+     *
+     * @param name the name of the wanted project
+     * @return the project entity
+     */
+    public Project findByName(String name) {
+        return projectRepository
+                .findByName(name)
+                .orElseThrow(() -> new NotFoundException(String.format("Project with name: %s - not found ", name)));
+    }
+
 }

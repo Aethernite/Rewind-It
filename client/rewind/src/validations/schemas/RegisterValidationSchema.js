@@ -3,6 +3,7 @@ import * as yup from "yup";
 const RegisterValidationSchema = yup.object({
     email: yup
         .string()
+        .email("You must enter a valid Email")
         .min(5, "Email must be at least 5 characters!")
         .max(30, "Email must not be longer than 30 characters!")
         .required("Email is required!"),
