@@ -126,5 +126,4 @@ public class ProjectService {
                 .findByName(name)
                 .orElseThrow(() -> new NotFoundException(String.format("Project with name: %s - not found ", name)));
     }
-
 }

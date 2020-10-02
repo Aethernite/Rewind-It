@@ -6,7 +6,7 @@ import com.mentormate.hackathon.persistence.entity.Task;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.util.Set;
+import java.util.List;
 
 /**
  * This class represents the Activity response dto
@@ -23,5 +23,5 @@ public class ActivityResponseDTO {
 
     private Task task;
 
-    private Set<DayOfTimesheet> timesheetDays;
+    private List<DayOfTimesheet> timesheetDays;
 }

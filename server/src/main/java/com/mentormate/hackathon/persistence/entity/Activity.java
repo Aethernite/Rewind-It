@@ -8,11 +8,12 @@ import lombok.NoArgsConstructor;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
-import java.util.Collection;
+import java.util.List;
 
 /**
  * The Activity entity class.
@@ -34,10 +35,8 @@ public class Activity extends BaseEntity {
     @OneToOne(cascade = {CascadeType.MERGE})
     @JoinColumn(name = "task_id", referencedColumnName = "id")
     private Task task;
-
-    @OneToMany(
-            cascade = CascadeType.MERGE,
-            orphanRemoval = true
-    )
-    private Collection<DayOfTimesheet> timesheetDays;
+    
+    @OneToMany(fetch = FetchType.LAZY)
+    @JoinColumn(name = "activity_id")
+    private List<DayOfTimesheet> timesheetDays;
 }

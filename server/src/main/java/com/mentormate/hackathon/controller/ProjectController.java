@@ -31,7 +31,7 @@ import java.util.List;
 public class ProjectController {
 
     private final ProjectService projectService;
-    
+
     /**
      * Get all response entities by page.
      *

@@ -1,35 +1,34 @@
-package com.mentormate.hackathon.persistence.entity;
+package com.mentormate.hackathon.service.dto;
 
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
 import com.mentormate.hackathon.utils.ParseDeserializer;
-import lombok.AccessLevel;
-import lombok.AllArgsConstructor;
 import lombok.Data;
-import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
+import org.springframework.validation.annotation.Validated;
 
-import javax.persistence.Entity;
-import javax.persistence.Table;
+import javax.validation.constraints.Size;
 import java.time.LocalDateTime;
 
 /**
- * The day of timesheet entity class.
+ * This class represents the Day of timesheets request dto
  *
  * @author Polina Usheva
  */
-@Entity
 @Data
-@NoArgsConstructor(access = AccessLevel.PROTECTED)
-@AllArgsConstructor
-@EqualsAndHashCode(callSuper = true)
-@Table(name = "dayOfTimesheet")
-public class DayOfTimesheet extends BaseEntity {
+@Validated
+@NoArgsConstructor
+public class DayOfTimesheetRequestDTO {
 
     @JsonSerialize(using = ToStringSerializer.class)
     @JsonDeserialize(using = ParseDeserializer.class)
     private LocalDateTime date;
 
+    @Size.List({
+            @Size(min = 0, message = "The hours must be greater than 0."),
+            @Size(max = 24, message = "The hours must be less than 24.")
+    })
     private Integer hours;
+
 }

@@ -3,6 +3,7 @@ package com.mentormate.hackathon.service;
 import com.mentormate.hackathon.controller.handler.exception.IncorrectDataInput;
 import com.mentormate.hackathon.controller.handler.exception.NotFoundException;
 import com.mentormate.hackathon.persistence.entity.Activity;
+import com.mentormate.hackathon.persistence.entity.DayOfTimesheet;
 import com.mentormate.hackathon.persistence.entity.Project;
 import com.mentormate.hackathon.persistence.entity.Task;
 import com.mentormate.hackathon.persistence.repository.ActivityRepository;
@@ -14,6 +15,7 @@ import org.modelmapper.ModelMapper;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -38,7 +40,8 @@ public class ActivityService {
     private final DayOfTimesheetService dayOfTimesheetService;
 
     /**
-     * Creates a new activity if the given task belongs to the given project.
+     * Creates a new activity if the given task belongs to the given project 
+     * and seeds the database with the given days of timesheets.
      *
      * @param activityRequestDTO the request dto
      * @return the saved response dto
@@ -47,14 +50,20 @@ public class ActivityService {
 
         Task task = taskService.find(activityRequestDTO.getTask().getId());
         Project project = projectService.find(activityRequestDTO.getProject().getId());
+
+        List<DayOfTimesheet> dayOfTimesheets = new ArrayList<>();
         
-        dayOfTimesheetService.validateDays(activityRequestDTO.getTimesheetDays());
+        activityRequestDTO.getTimesheetDays().forEach(timesheetDay -> {
+            DayOfTimesheet dayOfTimesheet = dayOfTimesheetService.create(timesheetDay);
+            dayOfTimesheets.add(dayOfTimesheet);
+        });
+
         validateProjectAndTaskNames(task, project, activityRequestDTO);
         taskBelongsToProject(task, project);
 
-        Activity activity = this.modelMapper.map(activityRequestDTO, Activity.class);
-
+        Activity activity = new Activity(project, task, dayOfTimesheets);
         this.activityRepository.save(activity);
+        
         log.info("Created activity with id {}!", activity.getId());
         return this.modelMapper.map(activity, ActivityResponseDTO.class);
     }
@@ -108,8 +117,14 @@ public class ActivityService {
 
         Task task = taskService.find(activityRequestDTO.getTask().getId());
         Project project = projectService.find(activityRequestDTO.getProject().getId());
-        
-        dayOfTimesheetService.validateDays(activityRequestDTO.getTimesheetDays());
+
+        List<DayOfTimesheet> dayOfTimesheets = new ArrayList<>();
+
+        activityRequestDTO.getTimesheetDays().forEach(timesheetDay -> {
+            DayOfTimesheet dayOfTimesheet = dayOfTimesheetService.create(timesheetDay);
+            dayOfTimesheets.add(dayOfTimesheet);
+        });
+
         validateProjectAndTaskNames(task, project, activityRequestDTO);
         taskBelongsToProject(task, project);
 
