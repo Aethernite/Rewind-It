@@ -1,5 +1,6 @@
 package com.mentormate.hackathon.service;
 
+import com.mentormate.hackathon.controller.handler.exception.IncorrectDataInput;
 import com.mentormate.hackathon.controller.handler.exception.NotFoundException;
 import com.mentormate.hackathon.persistence.entity.DayOfTimesheet;
 import com.mentormate.hackathon.persistence.repository.DayOfTimesheetRepository;
@@ -10,10 +11,9 @@ import org.modelmapper.ModelMapper;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
-import javax.annotation.PostConstruct;
-import java.time.LocalDate;
-import java.time.temporal.ChronoUnit;
 import java.util.List;
+import java.util.Optional;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 /**
@@ -46,31 +46,6 @@ public class DayOfTimesheetService {
     }
 
     /**
-     * Seed all days of timesheets in database.
-     */
-    @PostConstruct
-    protected void postConstruct() {
-        this.seedDaysOfTimesheets();
-    }
-
-    /**
-     * Seed all tasks in database
-     */
-    public void seedDaysOfTimesheets() {
-        if (dayOfTimesheetRepository.findAll().isEmpty()) {
-
-            LocalDate today = LocalDate.now();
-            
-            DayOfTimesheet dayOfTimesheet1 = new DayOfTimesheet(today,8);
-            dayOfTimesheetRepository.save(dayOfTimesheet1);
-
-            DayOfTimesheet dayOfTimesheet2 = new DayOfTimesheet(today.plus(1, ChronoUnit.DAYS),8);
-            dayOfTimesheetRepository.save(dayOfTimesheet2);
-
-        }
-    }
-
-    /**
      * Gets day of timesheet by an id.
      *
      * @param id the day of timesheet id
@@ -84,5 +59,28 @@ public class DayOfTimesheetService {
                 .map(dayOfTimesheet -> this.modelMapper.map(dayOfTimesheet, DayOfTimesheetResponseDTO.class))
                 .orElseThrow(() -> new NotFoundException(String.format("Day of timesheet with id %s - not found", id)));
 
+    }
+
+    /**
+     * Finds all of the days of timesheets
+     *
+     * @return list of tasks
+     */
+    public List<DayOfTimesheet> findAll() {
+        return dayOfTimesheetRepository.findAll();
+    }
+
+    public void validateDays(Set<DayOfTimesheet> timesheetDays) {
+
+        for (DayOfTimesheet dayOfTimesheet : timesheetDays) {
+            Optional<DayOfTimesheet> dayOfTimesheetOptional = dayOfTimesheetRepository.findById(dayOfTimesheet.getId());
+            if (dayOfTimesheetOptional.isEmpty()) {
+                throw new NotFoundException(String.format("Day of timesheet with id %s - not found", dayOfTimesheet.getId()));
+            }
+        }
+
+        if (timesheetDays.size() > 7) {
+            throw new IncorrectDataInput(String.format("Invalid number of days"));
+        }
     }
 }

@@ -15,6 +15,12 @@ import java.util.Optional;
 @Repository
 public interface TaskRepository extends JpaRepository<Task, Long> {
 
+    /**
+     * Finds a task by a enum type
+     *
+     * @param name the name of the task
+     * @return optional of the task
+     */
     Optional<Task> findByName(TypeOfTask name);
-
+    
 }
