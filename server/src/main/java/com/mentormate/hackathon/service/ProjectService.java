@@ -1,11 +1,13 @@
 package com.mentormate.hackathon.service;
 
+import com.mentormate.hackathon.controller.handler.exception.NotFoundException;
 import com.mentormate.hackathon.persistence.entity.Project;
 import com.mentormate.hackathon.persistence.entity.Task;
 import com.mentormate.hackathon.persistence.entity.TypeOfTask;
 import com.mentormate.hackathon.persistence.repository.ProjectRepository;
 import com.mentormate.hackathon.service.dto.ProjectResponseDTO;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
@@ -21,6 +23,7 @@ import java.util.stream.Collectors;
  *
  * @author Polina Usheva
  */
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class ProjectService {
@@ -48,7 +51,8 @@ public class ProjectService {
      * @return list of response dto's
      */
     public List<ProjectResponseDTO> findAll(int page, int size) {
-
+        log.info("Return all projects");
+        
         return projectRepository.findAll(PageRequest.of(page, size))
                 .stream()
                 .map(feature -> modelMapper.map(feature, ProjectResponseDTO.class))
@@ -82,5 +86,21 @@ public class ProjectService {
             projectRepository.save(devcamp2);
 
         }
+    }
+
+    /**
+     * Gets project by an id.
+     *
+     * @param id the project id
+     * @return the project response dto by id
+     */
+    public ProjectResponseDTO getById(Long id) {
+        log.info("Get project by id: {}", id);
+        
+        return this.projectRepository
+                .findById(id)
+                .map(project -> this.modelMapper.map(project, ProjectResponseDTO.class))
+                .orElseThrow(() -> new NotFoundException(String.format("Project with id %s - not found", id)));
+
     }
 }

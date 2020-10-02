@@ -9,10 +9,13 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.validation.constraints.Min;
+import javax.validation.constraints.NotNull;
 import java.util.List;
 
 /**
@@ -47,5 +50,23 @@ public class ProjectController {
             @RequestParam("page") int page, @RequestParam("size") int size) {
 
         return new ResponseEntity<>(projectService.findAll(page, size), HttpStatus.OK);
+    }
+
+    /**
+     * Gets a project by id.
+     *
+     * @param id the project id
+     * @return the project by id
+     */
+    @Operation(description = "This request is used for getting a project by id ")
+    @ApiResponses(
+            value = {
+                    @ApiResponse(responseCode = "200", description = "Returned the project successfully"),
+                    @ApiResponse(responseCode = "404", description = "Project not found"),
+                    @ApiResponse(responseCode = "500", description = "Internal Server Error")
+            })
+    @GetMapping("/{id}")
+    public ResponseEntity<ProjectResponseDTO> getProjectById(@PathVariable("id") @NotNull @Min(1) Long id) {
+        return ResponseEntity.ok(projectService.getById(id));
     }
 }
