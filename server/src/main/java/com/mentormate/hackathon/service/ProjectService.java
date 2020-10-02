@@ -1,11 +1,13 @@
 package com.mentormate.hackathon.service;
 
+import com.mentormate.hackathon.controller.handler.exception.NotFoundException;
 import com.mentormate.hackathon.persistence.entity.Project;
 import com.mentormate.hackathon.persistence.entity.Task;
 import com.mentormate.hackathon.persistence.entity.TypeOfTask;
 import com.mentormate.hackathon.persistence.repository.ProjectRepository;
 import com.mentormate.hackathon.service.dto.ProjectResponseDTO;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
@@ -21,6 +23,7 @@ import java.util.stream.Collectors;
  *
  * @author Polina Usheva
  */
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class ProjectService {
@@ -62,7 +65,7 @@ public class ProjectService {
 
         if (projectRepository.findAll().isEmpty()) {
 
-            Task learning = taskService.getByName(TypeOfTask.LEARNING);
+            Task learning = taskService.findByName(TypeOfTask.LEARNING);
 
             Project clientSatisfaction1 =
                     new Project("MentorMate L&D : Client Satisfaction & Communication Part 1 Training",
@@ -83,4 +86,45 @@ public class ProjectService {
 
         }
     }
+    
+    /**
+     * Gets project by an id.
+     *
+     * @param id the project id
+     * @return the project response dto by id
+     */
+    public ProjectResponseDTO getById(Long id) {
+        log.info("Get project by id: {}", id);
+
+        return this.projectRepository
+                .findById(id)
+                .map(project -> this.modelMapper.map(project, ProjectResponseDTO.class))
+                .orElseThrow(() -> new NotFoundException(String.format("Project with id %s - not found", id)));
+
+    }
+
+    /**
+     * Returns a project, when searched by id.
+     *
+     * @param id the id of the wanted project
+     * @return the project entity
+     */
+    public Project find(Long id) {
+        return projectRepository
+                .findById(id)
+                .orElseThrow(() -> new NotFoundException(String.format("Project with id: %s - not found", id)));
+    }
+
+    /**
+     * Returns a project, when searched by name.
+     *
+     * @param name the name of the wanted project
+     * @return the project entity
+     */
+    public Project findByName(String name) {
+        return projectRepository
+                .findByName(name)
+                .orElseThrow(() -> new NotFoundException(String.format("Project with name: %s - not found ", name)));
+    }
+
 }

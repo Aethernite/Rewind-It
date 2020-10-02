@@ -9,6 +9,8 @@ import { RegisterValidationSchema } from "../../../validations/schemas/RegisterV
 import "../../../css/forms.scss";
 import { useDispatch, useSelector } from 'react-redux';
 import { register } from '../../../store/slices/auth';
+import {Link} from "react-router-dom";
+import LoginPage from "./LoginPage";
 
 
 const Title = styled.h1`
@@ -92,13 +94,13 @@ export const RegisterPage = () => {
                             <Header>REGISTER</Header>
                         </div>
                     </div>
-                    {error &&
-                        <Alert variant="danger">{error}</Alert>
-                    }
+                    {/*{error &&*/}
+                    {/*    <Alert variant="danger">{error}</Alert>*/}
+                    {/*}*/}
                     <FormGroup className="form-group">
-                        <Label className="form-label">Email</Label>
                         {formik.touched.email && formik.errors.email &&
-                            <Alert variant="danger">{formik.errors.email}</Alert>}
+                        <Alert variant="danger">{formik.errors.email}</Alert>}
+                        <Label className="form-label">Email</Label>
                         <input type="text"
                             name="email"
                             className={"form-control " + classNames(formik.touched.email
@@ -114,9 +116,9 @@ export const RegisterPage = () => {
                         />
                     </FormGroup>
                     <FormGroup className="form-group">
-                        <Label className="form-label">Password</Label>
                         {formik.touched.password && formik.errors.password &&
-                            <Alert variant="danger">{formik.errors.password}</Alert>}
+                        <Alert variant="danger">{formik.errors.password}</Alert>}
+                        <Label className="form-label">Password</Label>
                         <input type="password"
                             name="password"
                             id="password"
@@ -131,9 +133,9 @@ export const RegisterPage = () => {
                             placeholder="Enter Password" />
                     </FormGroup>
                     <FormGroup className="form-group">
-                        <Label className="form-label">Confirm password</Label>
                         {formik.touched.confirmPassword && formik.errors.confirmPassword &&
-                            <Alert variant="danger">{formik.errors.confirmPassword}</Alert>}
+                        <Alert variant="danger">{formik.errors.confirmPassword}</Alert>}
+                        <Label className="form-label">Confirm password</Label>
                         <input type="password"
                             name="confirmPassword"
                             id="confirmPassword"
@@ -157,7 +159,7 @@ export const RegisterPage = () => {
                         </div>
                     </FormGroup>
                     <FormGroup className="form-group">
-                        <p className="text-center">Already have account? <a href="#signin">Sign in here</a></p>
+                        <p className="text-center">Already have account? <Link to="/login">Sign in here</Link></p>
                     </FormGroup>
                 </Form>
             </Col>

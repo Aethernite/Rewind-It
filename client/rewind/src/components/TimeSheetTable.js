@@ -14,12 +14,33 @@ font-family: "Roboto", sans-serif;
 background-color: #fff;
 `;
 
+
+
 export const TimesheetTable = () => {
 
     return (
         <Container className="mt-5">
             <Col className="d-flex justify-content-center">
                 <Table className="table" style={{ width: '1200px' }}>
+                    <thead style={{ height: '80px' }}>
+                        <tr style={{ height: '80px' }}>
+                            <th colSpan="11" className="h-100">
+                                <span style={{ verticalAlign: 'top' }}>Timesheet for 28/09/2020 - 03/10/2020</span>
+                                <div className="float-right">
+                                    <i class="far fa-eye mr-2 fa-2x" style={{ color: '#2e2e2e', transform: "translateY(5px)" }}></i>
+                                    <button type="button" class="btn btn-dark mr-3">VIEW</button>
+
+                                    <i class="far fa-edit mr-2 fa-2x" style={{ color: '#2e2e2e', transform: "translateY(5px)" }}></i>
+                                    <button type="button" class="btn btn-dark mr-3">EDIT</button>
+
+                                    <i class="far fa-save mr-2 fa-2x" style={{ color: '#2e2e2e', transform: "translateY(5px)" }}></i>
+                                    <button type="button" class="btn btn-dark mr-3">SAVE</button>
+
+                           Status: OPEN
+                           </div>
+                            </th>
+                        </tr>
+                    </thead>
                     <thead className="thead-dark">
                         <tr className="text-center">
                             <th scope="col" style={{ width: '60px' }}>#</th>
@@ -54,7 +75,7 @@ export const TimesheetTable = () => {
                     </tbody>
                 </Table>
             </Col>
-        </Container >
+        </Container>
     )
 };
 
