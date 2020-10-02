@@ -74,7 +74,7 @@ export const CreateTimesheet = () => {
                             {fullWeek.map(monday => <Week week={monday}/>)}
                         </select>
                     </div>
-                    <StyledButton>Save</StyledButton>
+                    <StyledButton>Next</StyledButton>
                 </Form>
             </Col>
         </Container>
