@@ -10,16 +10,27 @@ import {useSelector} from "react-redux";
 export const AppRoutes = () => {
     const user = useSelector((state) => state.auth.user);
 
-    return (
-        <>
-        <Background/>
-        <Switch>
-            <Route path="/login" exact component={LoginPage}/>
-            <Route path="/register" exact component={RegisterPage}/>
-            <Route path="/timesheet/create" exact component={CreateTimesheet}/>
-            <Route path="/timesheet/edit" exact component={TimesheetTable}/>
-            <Redirect to="/login"/>
-        </Switch>
-        </>
-    )
+    if (!user) {
+        return (
+            <>
+                <Background/>
+                <Switch>
+                    <Route path="/login" exact component={LoginPage}/>
+                    <Route path="/register" exact component={RegisterPage}/>
+                    <Redirect to="/login"/>
+                </Switch>
+            </>
+        )
+    } else {
+        return (
+            <>
+                <Background/>
+                <Switch>
+                    <Route path="/timesheet/create" exact component={CreateTimesheet}/>
+                    <Route path="/timesheet/edit" exact component={TimesheetTable}/>
+                    <Redirect to="/timesheet/edit"/>
+                </Switch>
+            </>
+        )
+    }
 }
