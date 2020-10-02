@@ -21,9 +21,11 @@ export const NavBar = () => {
     const dispatch = useDispatch();
 
     const handleSelect = (selectedKey) => {
-        // if (!isNaN(selectedKey)) {
-        //     setActiveKey({activeKey: 1})
-        // }
+        if (!isNaN(selectedKey)) {
+            setActiveKey({activeKey: 1})
+        }
+        console.log("active key:"+activeKey)
+        console.log("selected key:"+selectedKey)
 
         setActiveKey(selectedKey);
     }
@@ -32,7 +34,7 @@ export const NavBar = () => {
         <Navbar bg="dark" variant="dark" expand="sm" collapseOnSelect>
             <Container>
                 <Navbar.Brand href="#home">
-                    <Link to={"/"} style={{textDecoration: "none", color: "white"}}>
+                    <Link to={"/"} style={{textDecoration: "none", color: "white"}} onClick={handleSelect}>
                         <i style={{color: "cornflowerblue", display: "inline-block"}}
                            className="fa mt-1 fa-history"></i>
                         <Title style={{display: "inline-block"}}>REWIND</Title>
@@ -63,7 +65,7 @@ export const NavBar = () => {
                     <Navbar.Text>
                         Signed in as: <a href="#logout">Mark Otto</a>
                     </Navbar.Text>
-                    <Nav fill variant="tabs" className="ml-2" activeKey={1} onSelect={handleSelect}>
+                    <Nav fill variant="tabs" className="ml-2" activeKey={activeKey} onSelect={handleSelect}>
                         <Nav.Link onClick={() => dispatch(logout())} style={{backgroundColor: "transparent", width: "6rem"}} eventKey={5} as={NavLink}
                                   to="/" exact>
                             Logout
