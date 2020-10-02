@@ -1,7 +1,6 @@
 package com.mentormate.hackathon.controller;
 
 import com.mentormate.hackathon.service.AuthenticationService;
-import com.mentormate.hackathon.service.UserService;
 import com.mentormate.hackathon.service.dto.LoginRequestDTO;
 import com.mentormate.hackathon.service.dto.LoginResponseDTO;
 import com.mentormate.hackathon.service.dto.RegisterRequestDTO;
@@ -33,8 +32,6 @@ public class AuthenticationController {
 
     private final AuthenticationService authenticationService;
 
-    private final UserService userService;
-
     @Operation(summary = "login", description = "This request method login user", tags = {"Login"})
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Return user info"),
@@ -60,10 +57,10 @@ public class AuthenticationController {
     @Operation(summary = "logout", description = "This request method logout user.", tags = {"Logout"})
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "User is logout successfully"),
+            @ApiResponse(responseCode = "403", description = "Operation is forbidden"),
             @ApiResponse(responseCode = "500", description = "Internal Server Error")})
     @PostMapping("/logout")
     public ResponseEntity<Map<String, String>> logout(HttpServletRequest httpServletRequest) {
-        
         return ResponseEntity.ok(authenticationService.logout(httpServletRequest));
     }
 
