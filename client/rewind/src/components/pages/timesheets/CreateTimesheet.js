@@ -96,7 +96,7 @@ export const CreateTimesheet = () => {
                                 {fullWeek.map(monday => <Week week={monday} />)}
                             </select>
                         </div>
-                        <StyledButton disabled={formik.values.period == ''} type="submit">Save</StyledButton>
+                        <StyledButton disabled={formik.values.period == ''} type="submit">Next</StyledButton>
                     </Form>
                 </Col>
             </Container>

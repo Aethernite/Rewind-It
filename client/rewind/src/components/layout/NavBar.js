@@ -1,10 +1,9 @@
-import React, { useState } from "react";
-import { Navbar, Nav } from "react-bootstrap";
-import { Link, NavLink } from "react-router-dom";
+import React, {useState} from "react";
+import {Navbar, Nav} from "react-bootstrap";
+import {Link, NavLink} from "react-router-dom";
 import styled from "styled-components";
 import { useDispatch, useSelector } from 'react-redux';
 import { logout } from '../../store/slices/auth';
-import { nodeName } from "jquery";
 
 const Container = styled.div`
 display: flex;
@@ -56,12 +55,20 @@ export const NavBar = () => {
                     {/*          to="/register" exact>*/}
                     {/*    Register*/}
                     {/*</Nav.Link>*/}
-                    <Nav.Link style={{ backgroundColor: "transparent", borderRadius: "5px" }} eventKey={1} as={NavLink}
-                        to="/timesheet/edit" exact>
+                    {/*<Nav.Link style={{ backgroundColor: "transparent", borderRadius: "5px" }} eventKey={1} as={NavLink}*/}
+                    {/*    to="/timesheet/edit" exact>*/}
+                    {/*    All Timesheets*/}
+                    {/*</Nav.Link>*/}
+                    <Nav.Link style={{backgroundColor: "transparent", borderRadius: "5px" }} eventKey={1} as={NavLink}
+                              to="/timesheet/home" exact>
                         All Timesheets
                     </Nav.Link>
+                    {/*<Nav.Link style={{backgroundColor: "transparent", width: "12rem"}} eventKey={4} as={NavLink}*/}
+                    {/*          to="/timesheet/edit" exact>*/}
+                    {/*    All Timesheets*/}
+                    {/*</Nav.Link>*/}
                     <Nav.Link style={{ backgroundColor: "transparent", borderRadius: "5px" }} eventKey={2} as={NavLink}
-                        to="/timesheet/create" exact>
+                              to="/timesheet/create" exact>
                         Create Timesheets
                     </Nav.Link>
                 </Nav>
