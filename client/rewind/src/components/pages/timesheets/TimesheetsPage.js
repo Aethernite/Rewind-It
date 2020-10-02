@@ -68,7 +68,7 @@ export const TimesheetsPage = () => {
                     <tr>
                         <td>
                             <div className="mt-2">
-                                <option>Week 28/09/2020 - 03/10/2020</option>
+                                <option>Week 28/09/2020 - 04/10/2020</option>
                             </div>
                         </td>
                         <td>
@@ -87,19 +87,38 @@ export const TimesheetsPage = () => {
                     <tr>
                         <td>
                             <div className="mt-2">
-                                <option>Week 28/09/2020 - 03/10/2020</option>
+                                <option>Week 05/10/2020 - 11/10/2020</option>
                             </div>
                         </td>
                         <td>
                             <div className="mt-2">
-                                <span>Open</span>
+                                <span>Submitted</span>
                             </div>
                         </td>
                         <td>
                             <div style={{display: "flex"}}>
                                 <Button variant="outline-dark" style={{marginRight: "0.2rem"}}
-                                        className="form-control">Edit</Button>
-                                <Button variant="outline-dark" className="form-control">Delete</Button>
+                                        className="form-control">View</Button>
+                                <Button disabled={true} variant="outline-dark" className="form-control">Delete</Button>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <div className="mt-2">
+                                <option>Week 12/09/2020 - 18/10/2020</option>
+                            </div>
+                        </td>
+                        <td>
+                            <div className="mt-2">
+                                <span>Submitted</span>
+                            </div>
+                        </td>
+                        <td>
+                            <div style={{display: "flex"}}>
+                                <Button variant="outline-dark" style={{marginRight: "0.2rem"}}
+                                        className="form-control">View</Button>
+                                <Button disabled={true}  variant="outline-dark" className="form-control">Delete</Button>
                             </div>
                         </td>
                     </tr>
