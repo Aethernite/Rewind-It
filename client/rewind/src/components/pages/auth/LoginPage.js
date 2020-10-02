@@ -6,6 +6,8 @@ import { useFormik } from 'formik';
 import classNames from 'classnames';
 import '../../../css/forms.scss';
 import { LoginValidationSchema } from "../../../validations/schemas/LoginValidationSchema";
+import { useSelector, useDispatch } from 'react-redux';
+import { login } from '../../../store/slices/auth';
 
 const FormLabel = styled.label`
 font-family: 'Roboto', sans-serif;
@@ -57,10 +59,14 @@ letter-spacing: 0rem;
 
 const LoginPage = () => {
 
-    ///const error = useSelector(state => state.auth.error);
-    ///const isLoading = useSelector(state => state.auth.isLoading);
-    ///const dispatch = useDispatch();
-    const error = "Error Invalid Login!";
+    const error = useSelector(state => state.auth.error);
+    const isLoading = useSelector(state => state.auth.isLoading);
+    const dispatch = useDispatch();
+    const submit = React.useRef();
+
+    const handleSubmit = () => {
+        submit.current.click();
+    }
 
     const formik = useFormik({
         initialValues: {
@@ -69,7 +75,7 @@ const LoginPage = () => {
         },
 
         onSubmit: (values) => {
-            console.log("Submitting");
+            dispatch(login(values));
         },
         validationSchema: LoginValidationSchema,
     });
@@ -78,7 +84,7 @@ const LoginPage = () => {
     return (
         <Container className="mt-5">
             <Col className="d-flex justify-content-center">
-                <Form onSubmit={formik.handleSubmit}>
+                <Form onSubmit={formik.handleSubmit} id="myform">
                     <div className="logo mb-3">
                         <div className="col-md-12 text-center">
                             <Logo>Rewind</Logo>
@@ -115,7 +121,8 @@ const LoginPage = () => {
                         <p className="text-center">By signing up you accept our <a href="#TermsOfUse">Terms Of Use</a></p>
                     </FormGroup>
                     <div className="col-md-12 text-center ">
-                        <a href="#" class="btn-flip mb-3" data-back="Login" data-front="Login"></a>
+                        <a onClick={handleSubmit} class="btn-flip mb-3" data-back="Login" data-front="Login"></a>
+                        <button ref={submit} form="myform" type="submit" style={{ display: 'none' }}></button>
                     </div>
                     <div className="form-group">
                         <p className="text-center">Don't have account? <a href="#signup">Sign up here</a></p>
