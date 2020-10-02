@@ -1,8 +1,8 @@
 import React from "react";
-import {Col, Container, Button} from "react-bootstrap";
+import { Col, Container, Button } from "react-bootstrap";
 import styled from "styled-components";
 import moment from "moment";
-import {Week} from "../../common/Week";
+import { Week } from "../../common/Week";
 import "../../../css/forms.scss"
 
 const Form = styled.form`
@@ -55,7 +55,7 @@ export const CreateTimesheet = () => {
     }
 
     allMondays.map((monday) => (
-        <Week week={monday}/>
+        <Week week={monday} />
     ))
 
     return (
@@ -68,7 +68,7 @@ export const CreateTimesheet = () => {
                     <div>
                         <select title="Choose week" className="form-control">
                             <option>Choose week...</option>
-                            {allMondays.map(monday => <Week week={monday}/>)}
+                            {allMondays.map(monday => <Week week={monday} />)}
                         </select>
                     </div>
                     <StyledButton>Save</StyledButton>

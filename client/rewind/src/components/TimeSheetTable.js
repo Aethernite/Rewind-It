@@ -17,7 +17,7 @@ background-color: #fff;
 
 
 export const TimesheetTable = () => {
-
+    const total = 0;
     return (
         <Container className="mt-5">
             <Col className="d-flex justify-content-center">
@@ -57,9 +57,7 @@ export const TimesheetTable = () => {
                         </tr>
                     </thead>
                     <tbody className="text-center">
-                        <TimesheetRow></TimesheetRow>
-                        <TimesheetRow></TimesheetRow>
-                        <TimesheetRow></TimesheetRow>
+                        <TimesheetRow total={(total) => console.log(total)}></TimesheetRow>
                         <tr>
                             <td></td>
                             <td colSpan={2} style={{ textAlign: 'left', fontWeight: '500' }}>Total</td>
