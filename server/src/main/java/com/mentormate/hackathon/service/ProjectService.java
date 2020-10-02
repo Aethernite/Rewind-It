@@ -7,6 +7,7 @@ import com.mentormate.hackathon.persistence.entity.TypeOfTask;
 import com.mentormate.hackathon.persistence.repository.ProjectRepository;
 import com.mentormate.hackathon.service.dto.ProjectResponseDTO;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
@@ -22,6 +23,7 @@ import java.util.stream.Collectors;
  *
  * @author Polina Usheva
  */
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class ProjectService {

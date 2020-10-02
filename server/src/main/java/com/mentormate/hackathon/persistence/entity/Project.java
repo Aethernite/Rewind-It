@@ -7,7 +7,6 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
-import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.ManyToMany;
@@ -30,7 +29,6 @@ import java.util.Set;
 public class Project extends BaseEntity {
 
     @NotNull(message = "Project name must be valid.")
-    @Column(unique = true)
     private String name;
 
     @JsonIgnore

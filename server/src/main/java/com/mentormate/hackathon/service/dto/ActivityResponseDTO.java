@@ -1,9 +1,12 @@
 package com.mentormate.hackathon.service.dto;
 
+import com.mentormate.hackathon.persistence.entity.DayOfTimesheet;
 import com.mentormate.hackathon.persistence.entity.Project;
 import com.mentormate.hackathon.persistence.entity.Task;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+
+import java.util.Set;
 
 /**
  * This class represents the Activity response dto
@@ -19,4 +22,6 @@ public class ActivityResponseDTO {
     private Project project;
 
     private Task task;
+
+    private Set<DayOfTimesheet> timesheetDays;
 }

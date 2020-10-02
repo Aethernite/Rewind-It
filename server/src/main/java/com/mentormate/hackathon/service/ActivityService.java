@@ -35,6 +35,8 @@ public class ActivityService {
 
     private final ProjectService projectService;
 
+    private final DayOfTimesheetService dayOfTimesheetService;
+
     /**
      * Creates a new activity if the given task belongs to the given project.
      *
@@ -45,7 +47,8 @@ public class ActivityService {
 
         Task task = taskService.find(activityRequestDTO.getTask().getId());
         Project project = projectService.find(activityRequestDTO.getProject().getId());
-
+        
+        dayOfTimesheetService.validateDays(activityRequestDTO.getTimesheetDays());
         validateProjectAndTaskNames(task, project, activityRequestDTO);
         taskBelongsToProject(task, project);
 
@@ -105,7 +108,8 @@ public class ActivityService {
 
         Task task = taskService.find(activityRequestDTO.getTask().getId());
         Project project = projectService.find(activityRequestDTO.getProject().getId());
-
+        
+        dayOfTimesheetService.validateDays(activityRequestDTO.getTimesheetDays());
         validateProjectAndTaskNames(task, project, activityRequestDTO);
         taskBelongsToProject(task, project);
 
@@ -145,8 +149,8 @@ public class ActivityService {
     /**
      * Checks whether the project and task names match with the given id.
      *
-     * @param task the given task
-     * @param project the given project
+     * @param task       the given task
+     * @param project    the given project
      * @param requestDTO the request activity dto
      */
     private void validateProjectAndTaskNames(Task task, Project project,
