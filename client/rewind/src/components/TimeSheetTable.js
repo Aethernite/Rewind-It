@@ -4,6 +4,8 @@ import { Container, Col } from 'react-bootstrap';
 import '@fortawesome/fontawesome-free/css/all.min.css'
 import styled from 'styled-components';
 import TimesheetRow from './TimesheetRow';
+import { useDispatch } from 'react-redux';
+import { deleteCurrentTimesheet } from '../store/slices/timesheet';
 
 const Table = styled.table`
 border: 1px solid #2e2e2e;
@@ -16,8 +18,8 @@ background-color: #fff;
 
 
 
-export const TimesheetTable = () => {
-
+export const TimesheetTable = ({ from, to }) => {
+    const dispatch = useDispatch();
     return (
         <Container className="mt-5">
             <Col className="d-flex justify-content-center">
@@ -25,8 +27,11 @@ export const TimesheetTable = () => {
                     <thead style={{ height: '80px' }}>
                         <tr style={{ height: '80px' }}>
                             <th colSpan="11" className="h-100">
-                                <span style={{ verticalAlign: 'top' }}>Timesheet for 28/09/2020 - 03/10/2020</span>
+                                <span style={{ verticalAlign: 'top' }}>Timesheet for {from} - {to}</span>
                                 <div className="float-right">
+                                    <i class="far fa-trash-alt mr-2 fa-2x" style={{ color: '#2e2e2e', transform: "translateY(5px)" }}></i>
+                                    <button type="button" class="btn btn-dark mr-3" onClick={() => dispatch(deleteCurrentTimesheet())}>DELETE</button>
+
                                     <i class="far fa-eye mr-2 fa-2x" style={{ color: '#2e2e2e', transform: "translateY(5px)" }}></i>
                                     <button type="button" class="btn btn-dark mr-3">VIEW</button>
 
@@ -57,8 +62,6 @@ export const TimesheetTable = () => {
                         </tr>
                     </thead>
                     <tbody className="text-center">
-                        <TimesheetRow></TimesheetRow>
-                        <TimesheetRow></TimesheetRow>
                         <TimesheetRow></TimesheetRow>
                         <tr>
                             <td></td>

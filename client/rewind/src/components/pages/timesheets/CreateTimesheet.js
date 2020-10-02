@@ -1,9 +1,13 @@
 import React from "react";
-import {Col, Container, Button} from "react-bootstrap";
+import { Col, Container, Button } from "react-bootstrap";
 import styled from "styled-components";
 import moment from "moment";
-import {Week} from "../../common/Week";
+import { Week } from "../../common/Week";
 import "../../../css/forms.scss"
+import { useFormik } from 'formik';
+import { useDispatch, useSelector } from 'react-redux';
+import { createTimesheet } from "../../../store/slices/timesheet";
+import { Timesheet } from '../../Timesheet';
 
 const Form = styled.form`
  position: relative;
@@ -61,22 +65,46 @@ export const CreateTimesheet = () => {
     //     <Week week={monday}/>
     // ))
 
-    return (
-        <Container className="mt-5">
-            <Col className="d-flex justify-content-center">
-                <Form>
-                    <div className="col-md-12 text-center">
-                        <Header>Create new timesheet:</Header>
-                    </div>
-                    <div>
-                        <select title="Choose week" className="form-control">
-                            <option>Choose week...</option>
-                            {fullWeek.map(monday => <Week week={monday}/>)}
-                        </select>
-                    </div>
-                    <StyledButton>Next</StyledButton>
-                </Form>
-            </Col>
-        </Container>
-    )
+    const dispatch = useDispatch();
+
+    const formik = useFormik({
+        initialValues: {
+            period: ''
+        },
+
+        onSubmit: (values) => {
+            const splitted = values.period.split(" - ");
+            const from = splitted[0];
+            const to = splitted[1];
+            dispatch(createTimesheet({ from, to }));
+        },
+    });
+
+    const timesheet = useSelector(state => state.timesheet.timesheet);
+    if (!timesheet) {
+        return (
+            <Container className="mt-5">
+                <Col className="d-flex justify-content-center">
+                    <Form onSubmit={formik.handleSubmit}>
+                        <div className="col-md-12 text-center">
+                            <Header>Create new timesheet:</Header>
+                        </div>
+
+                        <div>
+                            <select name="period" title="Choose week" className="form-control" onBlur={formik.handleBlur} onChange={formik.handleChange}>
+                                <option value=''>Choose week...</option>
+                                {fullWeek.map(monday => <Week week={monday} />)}
+                            </select>
+                        </div>
+                        <StyledButton disabled={formik.values.period == ''} type="submit">Save</StyledButton>
+                    </Form>
+                </Col>
+            </Container>
+        )
+    }
+    else {
+        return (
+            <Timesheet from={timesheet.from} to={timesheet.to}></Timesheet>
+        );
+    }
 }
