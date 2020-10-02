@@ -2,6 +2,8 @@ import React, {useState} from "react";
 import {Navbar, Nav} from "react-bootstrap";
 import {Link, NavLink} from "react-router-dom";
 import styled from "styled-components";
+import { useDispatch } from 'react-redux';
+import { logout } from '../../store/slices/auth';
 
 const Container = styled.div`
 display: flex;
@@ -16,6 +18,7 @@ const Title = styled.div`
 
 export const NavBar = () => {
     const [activeKey, setActiveKey] = useState({activeKey: 1});
+    const dispatch = useDispatch();
 
     const handleSelect = (selectedKey) => {
         // if (!isNaN(selectedKey)) {
@@ -29,7 +32,7 @@ export const NavBar = () => {
         <Navbar bg="dark" variant="dark" expand="sm" collapseOnSelect>
             <Container>
                 <Navbar.Brand href="#home">
-                    <Link to={"/"} style={{textDecoration: "none", color: "white"}} onClick={handleSelect}>
+                    <Link to={"/"} style={{textDecoration: "none", color: "white"}}>
                         <i style={{color: "cornflowerblue", display: "inline-block"}}
                            className="fa mt-1 fa-history"></i>
                         <Title style={{display: "inline-block"}}>REWIND</Title>
@@ -61,7 +64,7 @@ export const NavBar = () => {
                         Signed in as: <a href="#logout">Mark Otto</a>
                     </Navbar.Text>
                     <Nav fill variant="tabs" className="ml-2" activeKey={1} onSelect={handleSelect}>
-                        <Nav.Link style={{backgroundColor: "transparent", width: "6rem"}} eventKey={5} as={NavLink}
+                        <Nav.Link onClick={() => dispatch(logout())} style={{backgroundColor: "transparent", width: "6rem"}} eventKey={5} as={NavLink}
                                   to="/" exact>
                             Logout
                         </Nav.Link>

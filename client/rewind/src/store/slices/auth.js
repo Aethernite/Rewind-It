@@ -1,7 +1,6 @@
 import { createSlice } from '@reduxjs/toolkit';
 import * as api from '../../api/AuthQueries';
 
-
 const initialState = {
     user: null,
     isLoading: false,
@@ -68,7 +67,6 @@ const { reducer: authReducer, actions } = createSlice({
 export const register = ({ email, password }) => {
     return async (dispatch, getState) => {
         const isLoading = getState().auth.isLoading;
-        console.log("REGISTER");
         if (isLoading) {
             return
         }
@@ -79,6 +77,42 @@ export const register = ({ email, password }) => {
             dispatch(actions.registerSuccess(user));
         } catch (err) {
             dispatch(actions.registerFailure(err?.response?.data?.message));
+        }
+    }
+
+};
+
+export const login = ({ email, password }) => {
+    return async (dispatch, getState) => {
+        const isLoading = getState().auth.isLoading;
+        if (isLoading) {
+            return
+        }
+
+        try {
+            dispatch(actions.authStart());
+            const user = await api.login({ email, password });
+            dispatch(actions.authSuccess(user));
+        } catch (err) {
+            dispatch(actions.authFailure(err?.response?.data?.message));
+        }
+    }
+
+};
+
+export const logout = () => {
+    return async (dispatch, getState) => {
+        const isLoading = getState().auth.isLoading;
+        if (isLoading) {
+            return
+        }
+
+        try {
+            dispatch(actions.logoutStart());
+            await api.logout();
+            dispatch(actions.logoutSuccess());
+        } catch (err) {
+            dispatch(actions.logoutFailure(err?.response?.data?.message));
         }
     }
 
