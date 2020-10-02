@@ -82,17 +82,17 @@ public class ActivityController {
      * @param activityRequestDTO the request
      * @return the response entity
      */
-    @Operation(description = "This request is used for creating activities ")
-    @ApiResponses(
-            value = {
-                    @ApiResponse(responseCode = "201", description = "Activity is created successfully"),
-                    @ApiResponse(responseCode = "400", description = "Incorrect request body"),
-                    @ApiResponse(responseCode = "500", description = "Internal Server Error")
-            })
-    @PostMapping
-    public ResponseEntity<ActivityResponseDTO> createActivity(@Valid @RequestBody ActivityRequestDTO activityRequestDTO) {
-        return new ResponseEntity<>(this.activityService.create(activityRequestDTO), HttpStatus.CREATED);
-    }
+//    @Operation(description = "This request is used for creating activities ")
+//    @ApiResponses(
+//            value = {
+//                    @ApiResponse(responseCode = "201", description = "Activity is created successfully"),
+//                    @ApiResponse(responseCode = "400", description = "Incorrect request body"),
+//                    @ApiResponse(responseCode = "500", description = "Internal Server Error")
+//            })
+//    @PostMapping
+//    public ResponseEntity<ActivityResponseDTO> createActivity(@Valid @RequestBody ActivityRequestDTO activityRequestDTO) {
+//        return new ResponseEntity<>(this.activityService.create(activityRequestDTO), HttpStatus.CREATED);
+//    }
 
     /**
      * Delete an activity by id.

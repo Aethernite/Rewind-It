@@ -43,7 +43,7 @@ public class ActivityService {
      * @param activityRequestDTO the request dto
      * @return the saved response dto
      */
-    public ActivityResponseDTO create(ActivityRequestDTO activityRequestDTO) {
+    public Activity create(ActivityRequestDTO activityRequestDTO) {
 
         Task task = taskService.find(activityRequestDTO.getTask().getId());
         Project project = projectService.find(activityRequestDTO.getProject().getId());
@@ -54,9 +54,9 @@ public class ActivityService {
 
         Activity activity = this.modelMapper.map(activityRequestDTO, Activity.class);
 
-        this.activityRepository.save(activity);
         log.info("Created activity with id {}!", activity.getId());
-        return this.modelMapper.map(activity, ActivityResponseDTO.class);
+        return this.activityRepository.save(activity);
+//        return this.modelMapper.map(activity, ActivityResponseDTO.class);
     }
 
     /**
