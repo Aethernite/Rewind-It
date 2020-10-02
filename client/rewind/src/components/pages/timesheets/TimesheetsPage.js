@@ -49,7 +49,6 @@ export const TimesheetsPage = () => {
                     <thead style={{height: '80px'}}>
                     <tr style={{height: '80px'}}>
                         <th colSpan="11" className="h-100">
-                            {/*<span style={{ verticalAlign: 'top' }}>Timesheet for 28/09/2020 - 03/10/2020</span>*/}
                             <div className="col-md-12 text-center">
                                 <Header>Your Timesheets:</Header>
                             </div>
@@ -61,7 +60,6 @@ export const TimesheetsPage = () => {
                         <th scope="col" style={{width: '560px'}}>Week</th>
                         <th scope="col" style={{width: '140px'}}>Status</th>
                         <th scope="col" style={{width: '140px'}}>Options</th>
-                        {/*<th scope="col" style={{ width: '140px' }}>Options</th>*/}
                     </tr>
                     </thead>
                     <tbody className="text-center">
