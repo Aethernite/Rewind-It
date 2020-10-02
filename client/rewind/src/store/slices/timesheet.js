@@ -2,24 +2,10 @@ import { createSlice } from '@reduxjs/toolkit';
 import * as api from '../../api/AuthQueries';
 
 const initialState = {
-    timesheet: [{
-        timesheetRows: [{
-            project: null,
-            task: null,
-            monday: 0,
-            tuesday: 0,
-            wednesday: 0,
-            thursday: 0,
-            friday: 0,
-            saturday: 0,
-            sunday: 0,
-        }
-        ]
-    },
-        rows
-    ],
-    iscreating,
-    creationError,
+    timesheet: null,
+    error: null,
+    isCreating: false,
+    isDeleting: false,
 };
 
 const { reducer: timesheetReducer, actions } = createSlice({
@@ -31,12 +17,19 @@ const { reducer: timesheetReducer, actions } = createSlice({
         },
         createTimesheetSuccess: (state, action) => {
             state.isCreating = false;
-            state.timesheet.push(action.payload);
+            state.timesheet = action.payload;
             state.creationError = null;
         },
         createPostFailure: (state, action) => {
             state.isCreating = false;
             state.creationError = action.payload;
+        },
+        deleteCurrentTimesheetStart: (state) => {
+            state.isDeleting = true;
+        },
+        deleteCurrentTimesheetSuccess: (state) => {
+            state.isDeleting = false;
+            state.timesheet = null;
         },
 
         // authStart: (state) => {
@@ -91,61 +84,21 @@ const { reducer: timesheetReducer, actions } = createSlice({
 
 //Actions
 
-export const createTimesheet = (values) => {
-    return async (dispatch, getState) => {
-
-        try {
-            dispatch(actions.createTimesheetStart());
-            //const user = await api.register({ email, password });
-
-            dispatch(actions.createTimesheetSuccess(user));
-        } catch (err) {
-            dispatch(actions.registerFailure(err?.response?.data?.message));
-        }
-    }
-
-};
-
-export const login = ({ email, password }) => {
-    return async (dispatch, getState) => {
-        const isLoading = getState().auth.isLoading;
-        if (isLoading) {
-            return
-        }
-
-        try {
-            dispatch(actions.authStart());
-            const user = await api.login({ email, password });
-            dispatch(actions.authSuccess(user));
-        } catch (err) {
-            dispatch(actions.authFailure(err?.response?.data?.message));
-        }
-    }
-
-};
-
-export const logout = () => {
-    return async (dispatch, getState) => {
-        const isLoading = getState().auth.isLoading;
-        if (isLoading) {
-            return
-        }
-
-        try {
-            dispatch(actions.logoutStart());
-            await api.logout();
-            dispatch(actions.logoutSuccess());
-        } catch (err) {
-            dispatch(actions.logoutFailure(err?.response?.data?.message));
-        }
-    }
-
-};
-
-export const clearErrors = () => {
+export const createTimesheet = ({ from, to }) => {
     return async (dispatch) => {
-        dispatch(actions.clearErrors());
+        dispatch(actions.createTimesheetStart());
+        const timesheet = { from: from, to: to };
+        dispatch(actions.createTimesheetSuccess(timesheet));
     }
-}
 
-export { authReducer };
+};
+
+export const deleteCurrentTimesheet = () => {
+    return async (dispatch) => {
+        dispatch(actions.deleteCurrentTimesheetStart());
+        dispatch(actions.deleteCurrentTimesheetSuccess());
+    }
+
+};
+
+export { timesheetReducer };

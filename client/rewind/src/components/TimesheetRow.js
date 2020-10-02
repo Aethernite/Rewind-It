@@ -31,7 +31,6 @@ transition: transform 0.2s;
 export const TimesheetRow = ({ total }) => {
 
     const dispatch = useDispatch();
-
     const id = "row";
     const formik = useFormik({
         initialValues: {
@@ -44,24 +43,20 @@ export const TimesheetRow = ({ total }) => {
             friday: '',
             saturday: '',
             sunday: '',
+            total: 0,
         },
 
         onSubmit: (values) => {
-            console.log("Submitting timesheet");
+            values.total = (formik.values.monday !== '' ? parseFloat(formik.values.monday) : 0) +
+                (formik.values.tuesday !== '' ? parseFloat(formik.values.tuesday) : 0) +
+                (formik.values.wednesday !== '' ? parseFloat(formik.values.wednesday) : 0) +
+                (formik.values.thursday !== '' ? parseFloat(formik.values.thursday) : 0) +
+                (formik.values.friday !== '' ? parseFloat(formik.values.friday) : 0) +
+                (formik.values.saturday !== '' ? parseFloat(formik.values.saturday) : 0) +
+                (formik.values.sunday !== '' ? parseFloat(formik.values.sunday) : 0);
         },
         validationSchema: TimesheetRowValidationSchema,
     });
-
-    const getTotal = () => {
-        const total = (formik.values.monday !== '' ? parseFloat(formik.values.monday) : 0) +
-            (formik.values.tuesday !== '' ? parseFloat(formik.values.tuesday) : 0) +
-            (formik.values.wednesday !== '' ? parseFloat(formik.values.wednesday) : 0) +
-            (formik.values.thursday !== '' ? parseFloat(formik.values.thursday) : 0) +
-            (formik.values.friday !== '' ? parseFloat(formik.values.friday) : 0) +
-            (formik.values.saturday !== '' ? parseFloat(formik.values.saturday) : 0) +
-            (formik.values.sunday !== '' ? parseFloat(formik.values.sunday) : 0);
-        return total;
-    }
 
     return (
         <>
