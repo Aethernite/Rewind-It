@@ -14,3 +14,12 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
 }
+
+.tippy-box[data-theme~='danger'] {
+  background-color: rgba(242, 222, 222, 0.99);
+  color: #b94a48;
+}
+
+.tippy-box[data-theme~='danger'][data-placement^='bottom'] > .tippy-arrow::before {
+  border-bottom-color: rgba(242, 222, 222, 0.99);
+}

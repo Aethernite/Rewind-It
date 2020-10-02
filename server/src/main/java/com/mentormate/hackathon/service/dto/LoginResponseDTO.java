@@ -6,14 +6,14 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 /**
- * This class represents the register response dto
- * <p>
- * Created by Vladislav Penchev on 2020/09/30
+ * This class represents the {@link LoginResponseDTO}
+ * 
+ * Created by Vladislav Penchev on 2020/10/01
  */
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class RegisterResponseDTO {
+public class LoginResponseDTO {
     @Schema(name = "id", description = "id of user")
     private String id;
 

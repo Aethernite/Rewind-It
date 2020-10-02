@@ -5,7 +5,9 @@ import { FormGroup, Container, Col, Alert } from 'react-bootstrap';
 import { useFormik } from 'formik';
 import classNames from 'classnames';
 import '../../../css/forms.scss';
-import {LoginValidationSchema} from "../../../validations/schemas/LoginValidationSchema";
+import { LoginValidationSchema } from "../../../validations/schemas/LoginValidationSchema";
+import { useSelector, useDispatch } from 'react-redux';
+import { login } from '../../../store/slices/auth';
 
 const FormLabel = styled.label`
 font-family: 'Roboto', sans-serif;
@@ -57,19 +59,23 @@ letter-spacing: 0rem;
 
 const LoginPage = () => {
 
-    ///const error = useSelector(state => state.auth.error);
-    ///const isLoading = useSelector(state => state.auth.isLoading);
-    ///const dispatch = useDispatch();
-    const error = "Error Invalid Login!";
+    const error = useSelector(state => state.auth.error);
+    const isLoading = useSelector(state => state.auth.isLoading);
+    const dispatch = useDispatch();
+    const submit = React.useRef();
+
+    const handleSubmit = () => {
+        submit.current.click();
+    }
 
     const formik = useFormik({
         initialValues: {
-            username: '',
+            email: '',
             password: ''
         },
 
         onSubmit: (values) => {
-            console.log("Submitting");
+            dispatch(login(values));
         },
         validationSchema: LoginValidationSchema,
     });
@@ -77,13 +83,8 @@ const LoginPage = () => {
 
     return (
         <Container className="mt-5">
-            <div className="ocean">
-                <div className="wave" />
-                <div className="wave" />
-                <div className="wave" />
-            </div>
             <Col className="d-flex justify-content-center">
-                <Form onSubmit={formik.handleSubmit}>
+                <Form onSubmit={formik.handleSubmit} id="myform">
                     <div className="logo mb-3">
                         <div className="col-md-12 text-center">
                             <Logo>Rewind</Logo>
@@ -93,13 +94,13 @@ const LoginPage = () => {
                         }
                     </div>
                     <FormGroup>
-                        <FormLabel className="form-label">Username</FormLabel>
+                        <FormLabel className="form-label">Email</FormLabel>
                         <input
                             type="text"
-                            name="username"
-                            className={"form-control " + classNames(formik.touched.username && !formik.errors.username && 'is-valid', formik.touched.username && formik.errors.username && 'is-invalid')}
-                            id="username"
-                            placeholder="Enter Username"
+                            name="email"
+                            className={"form-control " + classNames(formik.touched.email && !formik.errors.email && 'is-valid', formik.touched.email && formik.errors.email && 'is-invalid')}
+                            id="email"
+                            placeholder="Enter Email"
                             onBlur={formik.handleBlur}
                             onChange={formik.handleChange}
                         />
@@ -120,7 +121,8 @@ const LoginPage = () => {
                         <p className="text-center">By signing up you accept our <a href="#TermsOfUse">Terms Of Use</a></p>
                     </FormGroup>
                     <div className="col-md-12 text-center ">
-                        <a href="#" class="btn-flip mb-3" data-back="Login" data-front="Login"></a>
+                        <a onClick={handleSubmit} class="btn-flip mb-3" data-back="Login" data-front="Login"></a>
+                        <button ref={submit} form="myform" type="submit" style={{ display: 'none' }}></button>
                     </div>
                     <div className="form-group">
                         <p className="text-center">Don't have account? <a href="#signup">Sign up here</a></p>

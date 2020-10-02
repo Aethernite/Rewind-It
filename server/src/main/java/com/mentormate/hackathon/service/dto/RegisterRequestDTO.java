@@ -7,6 +7,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.validation.annotation.Validated;
 
+import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
 
@@ -28,13 +29,14 @@ import javax.validation.constraints.Size;
 })
 public class RegisterRequestDTO {
 
-    @NotBlank(message = "Username must not be empty.")
+    @Email(message = "Email format is incorrect.")
+    @NotBlank(message = "Email must not be empty.")
     @Size.List({
-            @Size(min = 5, message = "Username must be greater than 5 length of characters."),
-            @Size(max = 30, message = "Username must be less than 30 length of characters.")
+            @Size(min = 5, message = "Email must be greater than 5 length of characters."),
+            @Size(max = 50, message = "Email must be less than 50 length of characters.")
     })
-    @Schema(name = "username", description = "username of user")
-    private String username;
+    @Schema(name = "email", description = "email of user")
+    private String email;
 
     @NotBlank(message = "Password must not be empty.")
     @Size.List({
