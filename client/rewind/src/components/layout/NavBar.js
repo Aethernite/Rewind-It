@@ -19,7 +19,11 @@ const Title = styled.div`
 export const NavBar = () => {
     const [activeKey, setActiveKey] = useState({activeKey: 1});
     const dispatch = useDispatch();
-    const userEmail = useSelector((state) => state?.user?.email);
+    const userEmail = useSelector((state) => state?.auth?.user?.email);
+
+    const emailMatch = /([@][a-zA-Z]+[.][a-zA-Z]+)/;
+
+    let userNameFromEmail = userEmail.replace(emailMatch, "");
 
     const handleSelect = (selectedKey) => {
         if (!isNaN(selectedKey)) {
@@ -62,7 +66,7 @@ export const NavBar = () => {
                 </Nav>
                 <Navbar.Collapse className="justify-content-end">
                     <Navbar.Text>
-                        Signed in as: <a href="#logout">Mark Otto</a>
+                        Signed in as: <span style={{color: "white"}}>{userNameFromEmail}</span>
                     </Navbar.Text>
                     <Nav fill variant="tabs" className="ml-2" style={{border: "none"}} activeKey={activeKey} onSelect={handleSelect}>
                         <Nav.Link onClick={() => dispatch(logout())} style={{backgroundColor: "transparent", width: "6rem", borderRadius: "5px"}} eventKey={3} as={NavLink}
