@@ -7,6 +7,8 @@ import styled from 'styled-components';
 import { useFormik } from 'formik';
 import { useSelector, useDispatch } from 'react-redux';
 import { TimesheetRowValidationSchema } from "../validations/schemas/TimesheetRowValidationSchema";
+import {fetchAllProjects, resetProjects} from "../store/slices/projects";
+import {fetchAllTasksForProject, resetTasks} from "../store/slices/tasks";
 
 const Input = styled.input`
 text-align: center;
@@ -29,8 +31,24 @@ transition: transform 0.2s;
 `;
 
 export const TimesheetRow = ({ total }) => {
-
     const dispatch = useDispatch();
+    const projects = useSelector((state) => state.projects.projects);
+    const tasks = useSelector((state) => state.tasks.tasks);
+    const [currentId, setCurrentId] = React.useState(0);
+
+    React.useEffect(() => {
+        dispatch(fetchAllProjects());
+
+        return () => dispatch(resetProjects());
+    }, [dispatch, currentId]);
+
+    React.useEffect(() => {
+        dispatch(fetchAllTasksForProject(currentId));
+
+        return () => dispatch(resetTasks());
+    }, [dispatch, currentId]);
+
+
     const id = "row";
     const formik = useFormik({
         initialValues: {
@@ -71,16 +89,19 @@ export const TimesheetRow = ({ total }) => {
                     </div>
                 </th>
                 <td>
-                    <select name="project" className="form-control" form={id} onBlur={formik.handleBlur} onChange={formik.handleChange} value={formik.values.project}>
+                    <select name="project" className="form-control" form={id} onBlur={formik.handleBlur} onChange={formik.handleChange} value={formik.values.project} onClick={() => setCurrentId(prevState => formik.values.project)}>
                         <option value="" selected="selected" disabled>Choose project...</option>
-                        <option>Google Timesheet Project</option>
-                        <option>Google Timesheet Project 2</option>
+                        {projects.map((project) => {
+                            return <option value={project.id}>{project.name}</option>
+                        })}
                     </select>
                 </td>
                 <td>
                     <select name="task" className={`form-control`} form={id} onBlur={formik.handleBlur} onChange={formik.handleChange} value={formik.values.task}>
                         <option value="" selected="selected" disabled>Choose task...</option>
-                        <option>Learning</option>
+                        {tasks.map((task) => {
+                            return <option value={task.id}>{task.name}</option>
+                        })}
                     </select>
                 </td>
                 <td >
