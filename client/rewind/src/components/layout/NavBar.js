@@ -60,13 +60,17 @@ export const NavBar = () => {
                               to="/timesheet/edit" exact>
                         All Timesheets
                     </Nav.Link>
+                    <Nav.Link style={{backgroundColor: "transparent", width: "12rem"}} eventKey={5} as={NavLink}
+                              to="/timesheet/home" exact>
+                        All Timesheets view
+                    </Nav.Link>
                 </Nav>
                 <Navbar.Collapse className="justify-content-end">
                     <Navbar.Text>
                         Signed in as: <a href="#logout">Mark Otto</a>
                     </Navbar.Text>
                     <Nav fill variant="tabs" className="ml-2" activeKey={activeKey} onSelect={handleSelect}>
-                        <Nav.Link onClick={() => dispatch(logout())} style={{backgroundColor: "transparent", width: "6rem"}} eventKey={5} as={NavLink}
+                        <Nav.Link onClick={() => dispatch(logout())} style={{backgroundColor: "transparent", width: "6rem"}} eventKey={6} as={NavLink}
                                   to="/" exact>
                             Logout
                         </Nav.Link>

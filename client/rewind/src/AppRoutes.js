@@ -6,6 +6,7 @@ import {CreateTimesheet} from "./components/pages/timesheets/CreateTimesheet";
 import TimesheetTable from "./components/TimeSheetTable";
 import Background from "./components/Background";
 import {useSelector} from "react-redux";
+import {TimesheetsPage} from "./components/pages/timesheets/TimesheetsPage";
 
 export const AppRoutes = () => {
     const user = useSelector((state) => state.auth.user);
@@ -18,6 +19,7 @@ export const AppRoutes = () => {
             <Route path="/register" exact component={RegisterPage}/>
             <Route path="/timesheet/create" exact component={CreateTimesheet}/>
             <Route path="/timesheet/edit" exact component={TimesheetTable}/>
+            <Route path="/timesheet/home" exact component={TimesheetsPage}/>
             <Redirect to="/login"/>
         </Switch>
         </>
