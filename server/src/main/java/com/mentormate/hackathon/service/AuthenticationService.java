@@ -1,7 +1,6 @@
 package com.mentormate.hackathon.service;
 
 import com.mentormate.hackathon.controller.handler.exception.EntityAlreadyExists;
-import com.mentormate.hackathon.controller.handler.exception.ForbiddenException;
 import com.mentormate.hackathon.persistence.entity.Role;
 import com.mentormate.hackathon.persistence.entity.RoleType;
 import com.mentormate.hackathon.persistence.entity.User;
@@ -100,13 +99,8 @@ public class AuthenticationService {
      * @return {@link Map} with key message and value contains information about successful logout
      */
     public Map<String, String> logout(HttpServletRequest httpServletRequest) {
-        if(httpServletRequest.getSession(false) == null) {
-            throw new ForbiddenException("Forbidden");
-        } else {
-            httpServletRequest.getSession().invalidate();
-            SecurityContextHolder.clearContext();
-            return Map.of("message", "logout successfully");   
-        }
+        httpServletRequest.getSession().invalidate();
+        return Map.of("message", "logout successfully");
     }
 
     /**
