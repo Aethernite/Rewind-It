@@ -93,13 +93,14 @@ export const TimesheetRow = () => {
                 </th>
                 <td>
                     <Select
+                        theme="primary"
                         defaultValue={projectDefault}
                         onChange={handleProjectChange}
                         options={projectOptions}
                         value={selectedProjectOption || ''}
                     />
                 </td>
-                <td>
+                <td className="react-select">
                     <Select
                         defaultValue={taskDefault}
                         onChange={handleTaskChange}
