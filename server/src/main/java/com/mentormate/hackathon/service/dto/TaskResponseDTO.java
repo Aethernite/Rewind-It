@@ -1,6 +1,5 @@
 package com.mentormate.hackathon.service.dto;
 
-import com.mentormate.hackathon.persistence.entity.TypeOfTask;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -16,7 +15,7 @@ public class TaskResponseDTO {
     
     @Schema(name = "id", description = "Id of task")
     private Long id;
-
+    
     @Schema(name = "name", description = "Name of task")
-    private TypeOfTask name;
+    private String name;
 }

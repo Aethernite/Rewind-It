@@ -2,12 +2,10 @@ package com.mentormate.hackathon.service;
 
 import com.mentormate.hackathon.controller.handler.exception.NotFoundException;
 import com.mentormate.hackathon.persistence.entity.Task;
-import com.mentormate.hackathon.persistence.entity.TypeOfTask;
 import com.mentormate.hackathon.persistence.repository.TaskRepository;
 import com.mentormate.hackathon.service.dto.TaskResponseDTO;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -42,7 +40,7 @@ public class TaskService {
      * @param name the name of the task
      * @return the task
      */
-    public Task findByName(TypeOfTask name) {
+    public Task findByName(String name) {
 
         Optional<Task> taskOptional = taskRepository.findByName(name);
 
@@ -54,15 +52,13 @@ public class TaskService {
     }
 
     /**
-     * Gets a task by a page number and size
+     * Gets a list of all of the tasks
      *
-     * @param page the page
-     * @param size the number of entities per page
      * @return list of response dto's
      */
-    public List<TaskResponseDTO> getAll(int page, int size) {
+    public List<TaskResponseDTO> getAll() {
 
-        return taskRepository.findAll(PageRequest.of(page, size))
+        return taskRepository.findAll()
                 .stream()
                 .map(feature -> modelMapper.map(feature, TaskResponseDTO.class))
                 .collect(Collectors.toUnmodifiableList());
@@ -73,16 +69,16 @@ public class TaskService {
      */
     public void seedTasks() {
         if (taskRepository.findAll().isEmpty()) {
-            Task administrative = new Task(TypeOfTask.ADMINISTRATIVE);
+            Task administrative = new Task("Administrative");
             taskRepository.save(administrative);
 
-            Task benchTime = new Task(TypeOfTask.BENCH_TIME);
+            Task benchTime = new Task("Bench time");
             taskRepository.save(benchTime);
 
-            Task learning = new Task(TypeOfTask.LEARNING);
+            Task learning = new Task("Learning");
             taskRepository.save(learning);
 
-            Task research = new Task(TypeOfTask.RESEARCH);
+            Task research = new Task("Research");
             taskRepository.save(research);
         }
     }
