@@ -3,7 +3,6 @@ package com.mentormate.hackathon.service;
 import com.mentormate.hackathon.controller.handler.exception.NotFoundException;
 import com.mentormate.hackathon.persistence.entity.DayOfTimesheet;
 import com.mentormate.hackathon.persistence.repository.DayOfTimesheetRepository;
-import com.mentormate.hackathon.service.dto.DayOfTimesheetRequestDTO;
 import com.mentormate.hackathon.service.dto.DayOfTimesheetResponseDTO;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -38,22 +37,17 @@ public class DayOfTimesheetService {
     /**
      * Creates a new day of timesheet.
      *
-     * @param dayOfTimesheetRequestDTO the request dto
      * @param fromDate
      * @return the day of timesheet entity
      */
-    public List<DayOfTimesheet> create(DayOfTimesheetRequestDTO dayOfTimesheetRequestDTO, LocalDateTime fromDate) {
-
-        DayOfTimesheet dayOfTimesheet = this.modelMapper.map(dayOfTimesheetRequestDTO, DayOfTimesheet.class);
-        log.info("Created day of timesheet with id {}!", dayOfTimesheet.getId());
-
+    public List<DayOfTimesheet> create(LocalDateTime fromDate) {
         Date convertedDatetime = Date.from(fromDate.atZone(ZoneId.systemDefault()).toInstant());
         List<DayOfTimesheet> dayOfTimesheets = new ArrayList<>();
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
         Calendar cal = Calendar.getInstance();
         cal.setTime(convertedDatetime);
 
-        for (int i = 0; i < 6; i++) {
+        for (int i = 0; i < 7; i++) {
             cal.add(Calendar.DAY_OF_YEAR, 1);
             TimeZone tz = cal.getTimeZone();
             ZoneId zid = tz == null ? ZoneId.systemDefault() : tz.toZoneId();
