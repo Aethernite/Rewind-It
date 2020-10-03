@@ -7,8 +7,6 @@ import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.Entity;
-import javax.persistence.EnumType;
-import javax.persistence.Enumerated;
 import javax.persistence.Table;
 
 /**
@@ -22,8 +20,7 @@ import javax.persistence.Table;
 @AllArgsConstructor
 @EqualsAndHashCode(callSuper = true)
 @Table(name = "tasks")
-public class Task extends BaseEntity{
+public class Task extends BaseEntity {
 
-    @Enumerated(EnumType.STRING)
-    private TypeOfTask name;
+    private String name;
 }

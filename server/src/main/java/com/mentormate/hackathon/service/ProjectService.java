@@ -3,13 +3,11 @@ package com.mentormate.hackathon.service;
 import com.mentormate.hackathon.controller.handler.exception.NotFoundException;
 import com.mentormate.hackathon.persistence.entity.Project;
 import com.mentormate.hackathon.persistence.entity.Task;
-import com.mentormate.hackathon.persistence.entity.TypeOfTask;
 import com.mentormate.hackathon.persistence.repository.ProjectRepository;
 import com.mentormate.hackathon.service.dto.ProjectResponseDTO;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.PostConstruct;
@@ -44,15 +42,13 @@ public class ProjectService {
     }
 
     /**
-     * Gets a project by a page number and size
+     * Gets a a list of projects
      *
-     * @param page the page
-     * @param size the number of entities per page
      * @return list of response dto's
      */
-    public List<ProjectResponseDTO> findAll(int page, int size) {
+    public List<ProjectResponseDTO> findAll() {
 
-        return projectRepository.findAll(PageRequest.of(page, size))
+        return projectRepository.findAll()
                 .stream()
                 .map(feature -> modelMapper.map(feature, ProjectResponseDTO.class))
                 .collect(Collectors.toUnmodifiableList());
@@ -65,7 +61,7 @@ public class ProjectService {
 
         if (projectRepository.findAll().isEmpty()) {
 
-            Task learning = taskService.findByName(TypeOfTask.LEARNING);
+            Task learning = taskService.findByName("Learning");
 
             Project clientSatisfaction1 =
                     new Project("MentorMate L&D : Client Satisfaction & Communication Part 1 Training",
@@ -86,7 +82,7 @@ public class ProjectService {
 
         }
     }
-    
+
     /**
      * Gets project by an id.
      *

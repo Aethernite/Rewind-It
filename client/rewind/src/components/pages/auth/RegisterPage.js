@@ -9,8 +9,7 @@ import { RegisterValidationSchema } from "../../../validations/schemas/RegisterV
 import "../../../css/forms.scss";
 import { useDispatch, useSelector } from 'react-redux';
 import { register } from '../../../store/slices/auth';
-import {Link} from "react-router-dom";
-import LoginPage from "./LoginPage";
+import { Link } from "react-router-dom";
 
 
 const Title = styled.h1`
@@ -99,7 +98,7 @@ export const RegisterPage = () => {
                     {/*}*/}
                     <FormGroup className="form-group">
                         {formik.touched.email && formik.errors.email &&
-                        <Alert variant="danger">{formik.errors.email}</Alert>}
+                            <Alert variant="danger">{formik.errors.email}</Alert>}
                         <Label className="form-label">Email</Label>
                         <input type="text"
                             name="email"
@@ -117,7 +116,7 @@ export const RegisterPage = () => {
                     </FormGroup>
                     <FormGroup className="form-group">
                         {formik.touched.password && formik.errors.password &&
-                        <Alert variant="danger">{formik.errors.password}</Alert>}
+                            <Alert variant="danger">{formik.errors.password}</Alert>}
                         <Label className="form-label">Password</Label>
                         <input type="password"
                             name="password"
@@ -134,7 +133,7 @@ export const RegisterPage = () => {
                     </FormGroup>
                     <FormGroup className="form-group">
                         {formik.touched.confirmPassword && formik.errors.confirmPassword &&
-                        <Alert variant="danger">{formik.errors.confirmPassword}</Alert>}
+                            <Alert variant="danger">{formik.errors.confirmPassword}</Alert>}
                         <Label className="form-label">Confirm password</Label>
                         <input type="password"
                             name="confirmPassword"
@@ -154,7 +153,7 @@ export const RegisterPage = () => {
                     </FormGroup>
                     <FormGroup className="form-group">
                         <div className="col-md-12 text-center ">
-                            <a onClick={handleSubmit} className="btn-flip mb-3" data-back="Register" data-front="Register"></a>
+                            <a href="# " onClick={handleSubmit} className="btn-flip mb-3" data-back="Register" data-front="Register" style={{ textDecoration: 'none' }}> </a>
                             <button ref={submit} form="myform" type="submit" style={{ display: 'none' }}></button>
                         </div>
                     </FormGroup>
