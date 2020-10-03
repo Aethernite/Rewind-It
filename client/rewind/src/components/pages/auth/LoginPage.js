@@ -1,7 +1,7 @@
 import React from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import styled from 'styled-components';
-import { FormGroup, Container, Col, Alert } from 'react-bootstrap';
+import { FormGroup, Container, Col, Alert, Spinner } from 'react-bootstrap';
 import { useFormik } from 'formik';
 import classNames from 'classnames';
 import '../../../css/forms.scss';
@@ -123,8 +123,9 @@ const LoginPage = () => {
                         <p className="text-center">By signing up you accept our <a href="#TermsOfUse">Terms Of Use</a></p>
                     </FormGroup>
                     <div className="col-md-12 text-center ">
-                        <a href="# " onClick={handleSubmit} class="btn-flip mb-3" data-back="Login" data-front="Login" style={{ textDecoration: 'none' }}> </a>
+                        <a href="#" onClick={handleSubmit} class="btn-flip mb-3" data-back="Login" data-front="Login" style={{ textDecoration: 'none', display: isLoading ? "none" : "" }}> </a>
                         <button ref={submit} form="myform" type="submit" style={{ display: 'none' }}></button>
+                        {isLoading && <Spinner animation="border" />}
                     </div>
                     <div className="form-group">
                         <p className="text-center">Don't have account? <Link to="/register">Sign up here</Link></p>

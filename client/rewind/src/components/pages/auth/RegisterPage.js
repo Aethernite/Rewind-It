@@ -1,7 +1,7 @@
 import React from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import styled from 'styled-components';
-import { FormGroup, Container, Col, Alert } from 'react-bootstrap';
+import {FormGroup, Container, Col, Alert, Spinner} from 'react-bootstrap';
 import { useFormik } from 'formik';
 import "../../../css/Animation.css";
 import classNames from 'classnames';
@@ -153,8 +153,9 @@ export const RegisterPage = () => {
                     </FormGroup>
                     <FormGroup className="form-group">
                         <div className="col-md-12 text-center ">
-                            <a href="# " onClick={handleSubmit} className="btn-flip mb-3" data-back="Register" data-front="Register" style={{ textDecoration: 'none' }}> </a>
+                            <a href="# " onClick={handleSubmit} className="btn-flip mb-3" data-back="Register" data-front="Register" style={{ textDecoration: 'none', display: isLoading ? "none" : "" }}> </a>
                             <button ref={submit} form="myform" type="submit" style={{ display: 'none' }}></button>
+                            {isLoading && <Spinner animation="border" />}
                         </div>
                     </FormGroup>
                     <FormGroup className="form-group">
