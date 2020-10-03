@@ -13,8 +13,6 @@ font-family: "Roboto", sans-serif;
 background-color: #fff;
 `;
 
-
-
 export const Timesheet = ({ from, to }) => {
 
     return (

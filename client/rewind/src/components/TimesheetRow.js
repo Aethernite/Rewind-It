@@ -28,10 +28,11 @@ transition: transform 0.2s;
 }
 `;
 
-export const TimesheetRow = ({ total }) => {
-
+export const TimesheetRow = () => {
+    const projects = useSelector(state => state.projects.projects);
     const dispatch = useDispatch();
     const id = "row";
+
     const formik = useFormik({
         initialValues: {
             project: '',
@@ -73,14 +74,21 @@ export const TimesheetRow = ({ total }) => {
                 <td>
                     <select name="project" className="form-control" form={id} onBlur={formik.handleBlur} onChange={formik.handleChange} value={formik.values.project}>
                         <option value="" selected="selected" disabled>Choose project...</option>
-                        <option>Google Timesheet Project</option>
-                        <option>Google Timesheet Project 2</option>
+                        {projects.map((project, index) => (
+                            <option key={index} value={project.name}>{project.name}</option>
+                        ))}
+}
                     </select>
                 </td>
                 <td>
                     <select name="task" className={`form-control`} form={id} onBlur={formik.handleBlur} onChange={formik.handleChange} value={formik.values.task}>
                         <option value="" selected="selected" disabled>Choose task...</option>
-                        <option>Learning</option>
+                        {projects.map((project) => (
+                            project.tasks.map((task, index) => (
+                                <option key={index} value={task.name}>{task.name}</option>
+                            )
+                            )))
+                        }
                     </select>
                 </td>
                 <td >
