@@ -32,14 +32,12 @@ export const TimesheetTable = ({ from, to }) => {
                                     <i class="far fa-trash-alt mr-2 fa-2x" style={{ color: '#2e2e2e', transform: "translateY(5px)" }}></i>
                                     <button type="button" class="btn btn-dark mr-3" onClick={() => dispatch(deleteCurrentTimesheet())}>DELETE</button>
 
-                                    <i class="far fa-eye mr-2 fa-2x" style={{ color: '#2e2e2e', transform: "translateY(5px)" }}></i>
-                                    <button type="button" class="btn btn-dark mr-3">VIEW</button>
-
-                                    <i class="far fa-edit mr-2 fa-2x" style={{ color: '#2e2e2e', transform: "translateY(5px)" }}></i>
-                                    <button type="button" class="btn btn-dark mr-3">EDIT</button>
-
                                     <i class="far fa-save mr-2 fa-2x" style={{ color: '#2e2e2e', transform: "translateY(5px)" }}></i>
                                     <button type="button" class="btn btn-dark mr-3">SAVE</button>
+
+                                    <i class="far fa-check-circle mr-2 fa-2x" style={{ color: '#2e2e2e', transform: "translateY(5px)" }}></i>
+                                    <button type="button" class="btn btn-dark mr-3">SUBMIT</button>
+
 
                            Status: OPEN
                            </div>
