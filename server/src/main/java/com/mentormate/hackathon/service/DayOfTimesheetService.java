@@ -40,7 +40,6 @@ public class DayOfTimesheetService {
      *
      * @param dayOfTimesheetRequestDTO the request dto
      * @param fromDate
-     * @param toDate
      * @return the day of timesheet entity
      */
     public List<DayOfTimesheet> create(DayOfTimesheetRequestDTO dayOfTimesheetRequestDTO, LocalDateTime fromDate) {
