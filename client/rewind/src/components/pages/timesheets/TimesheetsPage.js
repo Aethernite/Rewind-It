@@ -1,6 +1,7 @@
 import React from "react";
 import { Button, Col, Container } from "react-bootstrap";
 import styled from "styled-components";
+import {ConfirmationBox} from "../../common/ConfirmationBox";
 
 
 const Table = styled.table`
@@ -22,6 +23,8 @@ margin-bottom: 2rem;
 
 
 export const TimesheetsPage = () => {
+    const [modalShow, setModalShow] = React.useState(false);
+
     return (
         <Container className="mt-5">
             <Col className="d-flex justify-content-center">
@@ -58,7 +61,12 @@ export const TimesheetsPage = () => {
                                 <div style={{ display: "flex" }}>
                                     <Button variant="outline-dark" style={{ marginRight: "0.2rem" }}
                                         className="form-control">Edit</Button>
-                                    <Button variant="outline-dark" className="form-control">Delete</Button>
+                                    <Button variant="outline-dark" className="form-control" onClick={() => setModalShow(true)}>Delete</Button>
+                                    <ConfirmationBox
+                                        show={modalShow}
+                                        onHide={() => setModalShow(false)}
+                                        week={{week: "28/09/2020 - 04/10/2020"}}
+                                    />
                                 </div>
                             </td>
                         </tr>
