@@ -2,9 +2,14 @@ import React from "react";
 import { Button, Col, Container } from "react-bootstrap";
 import { useDispatch, useSelector } from "react-redux";
 import styled from "styled-components";
+<<<<<<< HEAD
 import { fetchUserTimesheets } from '../../../store/slices/timesheets';
 import Moment from 'react-moment';
 import ReactPaginate from 'react-paginate';
+=======
+import {ConfirmationBox} from "../../common/ConfirmationBox";
+
+>>>>>>> 3e02d2d47144ab98efdb0bad616caec354f9ce80
 
 const Table = styled.table`
 border: 1px solid #2e2e2e;
@@ -25,6 +30,7 @@ margin-bottom: 2rem;
 
 
 export const TimesheetsPage = () => {
+<<<<<<< HEAD
 
 
     const timesheets = useSelector(state => state.timesheets.timesheets.content);
@@ -40,6 +46,9 @@ export const TimesheetsPage = () => {
     const handlePageChange = e => {
         dispatch(fetchUserTimesheets({ cursor: e.selected }));
     }
+=======
+    const [modalShow, setModalShow] = React.useState(false);
+>>>>>>> 3e02d2d47144ab98efdb0bad616caec354f9ce80
 
     return (
         <Container className="mt-5">
@@ -123,7 +132,12 @@ export const TimesheetsPage = () => {
                                 <div style={{ display: "flex" }}>
                                     <Button variant="outline-dark" style={{ marginRight: "0.2rem" }}
                                         className="form-control">Edit</Button>
-                                    <Button variant="outline-dark" className="form-control">Delete</Button>
+                                    <Button variant="outline-dark" className="form-control" onClick={() => setModalShow(true)}>Delete</Button>
+                                    <ConfirmationBox
+                                        show={modalShow}
+                                        onHide={() => setModalShow(false)}
+                                        week={{week: "28/09/2020 - 04/10/2020"}}
+                                    />
                                 </div>
                             </td>
                         </tr>

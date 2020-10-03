@@ -60,7 +60,7 @@ export const NavBar = () => {
                         {/*    to="/timesheet/edit" exact>*/}
                         {/*    All Timesheets*/}
                         {/*</Nav.Link>*/}
-                        <Nav.Link style={{ backgroundColor: "transparent", borderRadius: "5px" }} eventKey={1} as={NavLink}
+                        <Nav.Link style={{ backgroundColor: "transparent", borderTop: "none", borderLeft: "none", borderRight: "none" }} eventKey={1} as={NavLink}
                             to="/timesheet/home" exact>
                             All Timesheets
                     </Nav.Link>
@@ -68,7 +68,7 @@ export const NavBar = () => {
                         {/*          to="/timesheet/edit" exact>*/}
                         {/*    All Timesheets*/}
                         {/*</Nav.Link>*/}
-                        <Nav.Link style={{ backgroundColor: "transparent", borderRadius: "5px" }} eventKey={2} as={NavLink}
+                        <Nav.Link style={{ backgroundColor: "transparent", borderTop: "none", borderLeft: "none", borderRight: "none" }} eventKey={2} as={NavLink}
                             to="/timesheet/create" exact>
                             Create Timesheets
                     </Nav.Link>
@@ -78,7 +78,7 @@ export const NavBar = () => {
                             <span style={{ color: "white" }}>Signed in as: {userNameFromEmail}</span>
                         </Nav.Link>
                         <Nav fill variant="tabs" className="ml-2" style={{ border: "none" }} activeKey={activeKey} onSelect={handleSelect}>
-                            <Nav.Link onClick={() => dispatch(logout())} style={{ backgroundColor: "transparent", borderRadius: "5px" }} eventKey={3} as={NavLink}
+                            <Nav.Link onClick={() => dispatch(logout())} style={{ backgroundColor: "transparent", borderTop: "none", borderLeft: "none", borderRight: "none" }} eventKey={3} as={NavLink}
                                 to="/" exact>
                                 Logout
                         </Nav.Link>
