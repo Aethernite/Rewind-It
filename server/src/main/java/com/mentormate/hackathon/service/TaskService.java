@@ -98,21 +98,4 @@ public class TaskService {
                 .findById(id)
                 .orElseThrow(() -> new NotFoundException(String.format("Task with id: %s - not found ", id)));
     }
-
-    /**
-     * Finds a task by a name
-     *
-     * @param name the name of the task
-     * @return the task
-     */
-    public Task getByName(TypeOfTask name) {
-
-        Optional<Task> taskOptional = taskRepository.findByName(name);
-
-        if (taskOptional.isEmpty()) {
-            throw new NotFoundException(String.format("Task with name %s not found ", name));
-        }
-
-        return taskOptional.get();
-    }
 }

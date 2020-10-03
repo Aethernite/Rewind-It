@@ -3,11 +3,13 @@ package com.mentormate.hackathon.controller;
 import com.mentormate.hackathon.service.TimesheetService;
 import com.mentormate.hackathon.service.dto.TimesheetRequestDTO;
 import com.mentormate.hackathon.service.dto.TimesheetResponseDTO;
+import com.mentormate.hackathon.service.dto.TimesheetUpdateRequestDTO;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -23,7 +25,6 @@ import org.springframework.web.bind.annotation.RestController;
 import javax.validation.Valid;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
-import java.util.List;
 
 /**
  * Created by Vladislav Penchev on 2020/10/02
@@ -32,7 +33,7 @@ import java.util.List;
 @RequiredArgsConstructor
 @RequestMapping("/api/v1/timesheets")
 public class TimesheetController {
-    
+
     private final TimesheetService timesheetService;
 
     @Operation(summary = "Create timesheet", description = "This request method is used for creating new timesheet", tags = {"Timesheet"})
@@ -41,7 +42,7 @@ public class TimesheetController {
             @ApiResponse(responseCode = "400", description = "The request body is not correct"),
             @ApiResponse(responseCode = "500", description = "Internal Server Error")})
     @PostMapping
-    public ResponseEntity<String> createTimesheet(@Valid @RequestBody TimesheetRequestDTO timesheetRequestDTO) {
+    public ResponseEntity<TimesheetResponseDTO> createTimesheet(@Valid @RequestBody TimesheetRequestDTO timesheetRequestDTO) {
         return new ResponseEntity(timesheetService.createTimesheet(timesheetRequestDTO), HttpStatus.CREATED);
     }
 
@@ -50,7 +51,7 @@ public class TimesheetController {
             @ApiResponse(responseCode = "200", description = "Return all timesheets"),
             @ApiResponse(responseCode = "500", description = "Internal Server Error")})
     @GetMapping(params = {"page", "size"})
-    public ResponseEntity<List<TimesheetResponseDTO>> getAllTimesheets(
+    public ResponseEntity<Page<TimesheetResponseDTO>> getAllTimesheets(
             @Parameter(description = "Page number") @RequestParam(value = "page") int page,
             @Parameter(description = "Size number - how many items to return") @RequestParam("size") int size) {
         return ResponseEntity.ok(timesheetService.getAll(page, size));
@@ -62,11 +63,10 @@ public class TimesheetController {
             @ApiResponse(responseCode = "404", description = "Timesheet not found"),
             @ApiResponse(responseCode = "500", description = "Internal Server Error")})
     @GetMapping("/{timesheetId}")
-    public ResponseEntity<String> getTimesheetById(
+    public ResponseEntity<TimesheetResponseDTO> getTimesheetById(
             @Parameter(description = "Id of the timesheet to be obtained.")
             @PathVariable("timesheetId") @NotBlank @Size(min = 1) Long timesheetId) {
-//        return ResponseEntity.ok(featureService.getById(featureId));
-        return null;
+        return ResponseEntity.ok(timesheetService.getById(timesheetId));
     }
 
     @Operation(summary = "Update timesheet by id", description = "This request method update timesheet by id", tags = {"Timesheet"})
@@ -76,11 +76,10 @@ public class TimesheetController {
             @ApiResponse(responseCode = "404", description = "Timesheet not found"),
             @ApiResponse(responseCode = "500", description = "Internal Server Error")})
     @PutMapping("/{timesheetId}")
-    public ResponseEntity<?> updateTimesheetById(
+    public ResponseEntity<TimesheetResponseDTO> updateTimesheetById(
             @Parameter(description = "Id of the timesheetId to be obtained.")
-            @PathVariable("timesheetId") @NotBlank @Size(min = 1) Long timesheetId, @Valid @RequestBody String timesheetRequestDTO) {
-//        return ResponseEntity.ok(featureService.updateFeatureById(featureId, featureDTO));
-        return null;
+            @PathVariable("timesheetId") @NotBlank @Size(min = 1) Long timesheetId, @Valid @RequestBody TimesheetUpdateRequestDTO timesheetUpdateRequestDTO) {
+        return ResponseEntity.ok(timesheetService.updateTimesheetById(timesheetId, timesheetUpdateRequestDTO));
     }
 
     @Operation(summary = "Delete timesheet by id", description = "This request method delete timesheet by id", tags = {"Timesheet"})
@@ -89,10 +88,9 @@ public class TimesheetController {
             @ApiResponse(responseCode = "404", description = "Timesheet not found"),
             @ApiResponse(responseCode = "500", description = "Internal Server Error")})
     @DeleteMapping("/{timesheetId}")
-    public ResponseEntity<?> deleteTimesheetById(
+    public ResponseEntity<TimesheetResponseDTO> deleteTimesheetById(
             @Parameter(description = "Id of the timesheet to be obtained.")
             @PathVariable("timesheetId") @NotBlank @Size(min = 1) Long timesheetId) {
-//        return ResponseEntity.ok(featureService.deleteFeatureById(timesheetId));
-        return null;
+        return ResponseEntity.ok(timesheetService.deleteTimesheetById(timesheetId));
     }
 }

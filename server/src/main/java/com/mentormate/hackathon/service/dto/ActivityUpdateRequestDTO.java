@@ -5,18 +5,17 @@ import com.mentormate.hackathon.persistence.entity.Project;
 import com.mentormate.hackathon.persistence.entity.Task;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.springframework.validation.annotation.Validated;
 
 import java.util.List;
 
 /**
- * This class represents the Activity response dto
- *
- * @author Polina Usheva
+ * Created by Vladislav Penchev on 2020/10/03
  */
 @Data
+@Validated
 @NoArgsConstructor
-public class ActivityResponseDTO {
-
+public class ActivityUpdateRequestDTO {
     private Long id;
 
     private Project project;

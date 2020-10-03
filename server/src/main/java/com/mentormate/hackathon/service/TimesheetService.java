@@ -5,9 +5,12 @@ import com.mentormate.hackathon.persistence.entity.Timesheet;
 import com.mentormate.hackathon.persistence.repository.TimesheetRepository;
 import com.mentormate.hackathon.service.dto.TimesheetRequestDTO;
 import com.mentormate.hackathon.service.dto.TimesheetResponseDTO;
+import com.mentormate.hackathon.service.dto.TimesheetUpdateRequestDTO;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
@@ -28,44 +31,31 @@ public class TimesheetService {
     private final TimesheetRepository timesheetRepository;
     private final ModelMapper modelMapper;
 
-    public String createTimesheet(TimesheetRequestDTO timesheetRequestDTO) {
+    public TimesheetResponseDTO createTimesheet(TimesheetRequestDTO timesheetRequestDTO) {
         List<Activity> activities = new ArrayList<>();
-
         timesheetRequestDTO.getActivities()
-                .stream()
-                .forEach(activity -> {
-                    Activity currentActivity = activityService.create(activity);
+                .forEach(activityRequestDTO -> {
+                    Activity currentActivity = activityService.create(activityRequestDTO, timesheetRequestDTO.getFromDate());
                     activities.add(currentActivity);
                 });
         Timesheet timesheet = new Timesheet(activities);
-        timesheetRepository.save(timesheet);
-        return "";
+        return modelMapper.map(timesheetRepository.save(timesheet), TimesheetResponseDTO.class);
     }
 
-    public List<TimesheetResponseDTO> getAll(int page, int size) {
-//        log.info("Fetch all features");
-        List<Timesheet> all = timesheetRepository.findAll(PageRequest.of(page, size)).getContent();
-        List<TimesheetResponseDTO> collect = all.stream()
+    public Page<TimesheetResponseDTO> getAll(int page, int size) {
+        log.info("Fetch all timesheets");
+        List<TimesheetResponseDTO> all = timesheetRepository.findAll(PageRequest.of(page, size))
+                .stream()
                 .map(timesheet -> modelMapper.map(timesheet, TimesheetResponseDTO.class))
                 .collect(Collectors.toUnmodifiableList());
-
-//        return new PageImpl<TimesheetResponseDTO>(all
-//                .stream()
-//                .map(TimesheetResponseDTO -> new TimesheetResponseDTO(
-//                        
-//                        person.getId(),
-//                        person.getFirstName(),
-//                        person.getLastName(),
-//                        person.getNumberMobil(),
-//                        person.getPresentPosition()))
-//                .collect(Collectors.toList()));
-
-//        List<TimesheetResponseDTO> collect = all
-//                .stream()
-//                .map(activity -> modelMapper.map(activity, TimesheetResponseDTO.class))
+        return new PageImpl<>(all, PageRequest.of(page, size), all.size());
+        
+//        List<Timesheet> all = timesheetRepository.findAll(PageRequest.of(page, size)).getContent();
+//        List<TimesheetResponseDTO> collect = all.stream()
+//                .map(timesheet -> modelMapper.map(timesheet, TimesheetResponseDTO.class))
 //                .collect(Collectors.toUnmodifiableList());
-
-        return collect;
+        
+//        return collect;
     }
 
     public TimesheetResponseDTO getById(Long timesheetId) {
@@ -74,11 +64,23 @@ public class TimesheetService {
         return modelMapper.map(timesheet, TimesheetResponseDTO.class);
     }
 
-    public TimesheetResponseDTO updateTimesheetById(Long timesheetId, TimesheetRequestDTO timesheetRequestDTO) {
+    public TimesheetResponseDTO updateTimesheetById(Long timesheetId, TimesheetUpdateRequestDTO timesheetUpdateRequestDTO) {
         log.info("Start updating timesheet with id: {}", timesheetId);
         Timesheet timesheet = checkIfTimesheetExists(timesheetId);
+        List<Activity> activities = timesheetUpdateRequestDTO.getActivities()
+                .stream().map(activity -> modelMapper.map(activity, Activity.class))
+                .collect(Collectors.toList());
+        timesheet.setActivities(activities);
         timesheet = timesheetRepository.save(timesheet);
         log.info("Updated timesheet with id: {}", timesheet);
+        return modelMapper.map(timesheet, TimesheetResponseDTO.class);
+    }
+
+    public TimesheetResponseDTO deleteTimesheetById(Long timesheetId) {
+        log.info("Start deleting timesheet with id: {}", timesheetId);
+        Timesheet timesheet = checkIfTimesheetExists(timesheetId);
+        timesheetRepository.delete(timesheet);
+        log.info("Deleted timesheet with id: {}", timesheetId);
         return modelMapper.map(timesheet, TimesheetResponseDTO.class);
     }
 

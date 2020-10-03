@@ -1,9 +1,9 @@
 package com.mentormate.hackathon.service;
 
-import com.mentormate.hackathon.controller.handler.exception.IncorrectDataInput;
 import com.mentormate.hackathon.controller.handler.exception.NotFoundException;
 import com.mentormate.hackathon.persistence.entity.DayOfTimesheet;
 import com.mentormate.hackathon.persistence.repository.DayOfTimesheetRepository;
+import com.mentormate.hackathon.service.dto.DayOfTimesheetRequestDTO;
 import com.mentormate.hackathon.service.dto.DayOfTimesheetResponseDTO;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -11,9 +11,14 @@ import org.modelmapper.ModelMapper;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
-import java.util.Optional;
-import java.util.Set;
+import java.util.TimeZone;
 import java.util.stream.Collectors;
 
 /**
@@ -29,6 +34,37 @@ public class DayOfTimesheetService {
     private final DayOfTimesheetRepository dayOfTimesheetRepository;
 
     private final ModelMapper modelMapper;
+
+    /**
+     * Creates a new day of timesheet.
+     *
+     * @param dayOfTimesheetRequestDTO the request dto
+     * @param fromDate
+     * @param toDate
+     * @return the day of timesheet entity
+     */
+    public List<DayOfTimesheet> create(DayOfTimesheetRequestDTO dayOfTimesheetRequestDTO, LocalDateTime fromDate) {
+
+        DayOfTimesheet dayOfTimesheet = this.modelMapper.map(dayOfTimesheetRequestDTO, DayOfTimesheet.class);
+        log.info("Created day of timesheet with id {}!", dayOfTimesheet.getId());
+
+        Date convertedDatetime = Date.from(fromDate.atZone(ZoneId.systemDefault()).toInstant());
+        List<DayOfTimesheet> dayOfTimesheets = new ArrayList<>();
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+        Calendar cal = Calendar.getInstance();
+        cal.setTime(convertedDatetime);
+
+        for (int i = 0; i < 6; i++) {
+            cal.add(Calendar.DAY_OF_YEAR, 1);
+            TimeZone tz = cal.getTimeZone();
+            ZoneId zid = tz == null ? ZoneId.systemDefault() : tz.toZoneId();
+            LocalDateTime localDateTime = LocalDateTime.ofInstant(cal.toInstant(), zid);
+            DayOfTimesheet currentDayOfTimesheet = new DayOfTimesheet(localDateTime, 0);
+            dayOfTimesheets.add(currentDayOfTimesheet);
+        }
+
+        return this.dayOfTimesheetRepository.saveAll(dayOfTimesheets);
+    }
 
     /**
      * Gets day of timesheet by a page number and size
@@ -58,29 +94,5 @@ public class DayOfTimesheetService {
                 .findById(id)
                 .map(dayOfTimesheet -> this.modelMapper.map(dayOfTimesheet, DayOfTimesheetResponseDTO.class))
                 .orElseThrow(() -> new NotFoundException(String.format("Day of timesheet with id %s - not found", id)));
-
-    }
-
-    /**
-     * Finds all of the days of timesheets
-     *
-     * @return list of tasks
-     */
-    public List<DayOfTimesheet> findAll() {
-        return dayOfTimesheetRepository.findAll();
-    }
-
-    public void validateDays(Set<DayOfTimesheet> timesheetDays) {
-
-        for (DayOfTimesheet dayOfTimesheet : timesheetDays) {
-            Optional<DayOfTimesheet> dayOfTimesheetOptional = dayOfTimesheetRepository.findById(dayOfTimesheet.getId());
-            if (dayOfTimesheetOptional.isEmpty()) {
-                throw new NotFoundException(String.format("Day of timesheet with id %s - not found", dayOfTimesheet.getId()));
-            }
-        }
-
-        if (timesheetDays.size() > 7) {
-            throw new IncorrectDataInput(String.format("Invalid number of days"));
-        }
     }
 }

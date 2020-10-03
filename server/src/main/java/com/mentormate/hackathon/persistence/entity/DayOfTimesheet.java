@@ -3,7 +3,7 @@ package com.mentormate.hackathon.persistence.entity;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
-import com.mentormate.hackathon.persistence.entity.serealizing.ParseDeserializer;
+import com.mentormate.hackathon.utils.ParseDeserializer;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Data;
