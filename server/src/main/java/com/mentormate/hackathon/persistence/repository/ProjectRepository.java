@@ -21,5 +21,4 @@ public interface ProjectRepository extends JpaRepository<Project, Long> {
      * @return optional of the project
      */
     Optional<Project> findByName(String name);
-
 }
