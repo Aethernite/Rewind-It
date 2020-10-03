@@ -11,7 +11,14 @@ import org.modelmapper.ModelMapper;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
+import java.util.TimeZone;
 import java.util.stream.Collectors;
 
 /**
@@ -32,14 +39,30 @@ public class DayOfTimesheetService {
      * Creates a new day of timesheet.
      *
      * @param dayOfTimesheetRequestDTO the request dto
+     * @param fromDate
      * @return the day of timesheet entity
      */
-    public DayOfTimesheet create(DayOfTimesheetRequestDTO dayOfTimesheetRequestDTO) {
+    public List<DayOfTimesheet> create(DayOfTimesheetRequestDTO dayOfTimesheetRequestDTO, LocalDateTime fromDate) {
 
         DayOfTimesheet dayOfTimesheet = this.modelMapper.map(dayOfTimesheetRequestDTO, DayOfTimesheet.class);
         log.info("Created day of timesheet with id {}!", dayOfTimesheet.getId());
 
-        return this.dayOfTimesheetRepository.save(dayOfTimesheet);
+        Date convertedDatetime = Date.from(fromDate.atZone(ZoneId.systemDefault()).toInstant());
+        List<DayOfTimesheet> dayOfTimesheets = new ArrayList<>();
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+        Calendar cal = Calendar.getInstance();
+        cal.setTime(convertedDatetime);
+
+        for (int i = 0; i < 6; i++) {
+            cal.add(Calendar.DAY_OF_YEAR, 1);
+            TimeZone tz = cal.getTimeZone();
+            ZoneId zid = tz == null ? ZoneId.systemDefault() : tz.toZoneId();
+            LocalDateTime localDateTime = LocalDateTime.ofInstant(cal.toInstant(), zid);
+            DayOfTimesheet currentDayOfTimesheet = new DayOfTimesheet(localDateTime, 0);
+            dayOfTimesheets.add(currentDayOfTimesheet);
+        }
+
+        return this.dayOfTimesheetRepository.saveAll(dayOfTimesheets);
     }
 
     /**
@@ -70,6 +93,5 @@ public class DayOfTimesheetService {
                 .findById(id)
                 .map(dayOfTimesheet -> this.modelMapper.map(dayOfTimesheet, DayOfTimesheetResponseDTO.class))
                 .orElseThrow(() -> new NotFoundException(String.format("Day of timesheet with id %s - not found", id)));
-
     }
 }

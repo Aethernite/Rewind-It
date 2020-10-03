@@ -5,6 +5,8 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
@@ -28,15 +30,15 @@ import java.util.List;
 @Table(name = "activities")
 public class Activity extends BaseEntity {
 
-    @OneToOne(cascade = {CascadeType.MERGE})
+    @OneToOne(cascade = CascadeType.MERGE)
     @JoinColumn(name = "project_id", referencedColumnName = "id")
     private Project project;
 
-    @OneToOne(cascade = {CascadeType.MERGE})
+    @OneToOne(cascade = CascadeType.MERGE)
     @JoinColumn(name = "task_id", referencedColumnName = "id")
     private Task task;
-    
-    @OneToMany(fetch = FetchType.LAZY)
+
+    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinColumn(name = "activity_id")
     private List<DayOfTimesheet> timesheetDays;
 }
