@@ -2,6 +2,7 @@ package com.mentormate.hackathon.controller.handler;
 
 import com.mentormate.hackathon.controller.handler.exception.EntityAlreadyExists;
 import com.mentormate.hackathon.controller.handler.exception.NotFoundException;
+import com.mentormate.hackathon.controller.handler.exception.UnAuthorizedException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -59,7 +60,7 @@ public class HttpExceptionHandlers {
      * @param e current exception
      * @return json with message about existing error
      */
-    @ExceptionHandler(AuthenticationException.class)
+    @ExceptionHandler({AuthenticationException.class, UnAuthorizedException.class})
     public ResponseEntity<Map<String, String>> unauthorizedException(AuthenticationException e) {
         return new ResponseEntity<>(Map.of("message", "Unauthorized"), HttpStatus.UNAUTHORIZED);
     }

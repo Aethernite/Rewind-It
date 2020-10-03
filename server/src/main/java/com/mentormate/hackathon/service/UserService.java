@@ -27,6 +27,10 @@ public class UserService implements UserDetailsService {
      */
     @Override
     public User loadUserByUsername(String email) throws UsernameNotFoundException {
+        return this.checkIfUserExist(email);
+    }
+    
+    public User checkIfUserExist(String email) {
         User user = userRepository.findByEmail(email).orElse(null);
         if (user == null) {
             log.info("User with email {} not found", email);
