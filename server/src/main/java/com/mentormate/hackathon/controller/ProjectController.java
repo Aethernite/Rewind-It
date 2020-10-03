@@ -11,7 +11,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.validation.constraints.Min;
@@ -33,10 +32,8 @@ public class ProjectController {
     private final ProjectService projectService;
 
     /**
-     * Get all response entities by page.
+     * Get all response entities.
      *
-     * @param page the number of the page
-     * @param size the number of entities per page
      * @return the paged entities
      */
     @Operation(description = "This request is used for getting all of the projects ")
@@ -45,11 +42,10 @@ public class ProjectController {
                     @ApiResponse(responseCode = "200", description = "Returns all of the projects"),
                     @ApiResponse(responseCode = "500", description = "Internal Server Error")
             })
-    @GetMapping(params = {"page", "size"})
-    public ResponseEntity<List<ProjectResponseDTO>> getAllProjects(
-            @RequestParam("page") int page, @RequestParam("size") int size) {
+    @GetMapping
+    public ResponseEntity<List<ProjectResponseDTO>> getAllProjects() {
 
-        return new ResponseEntity<>(projectService.findAll(page, size), HttpStatus.OK);
+        return new ResponseEntity<>(projectService.findAll(), HttpStatus.OK);
     }
 
     /**
@@ -69,4 +65,5 @@ public class ProjectController {
     public ResponseEntity<ProjectResponseDTO> getProjectById(@PathVariable("id") @NotNull @Min(1) Long id) {
         return ResponseEntity.ok(projectService.getById(id));
     }
+
 }

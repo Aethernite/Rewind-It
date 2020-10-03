@@ -7,6 +7,7 @@ import com.fasterxml.jackson.databind.deser.std.StdDeserializer;
 
 import java.io.IOException;
 import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeFormatterBuilder;
 import java.time.temporal.ChronoField;
@@ -22,7 +23,7 @@ public class ParseDeserializer extends StdDeserializer<LocalDateTime> {
     }
 
     /**
-     * Deserializes a formatted a date.
+     * Deserializes a formatted a date and sets the zone to UTC.
      *
      * @param p
      * @param ctxt
@@ -41,6 +42,7 @@ public class ParseDeserializer extends StdDeserializer<LocalDateTime> {
                 .parseDefaulting(ChronoField.SECOND_OF_MINUTE, 0)
                 .toFormatter();
 
-        return LocalDateTime.parse(p.getValueAsString(), formatter);
+        LocalDateTime ldt = LocalDateTime.parse(p.getValueAsString(), formatter);
+        return ldt.atZone(ZoneId.of("UTC")).toLocalDateTime();
     }
 }

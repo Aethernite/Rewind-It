@@ -16,7 +16,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.validation.Valid;
@@ -39,10 +38,8 @@ public class ActivityController {
     private final ActivityService activityService;
 
     /**
-     * Get all response entities by page.
+     * Get all response entities.
      *
-     * @param page the number of the page
-     * @param size the number of entities per page
      * @return the paged entities
      */
     @Operation(description = "This request is used for getting all of the activities ")
@@ -52,10 +49,9 @@ public class ActivityController {
                     @ApiResponse(responseCode = "500", description = "Internal Server Error")
             })
     @GetMapping
-    public ResponseEntity<List<ActivityResponseDTO>> getAllActivities(
-            @RequestParam("page") int page, @RequestParam("size") int size) {
+    public ResponseEntity<List<ActivityResponseDTO>> getAllActivities() {
 
-        return new ResponseEntity<>(activityService.findAll(page, size), HttpStatus.OK);
+        return new ResponseEntity<>(activityService.findAll(), HttpStatus.OK);
     }
 
     /**

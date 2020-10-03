@@ -12,7 +12,6 @@ import com.mentormate.hackathon.service.dto.ActivityResponseDTO;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -147,15 +146,13 @@ public class ActivityService {
     }
 
     /**
-     * Gets an activity by a page number and size
-     *
-     * @param page the page
-     * @param size the number of entities per page
+     * Gets a list of activities
+     * 
      * @return list of response dto's
      */
-    public List<ActivityResponseDTO> findAll(int page, int size) {
+    public List<ActivityResponseDTO> findAll() {
 
-        return activityRepository.findAll(PageRequest.of(page, size))
+        return activityRepository.findAll()
                 .stream()
                 .map(activity -> modelMapper.map(activity, ActivityResponseDTO.class))
                 .collect(Collectors.toUnmodifiableList());
