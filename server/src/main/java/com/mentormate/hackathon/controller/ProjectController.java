@@ -8,6 +8,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -37,6 +38,7 @@ public class ProjectController {
      * @return the paged entities
      */
     @Operation(description = "This request is used for getting all of the projects ")
+    @PreAuthorize("hasRole('ROLE_REGULAR')")
     @ApiResponses(
             value = {
                     @ApiResponse(responseCode = "200", description = "Returns all of the projects"),
@@ -65,5 +67,4 @@ public class ProjectController {
     public ResponseEntity<ProjectResponseDTO> getProjectById(@PathVariable("id") @NotNull @Min(1) Long id) {
         return ResponseEntity.ok(projectService.getById(id));
     }
-
 }
