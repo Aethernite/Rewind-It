@@ -41,3 +41,7 @@ background: linear-gradient(to bottom, #E5E5BE, #003973); /* W3C, IE 10+/ Edge, 
   background-clip: initial !important;
   background-color: initial !important;
 }
+
+.react-select{
+  font-size: 0.8rem;
+}

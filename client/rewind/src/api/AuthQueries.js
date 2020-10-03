@@ -2,6 +2,7 @@ import axios from 'axios';
 
 const instance = axios.create({
     baseURL: 'http://localhost:8000/api/v1',
+    withCredentials: true,
 });
 
 export const register = async ({ email, password }) => {
@@ -19,8 +20,8 @@ export const logout = async () => {
     return res.data;
 };
 
-export const getTimesheetsForUser = async ({ userId, cursor, limit }) => {
-    const res = await instance.get(`/v1/users/${userId}/timesheets`, { params: { cursor, limit } });
+export const getTimesheetsForUser = async ({ cursor, limit }) => {
+    const res = await instance.get(`/timesheets`, { params: { page: cursor, size: limit } });
     return res.data;
 };
 

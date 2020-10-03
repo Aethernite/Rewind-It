@@ -2,11 +2,11 @@ import { createSlice } from '@reduxjs/toolkit';
 import * as api from '../../api/AuthQueries';
 
 const initialState = {
-    timesheets: null,
+    timesheets: [],
     error: null,
     isCreating: false,
     isDeleting: false,
-    cursor: null,
+    limit: 5,
 };
 
 const { reducer: timesheetsReducer, actions } = createSlice({
@@ -18,9 +18,8 @@ const { reducer: timesheetsReducer, actions } = createSlice({
         },
         fetchTimesheetsSuccess: (state, action) => {
             state.isLoading = false;
-            state.timesheets.push(...action.payload.results.filter((x) => !state.timesheets.some((timesheet) => timesheet.id === x.id)));
+            state.timesheets = action.payload.timesheets;
             state.error = null;
-            state.cursor = action.payload.cursor;
         },
         fetchTimesheetsFailure: (state, action) => {
             state.isLoading = false;
@@ -31,21 +30,20 @@ const { reducer: timesheetsReducer, actions } = createSlice({
 });
 
 //Actions
-export const fetchUserTimesheets = (userId) => {
+export const fetchUserTimesheets = ({ cursor }) => {
     return async (dispatch, getState) => {
-        const { cursor, limit } = getState().timesheets;
+        const { limit } = getState().timesheets;
         try {
             dispatch(actions.fetchTimesheetsStart());
-            const { results, cursor: nextCursor } = await api.getTimesheetsForUser({ userId, cursor, limit });
-            dispatch(actions.fetchTimesheetsSuccess({ results, cursor: nextCursor }));
+            const timesheets = await api.getTimesheetsForUser({ cursor, limit });
+            dispatch(actions.fetchTimesheetsSuccess({ timesheets, cursor }));
         } catch (err) {
+            console.log(err);
             dispatch(actions.fetchTimesheetsFailure(err?.response?.data?.message));
         }
     }
-}
-
-
-
+};
 
 
 export { timesheetsReducer };
+
