@@ -1,11 +1,13 @@
 import React from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { Container, Col } from 'react-bootstrap';
-import '@fortawesome/fontawesome-free/css/all.min.css'
+import '@fortawesome/fontawesome-free/css/all.min.css';
+import '@fortawesome/free-solid-svg-icons';
 import styled from 'styled-components';
 import TimesheetRow from './TimesheetRow';
 import { useDispatch } from 'react-redux';
 import { deleteCurrentTimesheet } from '../store/slices/timesheet';
+import { fetchAllProjects } from '../store/slices/projects';
 
 const Table = styled.table`
 border: 1px solid #2e2e2e;
@@ -20,6 +22,14 @@ background-color: #fff;
 
 export const TimesheetTable = ({ from, to }) => {
     const dispatch = useDispatch();
+
+    React.useEffect(() => {
+        dispatch(fetchAllProjects());
+    }, [dispatch])
+
+
+
+
     return (
         <Container className="mt-5">
             <Col className="d-flex justify-content-center">

@@ -45,7 +45,7 @@ const StyledButton = styled(Button)`
   margin-top: 2rem;
   background-color: cornflowerblue;
   border-radius: 10px;
-`
+`;
 
 export const CreateTimesheet = () => {
 
@@ -60,10 +60,6 @@ export const CreateTimesheet = () => {
         monday.add(7, 'd');
         sunday.add(7, 'd');
     }
-
-    // fullWeek.map((monday) => (
-    //     <Week week={monday}/>
-    // ))
 
     const dispatch = useDispatch();
 
@@ -96,7 +92,7 @@ export const CreateTimesheet = () => {
                                 {fullWeek.map(monday => <Week week={monday} />)}
                             </select>
                         </div>
-                        <StyledButton disabled={formik.values.period == ''} type="submit">Next</StyledButton>
+                        <StyledButton disabled={formik.values.period === ''} type="submit">Next</StyledButton>
                     </Form>
                 </Col>
             </Container>

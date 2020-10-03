@@ -18,3 +18,13 @@ export const logout = async () => {
     const res = await instance.post('/auth/logout');
     return res.data;
 };
+
+export const getTimesheetsForUser = async ({ userId, cursor, limit }) => {
+    const res = await instance.get(`/v1/users/${userId}/timesheets`, { params: { cursor, limit } });
+    return res.data;
+};
+
+export const fetchProjects = async () => {
+    const res = await instance.get('/projects');
+    return res.data;
+};
