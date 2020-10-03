@@ -1,7 +1,10 @@
 import React from "react";
 import { Button, Col, Container } from "react-bootstrap";
+import { useDispatch, useSelector } from "react-redux";
 import styled from "styled-components";
-
+import { fetchUserTimesheets } from '../../../store/slices/timesheets';
+import Moment from 'react-moment';
+import ReactPaginate from 'react-paginate';
 
 const Table = styled.table`
 border: 1px solid #2e2e2e;
@@ -22,6 +25,22 @@ margin-bottom: 2rem;
 
 
 export const TimesheetsPage = () => {
+
+
+    const timesheets = useSelector(state => state.timesheets.timesheets.content);
+    const page = useSelector(state => state.timesheets.timesheets);
+    const hasMore = useSelector(state => state.timesheets.hasMore);
+    const dispatch = useDispatch();
+
+    React.useEffect(() => {
+        dispatch(fetchUserTimesheets({ cursor: 0 }));
+    }, [dispatch]);
+
+
+    const handlePageChange = e => {
+        dispatch(fetchUserTimesheets({ cursor: e.selected }));
+    }
+
     return (
         <Container className="mt-5">
             <Col className="d-flex justify-content-center">
@@ -43,10 +62,56 @@ export const TimesheetsPage = () => {
                         </tr>
                     </thead>
                     <tbody className="text-center">
+                        {timesheets && timesheets.map(timesheet => (
+                            <tr>
+                                <td>
+                                    <div classname="mt-2">
+                                        <span>Week <Moment format={"DD/MM/YYYY"}>{timesheet.activities[0].timesheetDays[0].date}</Moment> to <Moment format={"DD/MM/YYYY"}>{timesheet.activities[0].timesheetDays[5].date}</Moment></span>
+                                    </div>
+                                </td>
+                                <td>
+                                    <div className="mt-2">
+                                        <span>Submitted</span>
+                                    </div>
+                                </td>
+                                <td>
+                                    <div style={{ display: "flex" }}>
+                                        <Button variant="outline-dark" style={{ marginRight: "0.2rem" }}
+                                            className="form-control">Edit</Button>
+                                        <Button variant="outline-dark" className="form-control">Delete</Button>
+                                    </div>
+                                </td>
+                            </tr>)
+                        )}
+
                         <tr>
+                            <td colSpan="3">
+                                <div className="d-flex justify-content-center">
+                                    {console.log(page.totalPages)}
+                                    <ReactPaginate
+                                        pageCount={page.totalPages}
+                                        pageRangeDisplayed={page.totalPages}
+                                        marginPagesDisplayed={0}
+                                        onPageChange={(e) => handlePageChange(e)}
+                                        breakClassName={'page-item'}
+                                        breakLinkClassName={'page-link'}
+                                        containerClassName={'pagination'}
+                                        pageClassName={'page-item'}
+                                        pageLinkClassName={'page-link'}
+                                        previousClassName={'page-item'}
+                                        previousLinkClassName={'page-link'}
+                                        nextClassName={'page-item'}
+                                        nextLinkClassName={'page-link'}
+                                        activeClassName={'active'}
+                                    ></ReactPaginate>
+                                </div>
+                            </td>
+                        </tr>
+
+                        {/* <tr>
                             <td>
                                 <div className="mt-2">
-                                    <option>Week 28/09/2020 - 04/10/2020</option>
+                                    <span>Week 28/09/2020 - 04/10/2020</span>
                                 </div>
                             </td>
                             <td>
@@ -99,7 +164,7 @@ export const TimesheetsPage = () => {
                                     <Button disabled={true} variant="outline-dark" className="form-control">Delete</Button>
                                 </div>
                             </td>
-                        </tr>
+                        </tr> */}
                         {/*<TimesheetRow></TimesheetRow>*/}
                         {/*<tr>*/}
                         {/*    <td></td>*/}
