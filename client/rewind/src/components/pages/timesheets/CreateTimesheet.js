@@ -45,7 +45,7 @@ const StyledButton = styled(Button)`
   margin-top: 2rem;
   background-color: cornflowerblue;
   border-radius: 10px;
-`
+`;
 
 export const CreateTimesheet = () => {
 

@@ -8,7 +8,7 @@ import '../../../css/forms.scss';
 import { LoginValidationSchema } from "../../../validations/schemas/LoginValidationSchema";
 import { useSelector, useDispatch } from 'react-redux';
 import { login } from '../../../store/slices/auth';
-import {Link} from "react-router-dom";
+import { Link } from "react-router-dom";
 
 const FormLabel = styled.label`
 font-family: 'Roboto', sans-serif;
@@ -95,7 +95,7 @@ const LoginPage = () => {
                     </div>
                     <FormGroup>
                         {formik.touched.email && formik.errors.email &&
-                        <Alert variant="danger">{formik.errors.email}</Alert>}
+                            <Alert variant="danger">{formik.errors.email}</Alert>}
                         <FormLabel className="form-label">Email</FormLabel>
                         <input
                             type="text"
@@ -123,7 +123,7 @@ const LoginPage = () => {
                         <p className="text-center">By signing up you accept our <a href="#TermsOfUse">Terms Of Use</a></p>
                     </FormGroup>
                     <div className="col-md-12 text-center ">
-                        <a onClick={handleSubmit} class="btn-flip mb-3" data-back="Login" data-front="Login"></a>
+                        <a href="# " onClick={handleSubmit} class="btn-flip mb-3" data-back="Login" data-front="Login" style={{ textDecoration: 'none' }}> </a>
                         <button ref={submit} form="myform" type="submit" style={{ display: 'none' }}></button>
                     </div>
                     <div className="form-group">

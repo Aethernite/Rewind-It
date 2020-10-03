@@ -1,5 +1,4 @@
 import { createSlice } from '@reduxjs/toolkit';
-import * as api from '../../api/AuthQueries';
 
 const initialState = {
     timesheet: null,

@@ -1,7 +1,8 @@
 import React from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { Container, Col } from 'react-bootstrap';
-import '@fortawesome/fontawesome-free/css/all.min.css'
+import '@fortawesome/fontawesome-free/css/all.min.css';
+import '@fortawesome/free-solid-svg-icons';
 import styled from 'styled-components';
 import TimesheetRow from './TimesheetRow';
 import { useDispatch } from 'react-redux';
@@ -24,7 +25,9 @@ export const TimesheetTable = ({ from, to }) => {
 
     React.useEffect(() => {
         dispatch(fetchAllProjects());
-    }, [dispatch]);
+    }, [dispatch])
+
+
 
 
     return (
