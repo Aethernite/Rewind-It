@@ -60,6 +60,9 @@ public class ProjectService {
     private void seedProjects() {
 
         if (projectRepository.findAll().isEmpty()) {
+            Task defaultTask = taskService.findByName("default");
+            Project defaultProject = new Project("default", Set.of(defaultTask));
+            projectRepository.save(defaultProject);
 
             Task learning = taskService.findByName("Learning");
 
@@ -79,7 +82,6 @@ public class ProjectService {
 
             Project devcamp2 = new Project("MentorMate L&D : 2020.2.Devcamp", taskSet);
             projectRepository.save(devcamp2);
-
         }
     }
 

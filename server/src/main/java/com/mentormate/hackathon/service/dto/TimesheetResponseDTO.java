@@ -1,6 +1,7 @@
 package com.mentormate.hackathon.service.dto;
 
 import com.mentormate.hackathon.persistence.entity.Activity;
+import com.mentormate.hackathon.persistence.entity.StatusType;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -16,6 +17,10 @@ import java.util.List;
 public class TimesheetResponseDTO {
 
     private Long id;
-    
-    List<Activity> activities;
+
+    private StatusType statusType;
+
+    private List<Activity> activities;
+
+    private double total;
 }
