@@ -56,7 +56,15 @@ export const submitTimesheet = async ({ id }) => {
     return res.data;
 }
 
+export const saveTimesheet = async ({ id }) => {
+    const res = await instance.put(`/timesheets/${id}`);
+    return res.data;
+}
 
+export const fetchTimesheetById = async ({ id }) => {
+    const res = await instance.get(`/timesheets/${id}`);
+    return res.data;
+}
 
 const token = localStorage.getItem('token');
 if (token) {

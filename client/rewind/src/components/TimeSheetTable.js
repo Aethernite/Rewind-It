@@ -6,7 +6,7 @@ import '@fortawesome/free-solid-svg-icons';
 import styled from 'styled-components';
 import TimesheetRow from './TimesheetRow';
 import { useDispatch, useSelector } from 'react-redux';
-import {deleteCurrentTimesheet, submitCurrentTimesheet} from '../store/slices/timesheet';
+import {deleteCurrentTimesheet, saveCurrentTimesheet, submitCurrentTimesheet} from '../store/slices/timesheet';
 import { fetchAllProjects } from '../store/slices/projects';
 import moment from 'moment';
 import { Modal } from "react-bootstrap";
@@ -102,7 +102,10 @@ export const TimesheetTable = ({ from, to }) => {
                                     </Modal>
 
                                     <i class="far fa-save mr-2 fa-2x" style={{ color: '#2e2e2e', transform: "translateY(5px)" }}></i>
-                                    <button type="button" class="btn btn-dark mr-3">SAVE</button>
+                                    <button type="button" class="btn btn-dark mr-3" onClick={() => {
+
+                                        dispatch(saveCurrentTimesheet());
+                                    }}>SAVE</button>
 
                                     <i class="far fa-check-circle mr-2 fa-2x" style={{ color: '#2e2e2e', transform: "translateY(5px)" }}></i>
                                     <button type="button" className="btn btn-dark mr-3" onClick={() => {
