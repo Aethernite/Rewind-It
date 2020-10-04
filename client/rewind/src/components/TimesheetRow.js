@@ -8,6 +8,7 @@ import { useFormik } from 'formik';
 import { useSelector, useDispatch } from 'react-redux';
 import { TimesheetRowValidationSchema } from "../validations/schemas/TimesheetRowValidationSchema";
 import Select from 'react-select';
+import {addActivity} from "../store/slices/timesheet";
 
 const Input = styled.input`
 text-align: center;
@@ -71,8 +72,10 @@ export const TimesheetRow = ({ activity, index }) => {
     const projectDefault = { value: '', label: "Choose Project..." };
 
     const handleProjectChange = (e) => {
-        if (selectedProjectOption == null && e.target.value) {
-
+        if (selectedProjectOption === null) {
+            const temp = activity;
+            console.log(temp);
+            dispatch(addActivity(temp));
         }
         setSelectedProjectOption(e);
         setSelectedTaskOption(null);

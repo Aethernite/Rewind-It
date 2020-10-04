@@ -32,6 +32,17 @@ const { reducer: timesheetReducer, actions } = createSlice({
             state.isDeleting = false;
             state.timesheet = null;
         },
+        addCurrentTimesheetActivityStart: (state) => {
+            state.isCreating = true;
+        },
+        addCurrentTimesheetActivitySuccess: (state, action) => {
+            state.isCreating = false;
+            state.timesheet.activities.push(action.payload);
+        },
+        addCurrentTimesheetActivityFailure: (state, action) => {
+            state.isCreating = false;
+            // state.timesheet.error = action.payload;
+        },
 
         // authStart: (state) => {
         //     state.isLoading = true;
@@ -106,7 +117,17 @@ export const deleteCurrentTimesheet = () => {
         dispatch(actions.deleteCurrentTimesheetStart());
         dispatch(actions.deleteCurrentTimesheetSuccess());
     }
-
 };
+
+export const addActivity = (payload) => {
+    return async (dispatch) => {
+        try {
+            dispatch(actions.addCurrentTimesheetActivityStart());
+            dispatch(actions.addCurrentTimesheetActivitySuccess(payload));
+        } catch (error) {
+            dispatch(actions.addCurrentTimesheetActivityFailure(error?.response?.data?.message));
+        }
+    }
+}
 
 export { timesheetReducer };
