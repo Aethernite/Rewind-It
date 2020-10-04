@@ -4,6 +4,7 @@ import {Link, NavLink, useHistory} from "react-router-dom";
 import styled from "styled-components";
 import {useDispatch, useSelector} from 'react-redux';
 import {logout} from '../../store/slices/auth';
+import CustomNavLink from "./CustomNavLink";
 
 const Container = styled.div`
 display: flex;
@@ -51,24 +52,14 @@ export const NavBar = () => {
                 <Navbar.Toggle aria-controls="basic-navbar-nav"/>
                 <Navbar.Collapse>
                     <Nav fill variant="tabs" activeKey={activeKey} style={{border: "none"}} onSelect={handleSelect}>
-                        <Nav.Link activeClassName="active" className="tab" style={{
-                            backgroundColor: "transparent",
-                            borderTop: "none",
-                            borderLeft: "none",
-                            borderRight: "none"
-                        }} eventKey={1} as={Link}
-                                  to="/timesheet/home" exact>
-                            All Timesheets
-                        </Nav.Link>
-                        <Nav.Link activeClassName="active" className={"tab"} style={{
-                            backgroundColor: "transparent",
-                            borderTop: "none",
-                            borderLeft: "none",
-                            borderRight: "none"
-                        }} eventKey={2} as={NavLink}
-                                  to="/timesheet/create" exact>
-                            Create Timesheets
-                        </Nav.Link>
+                        <CustomNavLink inactiveClassName="inactive" activeClassName="active" to="/timesheet/home" exact
+                                       eventKey={2} as={NavLink}>
+                            <span>All Timesheets</span>
+                        </CustomNavLink>
+                        <CustomNavLink inactiveClassName="inactive" activeClassName="active" to="/timesheet/create"
+                                       exact eventKey={2} as={NavLink}>
+                            <span>Create Timesheets</span>
+                        </CustomNavLink>
                     </Nav>
                     <Navbar.Collapse className="justify-content-end">
                         <Nav.Link className="text-center" style={{textDecoration: 'none', color: '#2e2e2e'}}>
