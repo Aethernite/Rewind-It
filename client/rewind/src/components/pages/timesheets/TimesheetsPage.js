@@ -7,6 +7,7 @@ import Moment from 'react-moment';
 import ReactPaginate from 'react-paginate';
 import { ConfirmationBox } from "../../common/ConfirmationBox";
 import moment from 'moment';
+import {useHistory} from "react-router-dom";
 
 
 const Table = styled.table`
@@ -34,14 +35,17 @@ export const TimesheetsPage = () => {
     const page = useSelector(state => state.timesheets.timesheets);
     const hasMore = useSelector(state => state.timesheets.hasMore);
     const dispatch = useDispatch();
+    const history = useHistory();
+
+    console.log(timesheets);
 
     React.useEffect(() => {
-        dispatch(fetchUserTimesheets({ cursor: 0 }));
+        dispatch(fetchUserTimesheets({cursor: 0}));
     }, [dispatch]);
 
 
     const handlePageChange = e => {
-        dispatch(fetchUserTimesheets({ cursor: e.selected }));
+        dispatch(fetchUserTimesheets({cursor: e.selected}));
     }
     const [modalShow, setModalShow] = React.useState(false);
 
@@ -66,56 +70,63 @@ export const TimesheetsPage = () => {
                         </tr>
                     </thead>
                     <tbody className="text-center">
-                        {timesheets && timesheets.map(timesheet => (
-                            <tr>
-                                <td>
-                                    <div classname="mt-2">
-                                        <span>Week <Moment format={"DD/MM/YYYY"}>{timesheet.activities[0].timesheetDays[0].date}</Moment> - <Moment format={"DD/MM/YYYY"}>{timesheet.activities[0].timesheetDays[5].date}</Moment></span>
-                                    </div>
-                                </td>
-                                <td>
-                                    <div className="mt-2">
-                                        <span>Submitted</span>
-                                    </div>
-                                </td>
-                                <td>
-                                    <div style={{ display: "flex" }}>
-                                        <Button variant="outline-dark" style={{ marginRight: "0.2rem" }}
-                                            className="form-control">Edit</Button>
-                                        <Button variant="outline-dark" className="form-control" onClick={() => setModalShow(true)}>Delete</Button>
-                                        <ConfirmationBox
-                                            show={modalShow}
-                                            onHide={() => setModalShow(false)}
-                                            week={{ week: moment(timesheet.activities[0].timesheetDays[0].date).format("DD/MM/YYYY") + " to " + moment(timesheet.activities[0].timesheetDays[5].date).format("DD/MM/YYYY") }}
-                                        />
-                                    </div>
-                                </td>
-                            </tr>)
-                        )}
-
+                    {timesheets && timesheets.map(timesheet => (
                         <tr>
-                            <td colSpan="3">
-                                <div className="d-flex justify-content-center">
-                                    {console.log(page.totalPages)}
-                                    <ReactPaginate
-                                        pageCount={page.totalPages}
-                                        pageRangeDisplayed={page.totalPages}
-                                        marginPagesDisplayed={0}
-                                        onPageChange={(e) => handlePageChange(e)}
-                                        breakClassName={'page-item'}
-                                        breakLinkClassName={'page-link'}
-                                        containerClassName={'pagination'}
-                                        pageClassName={'page-item'}
-                                        pageLinkClassName={'page-link'}
-                                        previousClassName={'page-item'}
-                                        previousLinkClassName={'page-link'}
-                                        nextClassName={'page-item'}
-                                        nextLinkClassName={'page-link'}
-                                        activeClassName={'active'}
-                                    ></ReactPaginate>
+                            <td>
+                                <div classname="mt-2">
+                                    <span>Week <Moment format={"DD/MM/YYYY"}>{timesheet.from}</Moment> - <Moment
+                                        format={"DD/MM/YYYY"}>{timesheet.to}</Moment></span>
                                 </div>
                             </td>
-                        </tr>
+                            <td>
+                                <div className="mt-2">
+                                    <span>{timesheet.statusType === "SUBMITTED" ? "Submitted" : "Open"}</span>
+                                </div>
+                            </td>
+                            <td>
+                                <div style={{display: "flex"}}>
+                                    {timesheet.statusType === "SUBMITTED" ?
+                                        <Button variant="outline-dark" style={{marginRight: "0.2rem"}}
+                                                className="form-control" onClick={() => history.push(`/timesheet/view/${timesheet.id}`)}>View</Button> :
+                                        <Button variant="outline-dark" style={{marginRight: "0.2rem"}}
+                                                className="form-control">Edit</Button>}
+                                    <Button variant="outline-dark" className="form-control"
+                                            disabled={timesheet.statusType === "SUBMITTED"}
+                                            onClick={() => setModalShow(true)}>Delete</Button>
+                                    <ConfirmationBox
+                                        show={modalShow}
+                                        onHide={() => setModalShow(false)}
+                                        week={{week: moment(timesheet.from).format("DD/MM/YYYY") + " to " + moment(timesheet.to).format("DD/MM/YYYY")}}
+                                        timesheetId={timesheet.id}
+                                    />
+                                </div>
+                            </td>
+                        </tr>)
+                    )}
+                    <tr>
+                        <td colSpan="3">
+                            <div className="d-flex justify-content-center">
+                                {timesheets?.length > 0 && <ReactPaginate
+                                    pageCount={page.totalPages}
+                                    pageRangeDisplayed={page.totalPages}
+                                    marginPagesDisplayed={0}
+                                    onPageChange={(e) => handlePageChange(e)}
+                                    breakClassName={'page-item'}
+                                    breakLinkClassName={'page-link'}
+                                    containerClassName={'pagination'}
+                                    pageClassName={'page-item'}
+                                    pageLinkClassName={'page-link'}
+                                    previousClassName={'page-item'}
+                                    previousLinkClassName={'page-link'}
+                                    nextClassName={'page-item'}
+                                    nextLinkClassName={'page-link'}
+                                    activeClassName={'active'}
+                                ></ReactPaginate>}
+
+                                {timesheets?.length === 0 && <span>No timesheets found.</span>}
+                            </div>
+                        </td>
+                    </tr>
 
                         {/* <tr>
                             <td>

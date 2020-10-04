@@ -32,7 +32,57 @@ const { reducer: timesheetReducer, actions } = createSlice({
             state.isDeleting = false;
             state.timesheet = null;
         },
-
+        deleteCurrentTimesheetFailure: (state, action) => {
+            state.isDeleting = false;
+            state.error = action.payload;
+        },
+        addCurrentTimesheetActivityStart: (state) => {
+            state.isCreating = true;
+        },
+        addCurrentTimesheetActivitySuccess: (state, action) => {
+            state.isCreating = false;
+            state.timesheet.activities.push(action.payload);
+        },
+        addCurrentTimesheetActivityFailure: (state, action) => {
+            state.isCreating = false;
+            // state.timesheet.error = action.payload;
+        },
+        submitTimesheetStart: (state) => {
+            state.isCreating = true;
+        },
+        submitTimesheetSuccess: (state, action) => {
+            state.isCreating = false;
+            state.timesheet = action.payload;
+            state.creationError = null;
+        },
+        submitTimesheetFailure: (state, action) => {
+            state.isCreating = false;
+            state.creationError = action.payload;
+        },
+        saveTimesheetStart: (state) => {
+            state.isCreating = true;
+        },
+        saveTimesheetSuccess: (state, action) => {
+            state.isCreating = false;
+            state.timesheet = action.payload;
+            state.creationError = null;
+        },
+        saveTimesheetFailure: (state, action) => {
+            state.isCreating = false;
+            state.creationError = action.payload;
+        },
+        fetchTimesheetStart: (state) => {
+            state.isCreating = true;
+        },
+        fetchTimesheetSuccess: (state, action) => {
+            state.isCreating = false;
+            state.timesheet = action.payload;
+            state.creationError = null;
+        },
+        fetchTimesheetFailure: (state, action) => {
+            state.isCreating = false;
+            state.creationError = action.payload;
+        },
         // authStart: (state) => {
         //     state.isLoading = true;
         // },
@@ -102,11 +152,67 @@ export const createTimesheet = ({ from, to }) => {
 };
 
 export const deleteCurrentTimesheet = () => {
-    return async (dispatch) => {
+    return async (dispatch, getState) => {
+        const id = getState().timesheet.timesheet.id;
         dispatch(actions.deleteCurrentTimesheetStart());
-        dispatch(actions.deleteCurrentTimesheetSuccess());
+        try {
+            api.deleteTimesheet({ id });
+            dispatch(actions.deleteCurrentTimesheetSuccess());
+        } catch (err) {
+            dispatch(actions.deleteCurrentTimesheetFailure());
+        }
     }
-
 };
+
+export const addActivity = (payload) => {
+    return async (dispatch) => {
+        try {
+            dispatch(actions.addCurrentTimesheetActivityStart());
+            dispatch(actions.addCurrentTimesheetActivitySuccess(payload));
+        } catch (error) {
+            dispatch(actions.addCurrentTimesheetActivityFailure(error?.response?.data?.message));
+        }
+    }
+}
+
+export const submitCurrentTimesheet = () => {
+    return async (dispatch, getState) => {
+        const id = getState().timesheet.timesheet.id;
+        dispatch(actions.submitTimesheetStart());
+        try {
+            await api.submitTimesheet({id});
+            dispatch(actions.submitTimesheetSuccess());
+        } catch (error) {
+            actions.submitTimesheetFailure(error?.response?.data?.message)
+        }
+    }
+}
+
+export const saveCurrentTimesheet = () => {
+    return async (dispatch, getState) => {
+        const id = getState().timesheet.timesheet.id;
+        dispatch(actions.saveTimesheetStart());
+        try {
+            const result =  await api.saveTimesheet({id});
+            console.log(result);
+            dispatch(actions.submitTimesheetSuccess());
+        } catch (error) {
+            actions.saveTimesheetFailure(error?.response?.data?.message)
+        }
+    }
+}
+
+export const fetchTimesheet = ({id}) => {
+    return async (dispatch) => {
+        dispatch(actions.fetchTimesheetStart());
+        try {
+            const result =  await api.fetchTimesheetById({id});
+            console.log(result);
+            dispatch(actions.fetchTimesheetSuccess(result));
+        } catch (error) {
+            actions.fetchTimesheetFailure(error?.response?.data?.message)
+        }
+    }
+}
 
 export { timesheetReducer };

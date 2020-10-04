@@ -6,9 +6,11 @@ import '@fortawesome/free-solid-svg-icons';
 import styled from 'styled-components';
 import TimesheetRow from './TimesheetRow';
 import { useDispatch, useSelector } from 'react-redux';
-import { deleteCurrentTimesheet } from '../store/slices/timesheet';
+import {deleteCurrentTimesheet, saveCurrentTimesheet, submitCurrentTimesheet} from '../store/slices/timesheet';
 import { fetchAllProjects } from '../store/slices/projects';
 import moment from 'moment';
+import { Modal } from "react-bootstrap";
+import {useHistory, Redirect} from "react-router-dom"
 
 const Table = styled.table`
 border: 1px solid #2e2e2e;
@@ -19,16 +21,39 @@ font-family: "Roboto", sans-serif;
 background-color: #fff;
 `;
 
+const IconYes = styled.i`
+color: #26bf26;
+transition: transform 0.2s;
+
+&:hover{
+    color: #2cde2c;
+    transform: scale(1.1);
+    cursor: pointer;
+}
+`;
+
+const IconNo = styled.i`
+color: #cc1d1f;
+transition: transform 0.2s;
+
+&:hover{
+    color: #db2325;
+    transform: scale(1.1);
+    cursor: pointer;
+}
+`;
 
 
 export const TimesheetTable = ({ from, to }) => {
     const dispatch = useDispatch();
     const timesheet = useSelector(state => state.timesheet.timesheet);
+    const history = useHistory();
 
     React.useEffect(() => {
         dispatch(fetchAllProjects());
     }, [dispatch])
 
+    const [modalShow, setModalShow] = React.useState(false);
 
 
 
@@ -42,13 +67,42 @@ export const TimesheetTable = ({ from, to }) => {
                                 <span style={{ verticalAlign: 'top' }}>Timesheet for {timesheet.from} - {timesheet.to}</span>
                                 <div className="float-right">
                                     <i class="far fa-trash-alt mr-2 fa-2x" style={{ color: '#2e2e2e', transform: "translateY(5px)" }}></i>
-                                    <button type="button" class="btn btn-dark mr-3" onClick={() => dispatch(deleteCurrentTimesheet())}>DELETE</button>
+                                    <button type="button" class="btn btn-dark mr-3" onClick={() => setModalShow(true)}>DELETE</button>
+                                    <Modal
+                                        size="xs"
+                                        aria-labelledby="contained-modal-title-vcenter"
+                                        centered
+                                        show={modalShow}
+                                    >
+                                        <Modal.Header>
+                                            <Modal.Title style={{ margin: '0 auto' }}>Delete confirmation</Modal.Title>
+                                        </Modal.Header>
+                                        <Modal.Body style={{ display: "flex", height: "100%", justifyContent: "center", alignItems: "center" }}>
+                                            <h5 style={{ display: "flex", justifyContent: "center", alignItems: "center" }}>
+                                                <p style={{ justifyContent: "center", alignItems: "center", textAlign: 'center' }}>
+                                                    Are you sure you want to <br></br> delete the timesheet for week <br></br> {timesheet.from + ' - ' + timesheet.to + "?"}
+                                                </p>
+                                            </h5>
+                                        </Modal.Body>
+                                        <Modal.Footer>
+                                            <div style={{ display: "flex", width: "100%", justifyContent: "space-evenly" }}>
+                                                <IconYes className="fas fa-check-circle fa-3x" onClick={() => dispatch(deleteCurrentTimesheet())}></IconYes>
+                                                <IconNo className="fas fa-times-circle fa-3x" onClick={() => setModalShow(false)}></IconNo>
+                                            </div>
+                                        </Modal.Footer>
+                                    </Modal>
 
                                     <i class="far fa-save mr-2 fa-2x" style={{ color: '#2e2e2e', transform: "translateY(5px)" }}></i>
-                                    <button type="button" class="btn btn-dark mr-3">SAVE</button>
+                                    <button type="button" class="btn btn-dark mr-3" onClick={() => {
+
+                                        dispatch(saveCurrentTimesheet());
+                                    }}>SAVE</button>
 
                                     <i class="far fa-check-circle mr-2 fa-2x" style={{ color: '#2e2e2e', transform: "translateY(5px)" }}></i>
-                                    <button type="button" class="btn btn-dark mr-3">SUBMIT</button>
+                                    <button type="button" class="btn btn-dark mr-3" onClick={() => {
+                                        dispatch(submitCurrentTimesheet());
+                                        history.push("/timesheet/home");
+                                    }}>SUBMIT</button>
 
 
                                     <span>Status: {timesheet.statusType}</span>
@@ -79,7 +133,9 @@ export const TimesheetTable = ({ from, to }) => {
                         <tr>
                             <td></td>
                             <td colSpan={2} style={{ textAlign: 'left', fontWeight: '500' }}>Total</td>
-                            <td>8</td>
+                            <td>{
+                                0
+                            }</td>
                             <td>8</td>
                             <td>8</td>
                             <td>8</td>
