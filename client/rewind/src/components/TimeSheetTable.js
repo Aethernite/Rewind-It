@@ -6,7 +6,12 @@ import '@fortawesome/free-solid-svg-icons';
 import styled from 'styled-components';
 import TimesheetRow from './TimesheetRow';
 import { useDispatch, useSelector } from 'react-redux';
-import {deleteCurrentTimesheet, saveCurrentTimesheet, submitCurrentTimesheet} from '../store/slices/timesheet';
+import {
+    deleteCurrentTimesheet,
+    resetTimesheet,
+    saveCurrentTimesheet,
+    submitCurrentTimesheet
+} from '../store/slices/timesheet';
 import { fetchAllProjects } from '../store/slices/projects';
 import moment from 'moment';
 import { Modal } from "react-bootstrap";
@@ -62,6 +67,8 @@ export const TimesheetTable = ({ from, to }) => {
         if (timesheet !== null) {
             dispatch(fetchAllProjects());
         }
+
+        return () => dispatch(resetTimesheet());
     }, [dispatch])
 
     const [modalShow, setModalShow] = React.useState(false);
@@ -75,7 +82,7 @@ export const TimesheetTable = ({ from, to }) => {
                     <thead style={{ height: '80px' }}>
                         <tr style={{ height: '80px' }}>
                             <th colSpan="11" className="h-100">
-                                <span style={{ verticalAlign: 'top' }}>Timesheet for {timesheet.from} - {timesheet.to}</span>
+                                <span style={{ verticalAlign: 'top' }}>Timesheet for {moment(timesheet.from).format("DD/MM/YYYY")} - {moment(timesheet.to).format("DD/MM/YYYY")}</span>
                                 <div className="float-right">
                                     <i class="far fa-trash-alt mr-2 fa-2x" style={{ color: '#2e2e2e', transform: "translateY(5px)" }}></i>
                                     <button type="button" class="btn btn-dark mr-3" onClick={() => setModalShow(true)}>DELETE</button>

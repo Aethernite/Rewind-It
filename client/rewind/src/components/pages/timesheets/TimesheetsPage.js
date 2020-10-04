@@ -42,7 +42,7 @@ export const TimesheetsPage = () => {
 
     React.useEffect(() => {
         dispatch(fetchUserTimesheets({ cursor: 0 }));
-    }, [dispatch, timesheets?.length]);
+    }, [dispatch]);
 
     const handlePageChange = e => {
         dispatch(fetchUserTimesheets({ cursor: e.selected }));

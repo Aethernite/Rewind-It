@@ -87,6 +87,9 @@ const { reducer: timesheetReducer, actions } = createSlice({
             state.isFetching = false;
             state.creationError = action.payload;
         },
+        reset: () => {
+            return initialState;
+        },
         // authStart: (state) => {
         //     state.isLoading = true;
         // },
@@ -221,5 +224,7 @@ export const fetchTimesheet = ({id}) => {
         }
     }
 }
+
+export const resetTimesheet = actions.reset;
 
 export { timesheetReducer };

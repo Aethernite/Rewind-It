@@ -88,7 +88,7 @@ export const TimesheetRow = ({ activity, index }) => {
     const activities = timesheet.activities;
 
     const handleProjectChange = (e) => {
-        console.log(index);
+
         if (activities.length === index + 1) {
             dispatch(addActivity());
         }
