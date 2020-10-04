@@ -4,7 +4,7 @@ import '@fortawesome/fontawesome-free/css/all.min.css'
 import Tippy from '@tippyjs/react';
 import 'tippy.js/dist/tippy.css'; // optional
 import styled from 'styled-components';
-import { useFormik } from 'formik';
+import { useformik } from 'formik';
 import { useSelector, useDispatch } from 'react-redux';
 import { TimesheetRowValidationSchema } from "../validations/schemas/TimesheetRowValidationSchema";
 import Select from 'react-select';
@@ -38,39 +38,13 @@ const sum = arr => {
     return sum;
 }
 
-export const TimesheetRow = ({ activity, index }) => {
-    const projects = useSelector(state => state.projects.projects);
+export const TimesheetRow = ({ activity, index, formik }) => {
     const dispatch = useDispatch();
+    const projects = useSelector(state => state.projects.projects);
+
     const id = "row";
     const [selectedTaskOption, setSelectedTaskOption] = React.useState(activity.task);
     const [selectedProjectOption, setSelectedProjectOption] = React.useState(activity.project);
-
-
-    const formik = useFormik({
-        initialValues: {
-            project: '',
-            task: '',
-            monday: '',
-            tuesday: '',
-            wednesday: '',
-            thursday: '',
-            friday: '',
-            saturday: '',
-            sunday: '',
-            total: 0,
-        },
-
-        onSubmit: (values) => {
-            values.total = (formik.values.monday !== '' ? parseFloat(formik.values.monday) : 0) +
-                (formik.values.tuesday !== '' ? parseFloat(formik.values.tuesday) : 0) +
-                (formik.values.wednesday !== '' ? parseFloat(formik.values.wednesday) : 0) +
-                (formik.values.thursday !== '' ? parseFloat(formik.values.thursday) : 0) +
-                (formik.values.friday !== '' ? parseFloat(formik.values.friday) : 0) +
-                (formik.values.saturday !== '' ? parseFloat(formik.values.saturday) : 0) +
-                (formik.values.sunday !== '' ? parseFloat(formik.values.sunday) : 0);
-        },
-        validationSchema: TimesheetRowValidationSchema,
-    });
 
     const projectOptions = [] = projects.map((project, index) => project = { value: index, label: project.name });
 
@@ -81,6 +55,7 @@ export const TimesheetRow = ({ activity, index }) => {
 
     const handleProjectChange = (e) => {
         setSelectedProjectOption(e);
+        console.log(e);
         setSelectedTaskOption(null);
     }
 
@@ -90,9 +65,6 @@ export const TimesheetRow = ({ activity, index }) => {
 
     return (
         <>
-            <form onSubmit={formik.handleSubmit} id={id}>
-
-            </form>
             <tr>
                 <th>
                     <div className="mt-2">
@@ -102,16 +74,20 @@ export const TimesheetRow = ({ activity, index }) => {
                 </th>
                 <td>
                     <Select
+                        form={id}
                         theme="primary"
                         defaultValue={projectDefault}
                         onChange={handleProjectChange}
                         options={projectOptions}
                         value={selectedProjectOption || ''}
                         className="react-select"
+                        value={formik.values.timesheet.activities[0].project?.name}
+
                     />
                 </td>
                 <td>
                     <Select
+                        form={id}
                         defaultValue={taskDefault}
                         onChange={handleTaskChange}
                         value={selectedTaskOption || ''}
@@ -122,7 +98,7 @@ export const TimesheetRow = ({ activity, index }) => {
                 <td >
                     <div>
                         <Input name="monday" value={activity.timesheetDays[0].hours} maxLength={4} className={`form-control ${formik.errors.monday ? "is-invalid" : ""}`} form={id} onBlur={formik.handleBlur} onChange={formik.handleChange} value={formik.values.monday} />
-                        <Tippy content={formik.errors.monday ? "Only positive numbers allowed 0-24!" : "This input is for the work hours \n on a certain task!"} arrow={true} placement='bottom' theme={formik.errors.monday ? "danger" : "dark"} style={{ display: "inline-block" }}>
+                        <Tippy content={formik.errors.activity ? "Only positive numbers allowed 0-24!" : "This input is for the work hours \n on a certain task!"} arrow={true} placement='bottom' theme={formik.errors.monday ? "danger" : "dark"} style={{ display: "inline-block" }}>
                             <i class="fas fa-info-circle" style={{ color: formik.errors.monday ? "red" : "#2e2e2e" }}></i>
                         </Tippy>
                     </div>
@@ -140,7 +116,7 @@ export const TimesheetRow = ({ activity, index }) => {
                     </Tippy>
                 </td >
                 <td>
-                    <Input name="thursday" maxLength={4} value={activity.timesheetDays[3].hours} className={`form-control ${formik.errors.thursday ? "is-invalid" : ""}`} form={id} onBlur={formik.handleBlur} onChange={formik.handleChange} value={formik.values.thursday} />
+                    <input name="thursday" maxLength={4} value={activity.timesheetDays[3].hours} className={`form-control ${formik.errors.thursday ? "is-invalid" : ""}`} form={id} onBlur={formik.handleBlur} onChange={formik.handleChange} value={formik.values.thursday} />
                     <Tippy content={formik.errors.thursday ? "Only positive numbers allowed 0-24!" : "This input is for the work hours \n on a certain task!"} arrow={true} placement='bottom' theme={formik.errors.thursday ? "danger" : "dark"} style={{ display: "inline-block" }}>
                         <i class="fas fa-info-circle" style={{ color: formik.errors.thursday ? "red" : "#2e2e2e" }}></i>
                     </Tippy>
@@ -172,8 +148,10 @@ export const TimesheetRow = ({ activity, index }) => {
                     formik.values.saturday,
                     formik.values.sunday].filter(hour => !isNaN(hour)).map(Number))
                 }
+                    <button type="submit" form="myform">ok</button>
                 </td>
             </tr>
+
         </>
     )
 };

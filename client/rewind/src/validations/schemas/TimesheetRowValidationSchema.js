@@ -12,4 +12,43 @@ const TimesheetRowValidationSchema = Yup.object({
     sunday: Yup.number().positive().min(0).max(24),
 });
 
-export { TimesheetRowValidationSchema };
+
+
+
+
+const schema = Yup.object().shape({
+    timesheet:
+        Yup.object().shape({
+            activities: Yup.array().of(
+                Yup.object().shape({
+                    project: Yup.object().shape({
+                        name: Yup.string().required("Project must be selected!"),
+                    }),
+                    task: Yup.object().shape({
+                        name: Yup.string().required("Task must be selected!"),
+                    }),
+                }))
+        })
+});
+
+// const schema = Yup.object().shape({
+//     timesheet:
+//         Yup.object().shape({
+//             activities: Yup.array().of(
+//                 Yup.object().shape({
+//                     project: Yup.object().shape({
+//                         name: Yup.string().required("Project must be selected!"),
+//                     }),
+//                     task: Yup.object().shape({
+//                         name: Yup.string().required("Task must be selected!"),
+//                     }),
+//                     timesheetDays: Yup.array().of(
+//                         Yup.object().shape({
+//                             hours: Yup.number().positive().min(0).max(24)
+//                         }
+//                         ))
+//                 }))
+//         })
+// });
+
+export { TimesheetRowValidationSchema, schema };

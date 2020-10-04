@@ -97,7 +97,7 @@ export const createTimesheet = ({ from, to }) => {
             const format = split[2] + "-" + split[1] + "-" + split[0];
             const timesheet = await api.createTimesheet({ fromDate: format });
             dispatch(actions.createTimesheetSuccess(timesheet));
-            console.log(timesheet);
+
         } catch (err) {
             dispatch(actions.createTimesheetFailure(err?.response?.data?.message));
         }
@@ -110,14 +110,13 @@ export const deleteCurrentTimesheet = () => {
         const id = getState().timesheet.timesheet.id;
         dispatch(actions.deleteCurrentTimesheetStart());
         try {
-            api.deleteTimesheet({ id });
+            await api.deleteTimesheet({ id });
             dispatch(actions.deleteCurrentTimesheetSuccess());
         } catch (err) {
             dispatch(actions.deleteCurrentTimesheetFailure());
         }
     }
+
 };
-
-
 
 export { timesheetReducer };
