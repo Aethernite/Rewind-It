@@ -72,6 +72,7 @@ export const CreateTimesheet = () => {
             const splitted = values.period.split(" - ");
             const from = splitted[0];
             const to = splitted[1];
+            console.log(from);
             dispatch(createTimesheet({ from, to }));
         },
     });
@@ -100,7 +101,7 @@ export const CreateTimesheet = () => {
     }
     else {
         return (
-            <Timesheet from={timesheet.from} to={timesheet.to}></Timesheet>
+            <Timesheet></Timesheet>
         );
     }
 }

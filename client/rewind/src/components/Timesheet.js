@@ -4,10 +4,10 @@ import '@fortawesome/fontawesome-free/css/all.min.css'
 
 import TimesheetTable from './TimeSheetTable';
 
-export const Timesheet = ({ from, to }) => {
+export const Timesheet = () => {
 
     return (
-        <TimesheetTable from={from} to={to}></TimesheetTable>
+        <TimesheetTable></TimesheetTable>
     )
 };
 

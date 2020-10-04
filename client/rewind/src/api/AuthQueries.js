@@ -41,6 +41,11 @@ export const getMe = async () => {
     return res.data;
 }
 
+export const createTimesheet = async ({ fromDate }) => {
+    const res = await instance.post('/timesheets', { fromDate });
+    return res.data;
+}
+
 
 const token = localStorage.getItem('token');
 if (token) {
