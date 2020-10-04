@@ -1,4 +1,4 @@
-package com.mentormate.hackathon.service.dto;
+package com.mentormate.hackathon.service.dto.request;
 
 import com.mentormate.hackathon.persistence.entity.Project;
 import com.mentormate.hackathon.persistence.entity.Task;

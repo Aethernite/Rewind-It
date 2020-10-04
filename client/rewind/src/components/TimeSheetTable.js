@@ -6,12 +6,13 @@ import '@fortawesome/free-solid-svg-icons';
 import styled from 'styled-components';
 import TimesheetRow from './TimesheetRow';
 import { useDispatch, useSelector } from 'react-redux';
-import { deleteCurrentTimesheet } from '../store/slices/timesheet';
+import { deleteCurrentTimesheet, saveCurrentTimesheet, submitCurrentTimesheet } from '../store/slices/timesheet';
 import { fetchAllProjects } from '../store/slices/projects';
 import moment from 'moment';
 import { Modal } from "react-bootstrap";
 import { useFormik } from 'formik';
 import { schema } from '../validations/schemas/TimesheetRowValidationSchema';
+import { useHistory } from "react-router-dom"
 
 const Table = styled.table`
 border: 1px solid #2e2e2e;
@@ -57,6 +58,7 @@ const sum = arr => {
 export const TimesheetTable = () => {
     const dispatch = useDispatch();
     const timesheet = useSelector(state => state.timesheet.timesheet);
+    const history = useHistory();
 
     React.useEffect(() => {
         dispatch(fetchAllProjects());
@@ -112,11 +114,17 @@ export const TimesheetTable = () => {
                                         </Modal>
 
                                         <i class="far fa-save mr-2 fa-2x" style={{ color: '#2e2e2e', transform: "translateY(5px)" }}></i>
-                                        <button type="button" class="btn btn-dark mr-3">SAVE</button>
+                                        <button type="button" class="btn btn-dark mr-3" onClick={() => {
+                                            dispatch(saveCurrentTimesheet());
+                                        }}>SAVE</button>
 
                                         <i class="far fa-check-circle mr-2 fa-2x" style={{ color: '#2e2e2e', transform: "translateY(5px)" }}></i>
-                                        <button type="button" class="btn btn-dark mr-3">SUBMIT</button>
-
+                                        <button type="button" className="btn btn-dark mr-3" onClick={() => {
+                                            dispatch(submitCurrentTimesheet());
+                                            let path = `/timesheet/home`;
+                                            history.push(path);
+                                        }}>SUBMIT
+                                    </button>
 
                                         <span>Status: {timesheet.statusType}</span>
                                     </div>

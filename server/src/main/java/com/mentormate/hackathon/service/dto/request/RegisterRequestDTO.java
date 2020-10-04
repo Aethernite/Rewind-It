@@ -1,4 +1,4 @@
-package com.mentormate.hackathon.service.dto;
+package com.mentormate.hackathon.service.dto.request;
 
 import com.mentormate.hackathon.validate.NotSamePassword;
 import io.swagger.v3.oas.annotations.media.Schema;

@@ -4,7 +4,7 @@ import com.mentormate.hackathon.controller.handler.exception.NotFoundException;
 import com.mentormate.hackathon.persistence.entity.Project;
 import com.mentormate.hackathon.persistence.entity.Task;
 import com.mentormate.hackathon.persistence.repository.ProjectRepository;
-import com.mentormate.hackathon.service.dto.ProjectResponseDTO;
+import com.mentormate.hackathon.service.dto.response.ProjectResponseDTO;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
