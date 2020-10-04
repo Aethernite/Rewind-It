@@ -10,7 +10,7 @@ import {deleteCurrentTimesheet, submitCurrentTimesheet} from '../store/slices/ti
 import { fetchAllProjects } from '../store/slices/projects';
 import moment from 'moment';
 import { Modal } from "react-bootstrap";
-import {useHistory, Redirect} from "react-router-dom"
+import {useHistory} from "react-router-dom"
 
 const Table = styled.table`
 border: 1px solid #2e2e2e;
@@ -105,10 +105,12 @@ export const TimesheetTable = ({ from, to }) => {
                                     <button type="button" class="btn btn-dark mr-3">SAVE</button>
 
                                     <i class="far fa-check-circle mr-2 fa-2x" style={{ color: '#2e2e2e', transform: "translateY(5px)" }}></i>
-                                    <button type="button" class="btn btn-dark mr-3" onClick={() => {
+                                    <button type="button" className="btn btn-dark mr-3" onClick={() => {
                                         dispatch(submitCurrentTimesheet());
-                                    }}>SUBMIT</button>
-
+                                        let path = `/timesheet/home`;
+                                        history.push(path);
+                                    }}>SUBMIT
+                                    </button>
 
                                     <span>Status: {timesheet.statusType}</span>
                                 </div>
