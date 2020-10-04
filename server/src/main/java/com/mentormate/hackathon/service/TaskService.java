@@ -69,8 +69,6 @@ public class TaskService {
      */
     public void seedTasks() {
         if (taskRepository.findAll().isEmpty()) {
-            Task defaultTask = new Task("default");
-            taskRepository.save(defaultTask);
             
             Task administrative = new Task("Administrative");
             taskRepository.save(administrative);

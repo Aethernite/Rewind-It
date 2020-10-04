@@ -35,7 +35,7 @@ public class AuthenticationController {
 
     private final AuthenticationService authenticationService;
 
-    @Operation(summary = "sign up", description = "This request method create user in database", tags = {"Authentication"})
+    @Operation(summary = "Register", description = "This request method create user in database", tags = {"Authentication"})
     @ApiResponses(value = {
             @ApiResponse(responseCode = "201", description = "User is created successfully"),
             @ApiResponse(responseCode = "400", description = "The request body is not correct"),
@@ -46,7 +46,7 @@ public class AuthenticationController {
         return new ResponseEntity<>(authenticationService.signUp(registerRequestDTO), HttpStatus.CREATED);
     }
 
-    @Operation(summary = "sign in", description = "This request method login user", tags = {"Authentication"})
+    @Operation(summary = "Login", description = "This request method login user", tags = {"Authentication"})
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Return jwt"),
             @ApiResponse(responseCode = "400", description = "The request body is not correct"),

@@ -6,6 +6,7 @@ import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
 import com.mentormate.hackathon.utils.ParseDeserializer;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
@@ -20,7 +21,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 import java.util.List;
 
 /**
@@ -28,6 +29,7 @@ import java.util.List;
  */
 @Data
 @Entity
+@Builder
 @AllArgsConstructor
 @Table(name = "timesheets")
 @EqualsAndHashCode(callSuper = true)
@@ -44,6 +46,15 @@ public class Timesheet extends BaseEntity {
     @Column
     private double total;
 
+    @JsonSerialize(using = ToStringSerializer.class)
+    @JsonDeserialize(using = ParseDeserializer.class)
+    LocalDate fromDate;
+
+    @JsonSerialize(using = ToStringSerializer.class)
+    @JsonDeserialize(using = ParseDeserializer.class)
+    LocalDate toDate;
+    
     @ManyToOne(fetch = FetchType.LAZY)
     private User user;
+
 }

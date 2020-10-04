@@ -43,10 +43,9 @@ public class DayOfTimesheetService {
     public List<DayOfTimesheet> create(LocalDateTime fromDate) {
         Date convertedDatetime = Date.from(fromDate.atZone(ZoneId.systemDefault()).toInstant());
         List<DayOfTimesheet> dayOfTimesheets = new ArrayList<>();
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
         Calendar cal = Calendar.getInstance();
         cal.setTime(convertedDatetime);
-
+        
         for (int i = 0; i < 7; i++) {
             TimeZone tz = cal.getTimeZone();
             ZoneId zid = tz == null ? ZoneId.systemDefault() : tz.toZoneId();

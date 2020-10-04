@@ -16,7 +16,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -30,6 +30,8 @@ import java.util.stream.Collectors;
 public class TimesheetService {
 
     private static final double DEFAULT_TIMESHEET_TOTAL = 0.0;
+    private static final int INDEX_OF_FIRST_DAY_OF_TIMESHEET = 0;
+    private static final int INDEX_OF_LAST_DAY_OF_TIMESHEET = 6;
 
     private final ActivityService activityService;
     private final TimesheetRepository timesheetRepository;
@@ -40,8 +42,16 @@ public class TimesheetService {
         log.info("Start creating timesheet");
         User user = userService.checkIfUserExist(userEmail);
         Activity currentActivity = activityService.create(createTimesheetRequestDTO.getFromDate());
-        LocalDateTime localDateTime = LocalDateTime.now();
-        Timesheet timesheet = new Timesheet(List.of(currentActivity), StatusType.OPEN, DEFAULT_TIMESHEET_TOTAL, user);
+        LocalDate fromTimesheetDay = currentActivity.getTimesheetDays().get(INDEX_OF_FIRST_DAY_OF_TIMESHEET).getDate().toLocalDate();
+        LocalDate toTimesheetDay = currentActivity.getTimesheetDays().get(INDEX_OF_LAST_DAY_OF_TIMESHEET).getDate().toLocalDate();
+        Timesheet timesheet = Timesheet.builder()
+                .activities(List.of(currentActivity))
+                .statusType(StatusType.OPEN)
+                .total(DEFAULT_TIMESHEET_TOTAL)
+                .fromDate(fromTimesheetDay)
+                .toDate(toTimesheetDay)
+                .user(user)
+                .build();
         TimesheetResponseDTO createTimesheetResponseDTO = modelMapper.map(timesheetRepository.save(timesheet), TimesheetResponseDTO.class);
         log.info("End creating timesheet and saved in database with id: {}", createTimesheetResponseDTO.getId());
         return createTimesheetResponseDTO;
@@ -71,8 +81,9 @@ public class TimesheetService {
         timesheet.setActivities(activities);
         timesheet.setTotal(timesheetUpdateRequestDTO.getTotal());
         timesheet = timesheetRepository.save(timesheet);
+        TimesheetResponseDTO timesheetResponseDTO = modelMapper.map(timesheet, TimesheetResponseDTO.class);
         log.info("Updated timesheet with id: {}", timesheet);
-        return modelMapper.map(timesheet, TimesheetResponseDTO.class);
+        return timesheetResponseDTO;
     }
 
     public TimesheetResponseDTO updateTimesheetStatus(Long timesheetId, String userEmail) {
@@ -90,8 +101,9 @@ public class TimesheetService {
         User user = userService.checkIfUserExist(userEmail);
         Timesheet timesheet = checkIfTimesheetExists(timesheetId, user.getId());
         timesheetRepository.delete(timesheet);
+        TimesheetResponseDTO timesheetResponseDTO = modelMapper.map(timesheet, TimesheetResponseDTO.class);
         log.info("Deleted timesheet with id: {}", timesheetId);
-        return modelMapper.map(timesheet, TimesheetResponseDTO.class);
+        return timesheetResponseDTO;
     }
 
     private Timesheet checkIfTimesheetExists(Long timesheetId, Long userId) {
