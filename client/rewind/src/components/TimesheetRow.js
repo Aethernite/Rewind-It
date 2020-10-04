@@ -29,6 +29,15 @@ transition: transform 0.2s;
 }
 `;
 
+const sum = arr => {
+    let sum = 0;
+    arr.forEach(element => {
+        sum += element;
+    });
+
+    return sum;
+}
+
 export const TimesheetRow = ({ activity, index }) => {
     const projects = useSelector(state => state.projects.projects);
     const dispatch = useDispatch();
@@ -71,9 +80,6 @@ export const TimesheetRow = ({ activity, index }) => {
     const projectDefault = { value: '', label: "Choose Project..." };
 
     const handleProjectChange = (e) => {
-        if (selectedProjectOption == null && e.target.value) {
-
-        }
         setSelectedProjectOption(e);
         setSelectedTaskOption(null);
     }
@@ -158,13 +164,13 @@ export const TimesheetRow = ({ activity, index }) => {
                     </Tippy>
                 </td>
                 <td>{
-                    (formik.values.monday !== '' ? parseFloat(formik.values.monday) : 0) +
-                    (formik.values.tuesday !== '' ? parseFloat(formik.values.tuesday) : 0) +
-                    (formik.values.wednesday !== '' ? parseFloat(formik.values.wednesday) : 0) +
-                    (formik.values.thursday !== '' ? parseFloat(formik.values.thursday) : 0) +
-                    (formik.values.friday !== '' ? parseFloat(formik.values.friday) : 0) +
-                    (formik.values.saturday !== '' ? parseFloat(formik.values.saturday) : 0) +
-                    (formik.values.sunday !== '' ? parseFloat(formik.values.sunday) : 0)
+                    sum([formik.values.monday,
+                    formik.values.tuesday,
+                    formik.values.wednesday,
+                    formik.values.thursday,
+                    formik.values.friday,
+                    formik.values.saturday,
+                    formik.values.sunday].filter(hour => !isNaN(hour)).map(Number))
                 }
                 </td>
             </tr>

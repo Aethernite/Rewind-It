@@ -70,34 +70,33 @@ export const TimesheetsPage = () => {
                             <tr>
                                 <td>
                                     <div classname="mt-2">
-                                        <span>Week <Moment format={"DD/MM/YYYY"}>{timesheet.activities[0].timesheetDays[0].date}</Moment> - <Moment format={"DD/MM/YYYY"}>{timesheet.activities[0].timesheetDays[5].date}</Moment></span>
+                                        <span>Week <Moment format={"DD/MM/YYYY"}>{timesheet.from}</Moment> - <Moment format={"DD/MM/YYYY"}>{timesheet.to}</Moment></span>
                                     </div>
                                 </td>
                                 <td>
                                     <div className="mt-2">
-                                        <span>Submitted</span>
+                                        <span>{timesheet.statusType === "SUBMITTED" ? "Submitted" : "Open"}</span>
                                     </div>
                                 </td>
                                 <td>
                                     <div style={{ display: "flex" }}>
                                         <Button variant="outline-dark" style={{ marginRight: "0.2rem" }}
                                             className="form-control">Edit</Button>
-                                        <Button variant="outline-dark" className="form-control" onClick={() => setModalShow(true)}>Delete</Button>
+                                        <Button variant="outline-dark" className="form-control" disabled={timesheet.statusType === "SUBMITTED"} onClick={() => setModalShow(true)}>Delete</Button>
                                         <ConfirmationBox
                                             show={modalShow}
                                             onHide={() => setModalShow(false)}
-                                            week={{ week: moment(timesheet.activities[0].timesheetDays[0].date).format("DD/MM/YYYY") + " to " + moment(timesheet.activities[0].timesheetDays[5].date).format("DD/MM/YYYY") }}
+                                            week={{ week: moment(timesheet.from).format("DD/MM/YYYY") + " to " + moment(timesheet.to).format("DD/MM/YYYY") }}
+                                            timesheetId={timesheet.id}
                                         />
                                     </div>
                                 </td>
                             </tr>)
                         )}
-
                         <tr>
                             <td colSpan="3">
                                 <div className="d-flex justify-content-center">
-                                    {console.log(page.totalPages)}
-                                    <ReactPaginate
+                                    {timesheets?.length > 0 && <ReactPaginate
                                         pageCount={page.totalPages}
                                         pageRangeDisplayed={page.totalPages}
                                         marginPagesDisplayed={0}
@@ -112,7 +111,9 @@ export const TimesheetsPage = () => {
                                         nextClassName={'page-item'}
                                         nextLinkClassName={'page-link'}
                                         activeClassName={'active'}
-                                    ></ReactPaginate>
+                                    ></ReactPaginate>}
+
+                                    {timesheets?.length === 0 && <span>No timesheets found.</span>}
                                 </div>
                             </td>
                         </tr>
