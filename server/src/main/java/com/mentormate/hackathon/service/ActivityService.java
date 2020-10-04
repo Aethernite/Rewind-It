@@ -34,10 +34,8 @@ public class ActivityService {
      * @return the saved response dto
      */
     public Activity create(LocalDateTime fromDate) {
-        Task task = taskService.findByName("default");
-        Project project = projectService.findByName("default");
         List<DayOfTimesheet> dayOfTimesheet = dayOfTimesheetService.create(fromDate);
-        Activity activity = new Activity(project, task, dayOfTimesheet);
+        Activity activity = new Activity(null, null, dayOfTimesheet);
         log.info("Created activity with id {}!", activity.getId());
         return this.activityRepository.save(activity);
     }

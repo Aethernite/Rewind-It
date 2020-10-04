@@ -1,4 +1,6 @@
 import { createSlice } from '@reduxjs/toolkit';
+import * as api from '../../api/AuthQueries';
+import moment from 'moment';
 
 const initialState = {
     timesheet: null,
@@ -19,7 +21,7 @@ const { reducer: timesheetReducer, actions } = createSlice({
             state.timesheet = action.payload;
             state.creationError = null;
         },
-        createPostFailure: (state, action) => {
+        createTimesheetFailure: (state, action) => {
             state.isCreating = false;
             state.creationError = action.payload;
         },
@@ -86,8 +88,15 @@ const { reducer: timesheetReducer, actions } = createSlice({
 export const createTimesheet = ({ from, to }) => {
     return async (dispatch) => {
         dispatch(actions.createTimesheetStart());
-        const timesheet = { from: from, to: to };
-        dispatch(actions.createTimesheetSuccess(timesheet));
+        try {
+            const split = from.split(/\//);
+            const format = split[2] + "-" + split[1] + "-" + split[0];
+            const timesheet = await api.createTimesheet({ fromDate: format });
+            dispatch(actions.createTimesheetSuccess(timesheet));
+            console.log(timesheet);
+        } catch (err) {
+            dispatch(actions.createTimesheetFailure(err?.response?.data?.message));
+        }
     }
 
 };
