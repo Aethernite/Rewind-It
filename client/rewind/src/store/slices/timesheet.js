@@ -14,6 +14,7 @@ const initialState = {
     fridayTotal: 0,
     saturdayTotal: 0,
     sundayTotal: 0,
+    isFetching: false
 };
 
 const { reducer: timesheetReducer, actions } = createSlice({
@@ -79,15 +80,18 @@ const { reducer: timesheetReducer, actions } = createSlice({
             state.creationError = action.payload;
         },
         fetchTimesheetStart: (state) => {
-            state.isCreating = true;
+            debugger;
+            state.isFetching = true;
         },
         fetchTimesheetSuccess: (state, action) => {
-            state.isCreating = false;
+            debugger;
+            state.isFetching = false;
+            console.log(action.payload);
             state.timesheet = action.payload;
             state.creationError = null;
         },
         fetchTimesheetFailure: (state, action) => {
-            state.isCreating = false;
+            state.isFetching = false;
             state.creationError = action.payload;
         },
         setMonday: (state, action) => {
@@ -185,7 +189,11 @@ export const deleteCurrentTimesheet = () => {
         const id = getState().timesheet.timesheet.id;
         dispatch(actions.deleteCurrentTimesheetStart());
         try {
+<<<<<<< HEAD
             await api.deleteTimesheet({ id });
+=======
+            await api.deleteTimesheet({id});
+>>>>>>> 22c78db696eefd2950ef4ac97606f07ce750de84
             dispatch(actions.deleteCurrentTimesheetSuccess());
         } catch (err) {
             dispatch(actions.deleteCurrentTimesheetFailure());
@@ -222,7 +230,11 @@ export const saveCurrentTimesheet = () => {
         const id = getState().timesheet.timesheet.id;
         dispatch(actions.saveTimesheetStart());
         try {
+<<<<<<< HEAD
             const result = await api.saveTimesheet({ id });
+=======
+            const result = await api.saveTimesheet({id});
+>>>>>>> 22c78db696eefd2950ef4ac97606f07ce750de84
             console.log(result);
             dispatch(actions.submitTimesheetSuccess());
         } catch (error) {
@@ -235,11 +247,15 @@ export const fetchTimesheet = ({ id }) => {
     return async (dispatch) => {
         dispatch(actions.fetchTimesheetStart());
         try {
+<<<<<<< HEAD
             const result = await api.fetchTimesheetById({ id });
+=======
+            const result = await api.fetchTimesheetById({id});
+>>>>>>> 22c78db696eefd2950ef4ac97606f07ce750de84
             console.log(result);
             dispatch(actions.fetchTimesheetSuccess(result));
         } catch (error) {
-            actions.fetchTimesheetFailure(error?.response?.data?.message)
+            dispatch(actions.fetchTimesheetFailure(error?.response?.data?.message));
         }
     }
 }

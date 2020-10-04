@@ -8,6 +8,8 @@ import ReactPaginate from 'react-paginate';
 import { ConfirmationBox } from "../../common/ConfirmationBox";
 import moment from 'moment';
 import {useHistory} from "react-router-dom";
+import {fetchTimesheetById} from "../../../api/AuthQueries";
+import {fetchTimesheet} from "../../../store/slices/timesheet";
 
 
 const Table = styled.table`
@@ -37,16 +39,20 @@ export const TimesheetsPage = () => {
     const dispatch = useDispatch();
     const history = useHistory();
 
-    console.log(timesheets);
 
     React.useEffect(() => {
         dispatch(fetchUserTimesheets({ cursor: 0 }));
-    }, [dispatch]);
-
+    }, [dispatch, timesheets?.length]);
 
     const handlePageChange = e => {
         dispatch(fetchUserTimesheets({ cursor: e.selected }));
     }
+
+    const handleClick = ({id}) => {
+        dispatch(fetchTimesheet({id}));
+        history.push(`/timesheet/view/${id}`);
+    }
+
     const [modalShow, setModalShow] = React.useState(false);
 
     return (
@@ -70,28 +76,28 @@ export const TimesheetsPage = () => {
                         </tr>
                     </thead>
                     <tbody className="text-center">
-                    {timesheets && timesheets.map(timesheet => (
+                    {timesheets && timesheets?.map(timesheet => (
                         <tr>
                             <td>
                                 <div classname="mt-2">
-                                    <span>Week <Moment format={"DD/MM/YYYY"}>{timesheet.from}</Moment> - <Moment
-                                        format={"DD/MM/YYYY"}>{timesheet.to}</Moment></span>
+                                    <span>Week <Moment format={"DD/MM/YYYY"}>{timesheet?.from}</Moment> - <Moment
+                                        format={"DD/MM/YYYY"}>{timesheet?.to}</Moment></span>
                                 </div>
                             </td>
                             <td>
                                 <div className="mt-2">
-                                    <span>{timesheet.statusType === "SUBMITTED" ? "Submitted" : "Open"}</span>
+                                    <span>{timesheet?.statusType === "SUBMITTED" ? "Submitted" : "Open"}</span>
                                 </div>
                             </td>
                             <td>
                                 <div style={{display: "flex"}}>
-                                    {timesheet.statusType === "SUBMITTED" ?
+                                    {timesheet?.statusType === "SUBMITTED" ?
                                         <Button variant="outline-dark" style={{marginRight: "0.2rem"}}
-                                                className="form-control" onClick={() => history.push(`/timesheet/view/${timesheet.id}`)}>View</Button> :
+                                                className="form-control" onClick={() => handleClick({id: timesheet?.id})}>View</Button> :
                                         <Button variant="outline-dark" style={{marginRight: "0.2rem"}}
                                                 className="form-control">Edit</Button>}
                                     <Button variant="outline-dark" className="form-control"
-                                            disabled={timesheet.statusType === "SUBMITTED"}
+                                            disabled={timesheet?.statusType === "SUBMITTED"}
                                             onClick={() => setModalShow(true)}>Delete</Button>
                                     <ConfirmationBox
                                         show={modalShow}
