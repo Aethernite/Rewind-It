@@ -51,6 +51,11 @@ export const deleteTimesheet = async ({ id }) => {
     return res.data;
 }
 
+export const submitTimesheet = async ({ id }) => {
+    const res = await instance.put(`/timesheets/${id}/submit`);
+    return res.data;
+}
+
 
 
 const token = localStorage.getItem('token');

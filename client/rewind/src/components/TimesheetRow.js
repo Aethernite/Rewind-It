@@ -8,6 +8,7 @@ import { useFormik } from 'formik';
 import { useSelector, useDispatch } from 'react-redux';
 import { TimesheetRowValidationSchema } from "../validations/schemas/TimesheetRowValidationSchema";
 import Select from 'react-select';
+import {addActivity} from "../store/slices/timesheet";
 
 const Input = styled.input`
 text-align: center;
@@ -40,10 +41,12 @@ const sum = arr => {
 
 export const TimesheetRow = ({ activity, index }) => {
     const projects = useSelector(state => state.projects.projects);
+    const timesheet = useSelector(state => state.timesheet.timesheet);
     const dispatch = useDispatch();
     const id = "row";
     const [selectedTaskOption, setSelectedTaskOption] = React.useState(activity.task);
     const [selectedProjectOption, setSelectedProjectOption] = React.useState(activity.project);
+    const [currentId, setCurrentId] = React.useState(timesheet.id);
 
 
     const formik = useFormik({
@@ -80,6 +83,12 @@ export const TimesheetRow = ({ activity, index }) => {
     const projectDefault = { value: '', label: "Choose Project..." };
 
     const handleProjectChange = (e) => {
+        if (selectedProjectOption === null) {
+            const temp = activity;
+            console.log(temp);
+            dispatch(addActivity(temp));
+        }
+        // setCurrentId(currentId + 1);
         setSelectedProjectOption(e);
         setSelectedTaskOption(null);
     }
@@ -96,8 +105,8 @@ export const TimesheetRow = ({ activity, index }) => {
             <tr>
                 <th>
                     <div className="mt-2">
-                        <span className="d-inline-block ml-1">{index}</span>
-                        <Icon className="d-inline-block fa fa-trash pl-2"></Icon>
+                        {timesheet.activities.length > 1 && (<><span className="d-inline-block ml-1">{index}</span>
+                        <Icon className="d-inline-block fa fa-trash pl-2"></Icon></>)}
                     </div>
                 </th>
                 <td>

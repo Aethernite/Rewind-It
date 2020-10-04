@@ -36,7 +36,29 @@ const { reducer: timesheetReducer, actions } = createSlice({
             state.isDeleting = false;
             state.error = action.payload;
         },
-
+        addCurrentTimesheetActivityStart: (state) => {
+            state.isCreating = true;
+        },
+        addCurrentTimesheetActivitySuccess: (state, action) => {
+            state.isCreating = false;
+            state.timesheet.activities.push(action.payload);
+        },
+        addCurrentTimesheetActivityFailure: (state, action) => {
+            state.isCreating = false;
+            // state.timesheet.error = action.payload;
+        },
+        submitTimesheetStart: (state) => {
+            state.isCreating = true;
+        },
+        submitTimesheetSuccess: (state, action) => {
+            state.isCreating = false;
+            state.timesheet = action.payload;
+            state.creationError = null;
+        },
+        submitTimesheetFailure: (state, action) => {
+            state.isCreating = false;
+            state.creationError = action.payload;
+        },
         // authStart: (state) => {
         //     state.isLoading = true;
         // },
@@ -118,6 +140,28 @@ export const deleteCurrentTimesheet = () => {
     }
 };
 
+export const addActivity = (payload) => {
+    return async (dispatch) => {
+        try {
+            dispatch(actions.addCurrentTimesheetActivityStart());
+            dispatch(actions.addCurrentTimesheetActivitySuccess(payload));
+        } catch (error) {
+            dispatch(actions.addCurrentTimesheetActivityFailure(error?.response?.data?.message));
+        }
+    }
+}
 
+export const submitCurrentTimesheet = () => {
+    return async (dispatch, getState) => {
+        const id = getState().timesheet.timesheet.id;
+        dispatch(actions.submitTimesheetStart());
+        try {
+            await api.submitTimesheet({id});
+            dispatch(actions.submitTimesheetSuccess());
+        } catch (error) {
+            actions.submitTimesheetFailure(error?.response?.data?.message)
+        }
+    }
+}
 
 export { timesheetReducer };

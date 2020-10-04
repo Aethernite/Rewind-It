@@ -6,10 +6,11 @@ import '@fortawesome/free-solid-svg-icons';
 import styled from 'styled-components';
 import TimesheetRow from './TimesheetRow';
 import { useDispatch, useSelector } from 'react-redux';
-import { deleteCurrentTimesheet } from '../store/slices/timesheet';
+import {deleteCurrentTimesheet, submitCurrentTimesheet} from '../store/slices/timesheet';
 import { fetchAllProjects } from '../store/slices/projects';
 import moment from 'moment';
 import { Modal } from "react-bootstrap";
+import {useHistory, Redirect} from "react-router-dom"
 
 const Table = styled.table`
 border: 1px solid #2e2e2e;
@@ -55,6 +56,7 @@ const sum = arr => {
 export const TimesheetTable = ({ from, to }) => {
     const dispatch = useDispatch();
     const timesheet = useSelector(state => state.timesheet.timesheet);
+    const history = useHistory();
 
     React.useEffect(() => {
         dispatch(fetchAllProjects());
@@ -103,7 +105,9 @@ export const TimesheetTable = ({ from, to }) => {
                                     <button type="button" class="btn btn-dark mr-3">SAVE</button>
 
                                     <i class="far fa-check-circle mr-2 fa-2x" style={{ color: '#2e2e2e', transform: "translateY(5px)" }}></i>
-                                    <button type="button" class="btn btn-dark mr-3">SUBMIT</button>
+                                    <button type="button" class="btn btn-dark mr-3" onClick={() => {
+                                        dispatch(submitCurrentTimesheet());
+                                    }}>SUBMIT</button>
 
 
                                     <span>Status: {timesheet.statusType}</span>
