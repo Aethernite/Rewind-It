@@ -59,7 +59,9 @@ export const TimesheetTable = ({ from, to }) => {
     const history = useHistory();
 
     React.useEffect(() => {
-        dispatch(fetchAllProjects());
+        if (timesheet !== null) {
+            dispatch(fetchAllProjects());
+        }
     }, [dispatch])
 
     const [modalShow, setModalShow] = React.useState(false);
@@ -136,8 +138,11 @@ export const TimesheetTable = ({ from, to }) => {
                         </tr>
                     </thead>
                     <tbody className="text-center">
-                        {timesheet.activities.map((activity) => (
-                            <TimesheetRow activity={activity}></TimesheetRow>
+                        {
+
+                            timesheet && timesheet?.activities.map((activity, index) => (
+                            <TimesheetRow index={index} activity={activity}></TimesheetRow>
+
                         ))
                         }
                         <tr>

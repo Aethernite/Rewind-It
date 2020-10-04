@@ -168,11 +168,14 @@ export const deleteCurrentTimesheet = () => {
     }
 }
 
-export const addActivity = (payload) => {
-    return async (dispatch) => {
+export const addActivity = () => {
+    return async (dispatch, getState) => {
+        const id = getState().timesheet.timesheet.id;
+        console.log(id);
+        dispatch(actions.addCurrentTimesheetActivityStart());
         try {
-            dispatch(actions.addCurrentTimesheetActivityStart());
-            dispatch(actions.addCurrentTimesheetActivitySuccess(payload));
+            const result = await api.addActivityToTimesheet({id});
+            dispatch(actions.addCurrentTimesheetActivitySuccess(result));
         } catch (error) {
             dispatch(actions.addCurrentTimesheetActivityFailure(error?.response?.data?.message));
         }

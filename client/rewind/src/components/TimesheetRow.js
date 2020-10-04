@@ -44,10 +44,15 @@ export const TimesheetRow = ({ activity, index }) => {
     const timesheet = useSelector(state => state.timesheet.timesheet);
     const dispatch = useDispatch();
     const id = "row";
-    const [selectedTaskOption, setSelectedTaskOption] = React.useState(activity.task);
-    const [selectedProjectOption, setSelectedProjectOption] = React.useState(activity.project);
+    const [selectedTaskOption, setSelectedTaskOption] = React.useState(activity?.task.name);
+    const [selectedProjectOption, setSelectedProjectOption] = React.useState(activity?.project.name);
     const [currentId, setCurrentId] = React.useState(timesheet.id);
 
+    const projectOptions = [] = projects.filter(project => project.name != '').map((project) => project = { value: project.id, label: project.name });
+    const taskOptions = [] = selectedProjectOption ? projects.filter(project => project.id === selectedProjectOption.value)[0].tasks.filter(task => task.name != '').map((task) => task = { value: task.id, label: task.name }) : [];
+
+    console.log(activity);
+    console.log(timesheet.activities);
 
     const formik = useFormik({
         initialValues: {
@@ -75,20 +80,15 @@ export const TimesheetRow = ({ activity, index }) => {
         validationSchema: TimesheetRowValidationSchema,
     });
 
-    const projectOptions = [] = projects.map((project, index) => project = { value: index, label: project.name });
-
-    const taskOptions = [] = selectedProjectOption ? projects[selectedProjectOption.value].tasks.map(task => task = { value: task.id, label: task.name }) : [];
-
     const taskDefault = { value: '', label: "Choose Task..." };
     const projectDefault = { value: '', label: "Choose Project..." };
 
     const handleProjectChange = (e) => {
-        if (selectedProjectOption === null) {
-            const temp = activity;
-            console.log(temp);
-            dispatch(addActivity(temp));
+        if (selectedProjectOption !== null) {
+
+            dispatch(addActivity());
         }
-        // setCurrentId(currentId + 1);
+
         setSelectedProjectOption(e);
         setSelectedTaskOption(null);
     }
@@ -105,7 +105,7 @@ export const TimesheetRow = ({ activity, index }) => {
             <tr>
                 <th>
                     <div className="mt-2">
-                        {timesheet.activities.length > 1 && (<><span className="d-inline-block ml-1">{index}</span>
+                        {timesheet?.activities?.length > 1 && (<><span className="d-inline-block ml-1">{index}</span>
                         <Icon className="d-inline-block fa fa-trash pl-2"></Icon></>)}
                     </div>
                 </th>
@@ -130,7 +130,7 @@ export const TimesheetRow = ({ activity, index }) => {
                 </td>
                 <td >
                     <div>
-                        <Input name="monday" value={activity.timesheetDays[0].hours} maxLength={4} className={`form-control ${formik.errors.monday ? "is-invalid" : ""}`} form={id} onBlur={formik.handleBlur} onChange={formik.handleChange} value={formik.values.monday} />
+                        <Input name="monday" value={activity?.timesheetDays[0].hours} maxLength={4} className={`form-control ${formik.errors.monday ? "is-invalid" : ""}`} form={id} onBlur={formik.handleBlur} onChange={formik.handleChange} value={formik.values.monday} />
                         <Tippy content={formik.errors.monday ? "Only positive numbers allowed 0-24!" : "This input is for the work hours \n on a certain task!"} arrow={true} placement='bottom' theme={formik.errors.monday ? "danger" : "dark"} style={{ display: "inline-block" }}>
                             <i class="fas fa-info-circle" style={{ color: formik.errors.monday ? "red" : "#2e2e2e" }}></i>
                         </Tippy>

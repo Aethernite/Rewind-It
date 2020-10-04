@@ -66,6 +66,11 @@ export const fetchTimesheetById = async ({ id }) => {
     return res.data;
 }
 
+export const addActivityToTimesheet = async ({ id }) => {
+    const res = await instance.post(`/timesheets/${id}/activities`);
+    return res.data;
+}
+
 const token = localStorage.getItem('token');
 if (token) {
     instance.defaults.headers['Authorization'] = `Bearer ${token}`;
