@@ -32,6 +32,10 @@ const { reducer: timesheetReducer, actions } = createSlice({
             state.isDeleting = false;
             state.timesheet = null;
         },
+        deleteCurrentTimesheetFailure: (state, action) => {
+            state.isDeleting = false;
+            state.error = action.payload;
+        },
 
         // authStart: (state) => {
         //     state.isLoading = true;
@@ -102,11 +106,18 @@ export const createTimesheet = ({ from, to }) => {
 };
 
 export const deleteCurrentTimesheet = () => {
-    return async (dispatch) => {
+    return async (dispatch, getState) => {
+        const id = getState().timesheet.timesheet.id;
         dispatch(actions.deleteCurrentTimesheetStart());
-        dispatch(actions.deleteCurrentTimesheetSuccess());
+        try {
+            api.deleteTimesheet({ id });
+            dispatch(actions.deleteCurrentTimesheetSuccess());
+        } catch (err) {
+            dispatch(actions.deleteCurrentTimesheetFailure());
+        }
     }
-
 };
+
+
 
 export { timesheetReducer };
