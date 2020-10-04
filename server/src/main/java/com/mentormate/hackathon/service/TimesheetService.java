@@ -5,10 +5,11 @@ import com.mentormate.hackathon.persistence.entity.Activity;
 import com.mentormate.hackathon.persistence.entity.StatusType;
 import com.mentormate.hackathon.persistence.entity.Timesheet;
 import com.mentormate.hackathon.persistence.entity.User;
+import com.mentormate.hackathon.persistence.repository.ActivityRepository;
 import com.mentormate.hackathon.persistence.repository.TimesheetRepository;
-import com.mentormate.hackathon.service.dto.CreateTimesheetRequestDTO;
-import com.mentormate.hackathon.service.dto.TimesheetResponseDTO;
-import com.mentormate.hackathon.service.dto.TimesheetUpdateRequestDTO;
+import com.mentormate.hackathon.service.dto.request.CreateTimesheetRequestDTO;
+import com.mentormate.hackathon.service.dto.request.TimesheetUpdateRequestDTO;
+import com.mentormate.hackathon.service.dto.response.TimesheetResponseDTO;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
@@ -37,7 +38,15 @@ public class TimesheetService {
     private final TimesheetRepository timesheetRepository;
     private final ModelMapper modelMapper;
     private final UserService userService;
+    private final ActivityRepository activityRepository;
 
+    /**
+     * Create new {@link Timesheet} in our application
+     *
+     * @param createTimesheetRequestDTO {@link CreateTimesheetRequestDTO} information needed for creation of new {@link Timesheet}
+     * @param userEmail                 email of current login user
+     * @return {@link Timesheet} that is saved in our database converted to {@link TimesheetResponseDTO}
+     */
     public TimesheetResponseDTO createTimesheet(CreateTimesheetRequestDTO createTimesheetRequestDTO, String userEmail) {
         log.info("Start creating timesheet");
         User user = userService.checkIfUserExist(userEmail);
@@ -57,12 +66,36 @@ public class TimesheetService {
         return createTimesheetResponseDTO;
     }
 
+    public TimesheetResponseDTO addActivityToTimesheet(Long timesheetId, String userEmail) {
+        log.info("Start creating timesheet");
+        User user = userService.checkIfUserExist(userEmail);
+        Timesheet timesheet = checkIfTimesheetExists(timesheetId, user.getId());
+        Activity currentActivity = activityService.create(timesheet.getFromDate().atStartOfDay());
+        timesheet.getActivities().add(currentActivity);
+        TimesheetResponseDTO createTimesheetResponseDTO = modelMapper.map(timesheetRepository.save(timesheet), TimesheetResponseDTO.class);
+        log.info("End creating timesheet and saved in database with id: {}", createTimesheetResponseDTO.getId());
+        return createTimesheetResponseDTO;
+    }
+
+    /**
+     * Provide all {@link Timesheet}'s for current user
+     *
+     * @param userEmail email of current login user
+     * @return {@link Page<TimesheetResponseDTO>} of our {@link Timesheet}'s converted to {@link TimesheetResponseDTO}'s
+     */
     public Page<TimesheetResponseDTO> getAll(int page, int size, String userEmail) {
         log.info("Fetch all timesheets");
         User user = userService.checkIfUserExist(userEmail);
         return timesheetRepository.findAllByUser_Id(PageRequest.of(page, size), user.getId()).map(timesheet -> modelMapper.map(timesheet, TimesheetResponseDTO.class));
     }
 
+    /**
+     * Get {@link Timesheet} by current login user and given timesheet id
+     *
+     * @param timesheetId id of the {@link Timesheet}
+     * @param userEmail   email of current login user
+     * @return {@link TimesheetResponseDTO} corresponding {@link Timesheet}
+     */
     public TimesheetResponseDTO getById(Long timesheetId, String userEmail) {
         log.info("Get timesheet by id: {}", timesheetId);
         User user = userService.checkIfUserExist(userEmail);
@@ -70,6 +103,14 @@ public class TimesheetService {
         return modelMapper.map(timesheet, TimesheetResponseDTO.class);
     }
 
+    /**
+     * Update all information for {@link Timesheet} by its id
+     *
+     * @param timesheetId               Id of the {@link Timesheet}
+     * @param userEmail                 email of current login user
+     * @param timesheetUpdateRequestDTO {@link TimesheetUpdateRequestDTO} new information that will be persisted into database
+     * @return Updated {@link TimesheetResponseDTO} corresponding {@link Timesheet}
+     */
     public TimesheetResponseDTO updateTimesheetById(Long timesheetId, TimesheetUpdateRequestDTO timesheetUpdateRequestDTO,
                                                     String userEmail) {
         log.info("Start updating timesheet with id: {}", timesheetId);
@@ -86,6 +127,13 @@ public class TimesheetService {
         return timesheetResponseDTO;
     }
 
+    /**
+     * Update status for {@link Timesheet} by its id
+     *
+     * @param timesheetId Id of the {@link Timesheet}
+     * @param userEmail   email of current login user
+     * @return Updated {@link TimesheetResponseDTO} corresponding {@link Timesheet}
+     */
     public TimesheetResponseDTO updateTimesheetStatus(Long timesheetId, String userEmail) {
         log.info("Start updating timesheet with id: {}", timesheetId);
         User user = userService.checkIfUserExist(userEmail);
@@ -96,6 +144,13 @@ public class TimesheetService {
         return modelMapper.map(timesheet, TimesheetResponseDTO.class);
     }
 
+    /**
+     * Delete {@link Timesheet} by Id
+     *
+     * @param timesheetId Id of the {@link Timesheet} that we want to delete
+     * @param userEmail   email of current login user
+     * @return Deleted {@link TimesheetResponseDTO} corresponding {@link Timesheet}
+     */
     public TimesheetResponseDTO deleteTimesheetById(Long timesheetId, String userEmail) {
         log.info("Start deleting timesheet with id: {}", timesheetId);
         User user = userService.checkIfUserExist(userEmail);
@@ -106,7 +161,29 @@ public class TimesheetService {
         return timesheetResponseDTO;
     }
 
-    private Timesheet checkIfTimesheetExists(Long timesheetId, Long userId) {
+    public TimesheetResponseDTO deleteActivityFromTimesheet(Long timesheetId, Long activityId, String userEmail) {
+        log.info("Start deleting timesheet with id: {}", timesheetId);
+        User user = userService.checkIfUserExist(userEmail);
+        Timesheet timesheet = checkIfTimesheetExists(timesheetId, user.getId());
+//        List<Activity> collect = timesheet.getActivities().stream()
+//                .filter(activity -> activity.getId() != activityId)
+//                .collect(Collectors.toList());
+        activityRepository.deleteById(activityId);
+//        TimesheetResponseDTO timesheetResponseDTO = modelMapper.map(timesheetRepository.save(timesheet), TimesheetResponseDTO.class);
+        log.info("Deleted timesheet with id: {}", timesheetId);
+//        return timesheetResponseDTO;
+        return null;
+    }
+
+    /**
+     * Check if {@link Timesheet} exists
+     *
+     * @param userId      email of current login user
+     * @param timesheetId Id of the {@link java.sql.Time} that we want to check if exists
+     * @return existing {@link Timesheet}
+     * @throws NotFoundException if {@link Timesheet} doesn't exist.
+     */
+    public Timesheet checkIfTimesheetExists(Long timesheetId, Long userId) {
         return timesheetRepository.findByIdAndUser_Id(timesheetId, userId)
                 .orElseThrow(() -> new NotFoundException(String.format("Timesheet with id %d of user with id %d is not found !", timesheetId, userId)));
     }

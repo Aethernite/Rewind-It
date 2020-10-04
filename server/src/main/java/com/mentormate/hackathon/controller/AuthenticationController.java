@@ -1,10 +1,10 @@
 package com.mentormate.hackathon.controller;
 
 import com.mentormate.hackathon.service.AuthenticationService;
-import com.mentormate.hackathon.service.dto.JwtResponseDTO;
-import com.mentormate.hackathon.service.dto.LoginRequestDTO;
-import com.mentormate.hackathon.service.dto.RegisterRequestDTO;
-import com.mentormate.hackathon.service.dto.RegisterResponseDTO;
+import com.mentormate.hackathon.service.dto.response.JwtResponseDTO;
+import com.mentormate.hackathon.service.dto.request.LoginRequestDTO;
+import com.mentormate.hackathon.service.dto.request.RegisterRequestDTO;
+import com.mentormate.hackathon.service.dto.response.RegisterResponseDTO;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;

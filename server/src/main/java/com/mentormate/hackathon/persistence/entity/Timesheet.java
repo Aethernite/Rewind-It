@@ -48,10 +48,12 @@ public class Timesheet extends BaseEntity {
 
     @JsonSerialize(using = ToStringSerializer.class)
     @JsonDeserialize(using = ParseDeserializer.class)
+    @Column(name = "from_date")
     LocalDate fromDate;
 
     @JsonSerialize(using = ToStringSerializer.class)
     @JsonDeserialize(using = ParseDeserializer.class)
+    @Column(name = "to_date")            
     LocalDate toDate;
     
     @ManyToOne(fetch = FetchType.LAZY)

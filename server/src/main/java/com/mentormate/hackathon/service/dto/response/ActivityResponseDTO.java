@@ -1,4 +1,4 @@
-package com.mentormate.hackathon.service.dto;
+package com.mentormate.hackathon.service.dto.response;
 
 import com.mentormate.hackathon.persistence.entity.DayOfTimesheet;
 import com.mentormate.hackathon.persistence.entity.Project;

@@ -3,7 +3,7 @@ package com.mentormate.hackathon.service;
 import com.mentormate.hackathon.controller.handler.exception.NotFoundException;
 import com.mentormate.hackathon.persistence.entity.DayOfTimesheet;
 import com.mentormate.hackathon.persistence.repository.DayOfTimesheetRepository;
-import com.mentormate.hackathon.service.dto.DayOfTimesheetResponseDTO;
+import com.mentormate.hackathon.service.dto.response.DayOfTimesheetResponseDTO;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
@@ -12,7 +12,6 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.time.ZoneId;
-import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -30,6 +29,10 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class DayOfTimesheetService {
 
+    private static final int DAYS_OF_WEEK = 7;
+    private static final int DEFAULT_HOURS = 0;
+    private static final int INDEX_OF_INCREMENT_OF_DAY = 1;
+
     private final DayOfTimesheetRepository dayOfTimesheetRepository;
 
     private final ModelMapper modelMapper;
@@ -41,18 +44,18 @@ public class DayOfTimesheetService {
      * @return the day of timesheet entity
      */
     public List<DayOfTimesheet> create(LocalDateTime fromDate) {
-        Date convertedDatetime = Date.from(fromDate.atZone(ZoneId.systemDefault()).toInstant());
+        Date convertedFromDateToDate = Date.from(fromDate.atZone(ZoneId.systemDefault()).toInstant());
         List<DayOfTimesheet> dayOfTimesheets = new ArrayList<>();
-        Calendar cal = Calendar.getInstance();
-        cal.setTime(convertedDatetime);
-        
-        for (int i = 0; i < 7; i++) {
-            TimeZone tz = cal.getTimeZone();
-            ZoneId zid = tz == null ? ZoneId.systemDefault() : tz.toZoneId();
-            LocalDateTime localDateTime = LocalDateTime.ofInstant(cal.toInstant(), zid);
-            DayOfTimesheet currentDayOfTimesheet = new DayOfTimesheet(localDateTime, 0);
+        Calendar calend = Calendar.getInstance();
+        calend.setTime(convertedFromDateToDate);
+
+        for (int i = 0; i < DAYS_OF_WEEK; i++) {
+            TimeZone timeZone = calend.getTimeZone();
+            ZoneId zoneId = timeZone == null ? ZoneId.systemDefault() : timeZone.toZoneId();
+            LocalDateTime currentDate = LocalDateTime.ofInstant(calend.toInstant(), zoneId);
+            DayOfTimesheet currentDayOfTimesheet = new DayOfTimesheet(currentDate, DEFAULT_HOURS);
             dayOfTimesheets.add(currentDayOfTimesheet);
-            cal.add(Calendar.DAY_OF_YEAR, 1);
+            calend.add(Calendar.DAY_OF_YEAR, INDEX_OF_INCREMENT_OF_DAY);
         }
 
         return this.dayOfTimesheetRepository.saveAll(dayOfTimesheets);
