@@ -2,11 +2,9 @@ package com.mentormate.hackathon.service;
 
 import com.mentormate.hackathon.persistence.entity.Activity;
 import com.mentormate.hackathon.persistence.entity.DayOfTimesheet;
-import com.mentormate.hackathon.persistence.entity.Timesheet;
-import com.mentormate.hackathon.persistence.entity.User;
+import com.mentormate.hackathon.persistence.entity.Project;
+import com.mentormate.hackathon.persistence.entity.Task;
 import com.mentormate.hackathon.persistence.repository.ActivityRepository;
-import com.mentormate.hackathon.persistence.repository.TimesheetRepository;
-import com.mentormate.hackathon.service.dto.response.TimesheetResponseDTO;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -26,9 +24,8 @@ public class ActivityService {
 
     private final ActivityRepository activityRepository;
     private final DayOfTimesheetService dayOfTimesheetService;
-//    private final TimesheetService timesheetService;
-//    private final UserService userService;
-//    private final TimesheetRepository timesheetRepository;
+    private final ProjectService projectService;
+    private final TaskService taskService;
 
     /**
      * Creates a new activity if the given task belongs to the given project
@@ -38,19 +35,11 @@ public class ActivityService {
      */
     public Activity create(LocalDateTime fromDate) {
         List<DayOfTimesheet> dayOfTimesheet = dayOfTimesheetService.create(fromDate);
-        Activity activity = new Activity(null, null, dayOfTimesheet);
+        Task task = taskService.findByName("");
+        Project project = projectService.findByName("");
+        Activity activity = new Activity(project, task, dayOfTimesheet);
         log.info("Created activity with id {}!", activity.getId());
         return this.activityRepository.save(activity);
     }
 
-//    public Activity create(Long timesheetId, String userEmail) {
-//        User user = userService.checkIfUserExist(userEmail);
-//        Timesheet timesheet = timesheetService.checkIfTimesheetExists(timesheetId, user.getId());
-//        List<DayOfTimesheet> dayOfTimesheet = dayOfTimesheetService.create(timesheet.getFromDate().atStartOfDay());
-//        Activity activity = new Activity(null, null, dayOfTimesheet);
-//        timesheet.getActivities().add(activity);
-//        timesheetRepository.save(timesheet);
-//        log.info("Created activity with id {}!", activity.getId());
-//        return this.activityRepository.save(activity);
-//    }
 }

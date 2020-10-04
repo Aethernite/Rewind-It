@@ -61,6 +61,10 @@ public class ProjectService {
 
         if (projectRepository.findAll().isEmpty()) {
 
+            Task defaultTask = taskService.findByName("");
+            Project defaultProject = new Project("", Set.of(defaultTask));
+            projectRepository.save(defaultProject);
+
             Task learning = taskService.findByName("Learning");
 
             Project clientSatisfaction1 =
