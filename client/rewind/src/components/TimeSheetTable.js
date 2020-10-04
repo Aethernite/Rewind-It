@@ -13,6 +13,7 @@ import { Modal } from "react-bootstrap";
 import { useFormik } from 'formik';
 import { schema } from '../validations/schemas/TimesheetRowValidationSchema';
 import { useHistory } from "react-router-dom"
+import { fetchUserTimesheets } from '../store/slices/timesheets';
 
 const Table = styled.table`
 border: 1px solid #2e2e2e;
@@ -77,6 +78,17 @@ export const TimesheetTable = () => {
         validationSchema: schema
     });
 
+
+    const monday = useSelector(state => state.timesheet.mondayTotal);
+    const tuesday = useSelector(state => state.timesheet.tuesdayTotal);
+    const wednesday = useSelector(state => state.timesheet.wednesdayTotal);
+    const thursday = useSelector(state => state.timesheet.thursdayTotal);
+    const friday = useSelector(state => state.timesheet.fridayTotal);
+    const saturday = useSelector(state => state.timesheet.saturdayTotal);
+    const sunday = useSelector(state => state.timesheet.sundayTotal);
+
+
+
     return (
         <Container className="mt-5">
             <Col className="d-flex justify-content-center">
@@ -121,6 +133,7 @@ export const TimesheetTable = () => {
                                         <i class="far fa-check-circle mr-2 fa-2x" style={{ color: '#2e2e2e', transform: "translateY(5px)" }}></i>
                                         <button type="button" className="btn btn-dark mr-3" onClick={() => {
                                             dispatch(submitCurrentTimesheet());
+                                            dispatch(fetchUserTimesheets(0));
                                             let path = `/timesheet/home`;
                                             history.push(path);
                                         }}>SUBMIT
@@ -148,21 +161,19 @@ export const TimesheetTable = () => {
                         </thead>
                         <tbody className="text-center">
                             {timesheet.activities.map((activity, index) => (
-                                <TimesheetRow activity={activity} formik={formik} index={index}></TimesheetRow>
+                                <TimesheetRow activity={activity} formik={{ subformik: formik }} index={index}></TimesheetRow>
                             ))
                             }
                             <tr>
                                 <td></td>
                                 <td colSpan={2} style={{ textAlign: 'left', fontWeight: '500' }}>Total</td>
-                                <td>{
-                                    0
-                                }</td>
-                                <td>8</td>
-                                <td>8</td>
-                                <td>8</td>
-                                <td>8</td>
-                                <td>8</td>
-                                <td>8</td>
+                                <td>{monday}</td>
+                                <td>{tuesday}</td>
+                                <td>{wednesday}</td>
+                                <td>{thursday}</td>
+                                <td>{friday}</td>
+                                <td>{saturday}</td>
+                                <td>{sunday}</td>
                                 <td>60</td>
                             </tr>
                         </tbody>

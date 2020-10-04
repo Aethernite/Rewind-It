@@ -4,11 +4,12 @@ import '@fortawesome/fontawesome-free/css/all.min.css'
 import Tippy from '@tippyjs/react';
 import 'tippy.js/dist/tippy.css'; // optional
 import styled from 'styled-components';
-import { useformik } from 'formik';
+import { useFormik } from 'formik';
 import { useSelector, useDispatch } from 'react-redux';
 import { TimesheetRowValidationSchema } from "../validations/schemas/TimesheetRowValidationSchema";
 import Select from 'react-select';
 import { addActivity } from "../store/slices/timesheet";
+import { setDay } from "../store/slices/timesheet";
 
 const Input = styled.input`
 text-align: center;
@@ -39,8 +40,7 @@ const sum = arr => {
     return sum;
 }
 
-export const TimesheetRow = ({ activity, index, formik }) => {
-    const projects = useSelector(state => state.projects.projects);
+export const TimesheetRow = ({ activity, index, subformik }) => {
     const timesheet = useSelector(state => state.timesheet.timesheet);
     const dispatch = useDispatch();
     const projects = useSelector(state => state.projects.projects);
@@ -69,9 +69,31 @@ export const TimesheetRow = ({ activity, index, formik }) => {
         setSelectedTaskOption(null);
     }
 
+    const monday = useSelector(state => state.timesheets.mondayTotal);
     const handleTaskChange = (e) => {
         setSelectedTaskOption(e);
     }
+
+    const formik = useFormik({
+        initialValues: {
+            project: '',
+            task: '',
+            monday: '',
+            tuesday: '',
+            wednesday: '',
+            thursday: '',
+            friday: '',
+            saturday: '',
+            sunday: '',
+            total: 0,
+        },
+
+        onSubmit: (values) => {
+            console.log("submitting");
+        },
+        validationSchema: TimesheetRowValidationSchema,
+    });
+
 
     return (
         <>
@@ -91,8 +113,6 @@ export const TimesheetRow = ({ activity, index, formik }) => {
                         options={projectOptions}
                         value={selectedProjectOption || ''}
                         className="react-select"
-                        value={formik.values.timesheet.activities[0].project?.name}
-
                     />
                 </td>
                 <td>
@@ -107,11 +127,12 @@ export const TimesheetRow = ({ activity, index, formik }) => {
                 </td>
                 <td >
                     <div>
-                        <Input name="monday" value={activity.timesheetDays[0].hours} maxLength={4} className={`form-control ${formik.errors.monday ? "is-invalid" : ""}`} form={id} onBlur={formik.handleBlur} onChange={formik.handleChange} value={formik.values.monday} />
-                        <Tippy content={formik.errors.activity ? "Only positive numbers allowed 0-24!" : "This input is for the work hours \n on a certain task!"} arrow={true} placement='bottom' theme={formik.errors.monday ? "danger" : "dark"} style={{ display: "inline-block" }}>
+                        <Input name="monday" maxLength={4} className={`form-control ${formik.errors.monday ? "is-invalid" : ""}`} form={id} onBlur={formik.handleBlur} onChange={formik.handleChange} value={formik.values.monday} />
+                        <Tippy content={formik.errors.monday ? "Only positive numbers allowed 0-24!" : "This input is for the work hours \n on a certain task!"} arrow={true} placement='bottom' theme={formik.errors.monday ? "danger" : "dark"} style={{ display: "inline-block" }}>
                             <i class="fas fa-info-circle" style={{ color: formik.errors.monday ? "red" : "#2e2e2e" }}></i>
                         </Tippy>
                     </div>
+
                 </td>
                 <td>
                     <Input name="tuesday" maxLength={4} value={activity.timesheetDays[1].hours} className={`form-control ${formik.errors.tuesday ? "is-invalid" : ""}`} form={id} onBlur={formik.handleBlur} onChange={formik.handleChange} value={formik.values.tuesday} />
@@ -158,7 +179,6 @@ export const TimesheetRow = ({ activity, index, formik }) => {
                     formik.values.saturday,
                     formik.values.sunday].filter(hour => !isNaN(hour)).map(Number))
                 }
-                    <button type="submit" form="myform">ok</button>
                 </td>
             </tr>
 

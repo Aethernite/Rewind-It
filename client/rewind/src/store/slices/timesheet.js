@@ -7,6 +7,13 @@ const initialState = {
     error: null,
     isCreating: false,
     isDeleting: false,
+    mondayTotal: 0,
+    tuesdayTotal: 0,
+    wednesdayTotal: 0,
+    thursdayTotal: 0,
+    fridayTotal: 0,
+    saturdayTotal: 0,
+    sundayTotal: 0,
 };
 
 const { reducer: timesheetReducer, actions } = createSlice({
@@ -83,6 +90,28 @@ const { reducer: timesheetReducer, actions } = createSlice({
             state.isCreating = false;
             state.creationError = action.payload;
         },
+        setMonday: (state, action) => {
+            state.mondayTotal = action.payload.total;
+        },
+        setTuesday: (state, action) => {
+            state.tuesdayTotal = action.payload.total;
+        },
+        setWednesday: (state, action) => {
+            state.wednesdayTotal = action.payload.total;
+        },
+        setThursday: (state, action) => {
+            state.thursdayTotal = action.payload.total;
+        },
+        setFriday: (state, action) => {
+            state.fridayTotal = action.payload.total;
+        },
+        setSaturday: (state, action) => {
+            state.saturdayTotal = action.payload.total;
+        },
+        setSunday: (state, action) => {
+            state.sundayTotal = action.payload.total;
+        }
+
         // authStart: (state) => {
         //     state.isLoading = true;
         // },
@@ -213,6 +242,34 @@ export const fetchTimesheet = ({ id }) => {
             actions.fetchTimesheetFailure(error?.response?.data?.message)
         }
     }
+}
+
+export const setDay = ({ day, total }) => {
+    return async (dispatch) => {
+        switch (day) {
+            case "Monday":
+                dispatch(actions.setMonday(total));
+                break;
+            case "Tuesday":
+                dispatch(actions.setTuesday(total));
+                break;
+            case "Wednesday":
+                dispatch(actions.setWednesday(total));
+                break;
+            case "Thursday":
+                dispatch(actions.setThursday(total));
+                break;
+            case "Friday":
+                dispatch(actions.setFriday(total));
+                break;
+            case "Saturday":
+                dispatch(actions.setSaturday(total));
+                break;
+            case "Sunday":
+                dispatch(actions.setSaturday(total));
+        }
+    }
+
 }
 
 export { timesheetReducer };

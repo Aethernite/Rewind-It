@@ -27,9 +27,18 @@ const schema = Yup.object().shape({
                     task: Yup.object().shape({
                         name: Yup.string().required("Task must be selected!"),
                     }),
-                }))
+                    timesheetDays: Yup.array().of(
+                        Yup.object().shape({
+                            hours: Yup.number().positive().min(0).max(24),
+                        })
+                    )
+                })
+            )
         })
 });
+
+
+
 
 // const schema = Yup.object().shape({
 //     timesheet:
