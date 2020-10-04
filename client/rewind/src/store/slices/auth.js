@@ -118,6 +118,17 @@ export const logout = () => {
 
 };
 
+export const checkSession = () => {
+    return async (dispatch) => {
+        try {
+            //const user = await getMe();
+            //dispatch(actions.authSuccess(user));
+        } catch (err) { }
+        dispatch(actions.markSessionChecked())
+    }
+}
+
+
 export const clearErrors = () => {
     return async (dispatch) => {
         dispatch(actions.clearErrors());
