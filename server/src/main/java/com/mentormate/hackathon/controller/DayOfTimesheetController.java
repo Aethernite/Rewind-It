@@ -1,7 +1,7 @@
 package com.mentormate.hackathon.controller;
 
 import com.mentormate.hackathon.service.DayOfTimesheetService;
-import com.mentormate.hackathon.service.dto.DayOfTimesheetResponseDTO;
+import com.mentormate.hackathon.service.dto.response.DayOfTimesheetResponseDTO;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;

@@ -1,11 +1,10 @@
 package com.mentormate.hackathon.controller;
 
 import com.mentormate.hackathon.service.AuthenticationService;
-import com.mentormate.hackathon.service.dto.JwtResponseDTO;
-import com.mentormate.hackathon.service.dto.LoginRequestDTO;
-import com.mentormate.hackathon.service.dto.LoginResponseDTO;
-import com.mentormate.hackathon.service.dto.RegisterRequestDTO;
-import com.mentormate.hackathon.service.dto.RegisterResponseDTO;
+import com.mentormate.hackathon.service.dto.response.JwtResponseDTO;
+import com.mentormate.hackathon.service.dto.request.LoginRequestDTO;
+import com.mentormate.hackathon.service.dto.request.RegisterRequestDTO;
+import com.mentormate.hackathon.service.dto.response.RegisterResponseDTO;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
@@ -18,10 +17,8 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
-import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import java.util.Map;
 
@@ -30,15 +27,15 @@ import java.util.Map;
  * <p>
  * Created by Vladislav Penchev on 2020/09/30
  */
-@CrossOrigin(origins = "http://localhost:3000")
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/v1/auth")
+@CrossOrigin(origins = "http://localhost:3000")
 public class AuthenticationController {
 
     private final AuthenticationService authenticationService;
 
-    @Operation(summary = "sign up", description = "This request method create user in database", tags = {"signUp"})
+    @Operation(summary = "Register", description = "This request method create user in database", tags = {"Authentication"})
     @ApiResponses(value = {
             @ApiResponse(responseCode = "201", description = "User is created successfully"),
             @ApiResponse(responseCode = "400", description = "The request body is not correct"),
@@ -49,7 +46,7 @@ public class AuthenticationController {
         return new ResponseEntity<>(authenticationService.signUp(registerRequestDTO), HttpStatus.CREATED);
     }
 
-    @Operation(summary = "sign in", description = "This request method login user", tags = {"signIn"})
+    @Operation(summary = "Login", description = "This request method login user", tags = {"Authentication"})
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Return jwt"),
             @ApiResponse(responseCode = "400", description = "The request body is not correct"),
@@ -60,23 +57,23 @@ public class AuthenticationController {
         return ResponseEntity.ok(authenticationService.signIn(loginRequestDTO));
     }
 
-
-    @Operation(summary = "logout", description = "This request method logout user.", tags = {"Logout"})
+    @Operation(summary = "logout", description = "This request method logout user.", tags = {"Authentication"})
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "User is logout successfully"),
             @ApiResponse(responseCode = "403", description = "Operation is forbidden"),
             @ApiResponse(responseCode = "500", description = "Internal Server Error")})
     @PostMapping("/logout")
-    public ResponseEntity<Map<String, String>> logout(HttpServletRequest httpServletRequest) {
+    public ResponseEntity<Map<String, String>> logout() {
         return ResponseEntity.ok(authenticationService.logout());
     }
-    
-    @Operation(summary = "gets logged user", description = "This request method gets logged user.", tags = {"Get Me"})
-        @GetMapping("/me")
-        @ResponseBody
-        public ResponseEntity<String> currentUserName(Authentication authentication) {
-        System.out.println(authentication.getName());
-            return ResponseEntity.ok(authentication.getName());
-        }
+
+    @Operation(summary = "Gets logged user", description = "This request method gets logged user.", tags = {"Get Me"})
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Get user information successfully"),
+            @ApiResponse(responseCode = "500", description = "Internal Server Error")})
+    @GetMapping("/me")
+    public ResponseEntity<String> currentUserName(Authentication authentication) {
+        return ResponseEntity.ok(authentication.getName());
+    }
 
 }

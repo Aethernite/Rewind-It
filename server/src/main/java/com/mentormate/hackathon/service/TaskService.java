@@ -3,7 +3,7 @@ package com.mentormate.hackathon.service;
 import com.mentormate.hackathon.controller.handler.exception.NotFoundException;
 import com.mentormate.hackathon.persistence.entity.Task;
 import com.mentormate.hackathon.persistence.repository.TaskRepository;
-import com.mentormate.hackathon.service.dto.TaskResponseDTO;
+import com.mentormate.hackathon.service.dto.response.TaskResponseDTO;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
