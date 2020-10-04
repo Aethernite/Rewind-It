@@ -7,6 +7,7 @@ const initialState = {
     error: null,
     isCreating: false,
     isDeleting: false,
+    isFetching: false
 };
 
 const { reducer: timesheetReducer, actions } = createSlice({
@@ -72,15 +73,18 @@ const { reducer: timesheetReducer, actions } = createSlice({
             state.creationError = action.payload;
         },
         fetchTimesheetStart: (state) => {
-            state.isCreating = true;
+            debugger;
+            state.isFetching = true;
         },
         fetchTimesheetSuccess: (state, action) => {
-            state.isCreating = false;
+            debugger;
+            state.isFetching = false;
+            console.log(action.payload);
             state.timesheet = action.payload;
             state.creationError = null;
         },
         fetchTimesheetFailure: (state, action) => {
-            state.isCreating = false;
+            state.isFetching = false;
             state.creationError = action.payload;
         },
         // authStart: (state) => {
@@ -156,7 +160,7 @@ export const deleteCurrentTimesheet = () => {
         const id = getState().timesheet.timesheet.id;
         dispatch(actions.deleteCurrentTimesheetStart());
         try {
-            api.deleteTimesheet({id});
+            await api.deleteTimesheet({id});
             dispatch(actions.deleteCurrentTimesheetSuccess());
         } catch (err) {
             dispatch(actions.deleteCurrentTimesheetFailure());
@@ -193,7 +197,7 @@ export const saveCurrentTimesheet = () => {
         const id = getState().timesheet.timesheet.id;
         dispatch(actions.saveTimesheetStart());
         try {
-            const result =  await api.saveTimesheet({id});
+            const result = await api.saveTimesheet({id});
             console.log(result);
             dispatch(actions.submitTimesheetSuccess());
         } catch (error) {
@@ -206,11 +210,11 @@ export const fetchTimesheet = ({id}) => {
     return async (dispatch) => {
         dispatch(actions.fetchTimesheetStart());
         try {
-            const result =  await api.fetchTimesheetById({id});
+            const result = await api.fetchTimesheetById({id});
             console.log(result);
             dispatch(actions.fetchTimesheetSuccess(result));
         } catch (error) {
-            actions.fetchTimesheetFailure(error?.response?.data?.message)
+            dispatch(actions.fetchTimesheetFailure(error?.response?.data?.message));
         }
     }
 }
