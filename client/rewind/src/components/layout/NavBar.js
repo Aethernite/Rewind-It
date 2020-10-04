@@ -19,7 +19,8 @@ const Title = styled.div`
 export const NavBar = () => {
     const [activeKey, setActiveKey] = useState({ activeKey: 1 });
     const dispatch = useDispatch();
-    const userEmail = useSelector((state) => state?.auth?.user?.email);
+    const userEmail = useSelector(state => state.auth.user);
+    console.log("UserEmail" + userEmail);
 
     const emailMatch = /([@][a-zA-Z]+[.][a-zA-Z]+)/;
 

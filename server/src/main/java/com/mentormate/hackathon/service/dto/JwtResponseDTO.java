@@ -18,4 +18,5 @@ public class JwtResponseDTO {
     
     @Schema(name = "token", description = "JSON Web Token")
     private String token;
+    private String user;
 }

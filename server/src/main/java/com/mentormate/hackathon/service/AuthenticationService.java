@@ -82,7 +82,7 @@ public class AuthenticationService {
                 new UsernamePasswordAuthenticationToken(loginRequestDTO.getEmail(), loginRequestDTO.getPassword()));
         SecurityContextHolder.getContext().setAuthentication(authentication);
         String jwt = jwtUtils.generateJwtToken(authentication);
-        return new JwtResponseDTO(jwt);
+        return new JwtResponseDTO(jwt,authentication.getName());
     }
 
     /**
