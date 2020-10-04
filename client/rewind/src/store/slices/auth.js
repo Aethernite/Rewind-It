@@ -2,7 +2,7 @@ import { createSlice } from '@reduxjs/toolkit';
 import * as api from '../../api/AuthQueries';
 
 const initialState = {
-    user: null,
+    user: localStorage.getItem('user'),
     isLoading: false,
     error: null,
     isSessionChecked: false,
@@ -34,12 +34,10 @@ const { reducer: authReducer, actions } = createSlice({
         },
         registerSuccess: (state, action) => {
             state.isLoading = false;
-            state.user = action.payload;
             state.error = null;
         },
         registerFailure: (state, action) => {
             state.isLoading = false;
-            state.user = null;
             state.error = action.payload;
         },
         clearErrors: (state) => {
@@ -91,7 +89,9 @@ export const login = ({ email, password }) => {
 
         try {
             dispatch(actions.authStart());
-            const user = await api.login({ email, password });
+            await api.login({ email, password });
+            const user = await api.getMe();
+            console.log(user);
             dispatch(actions.authSuccess(user));
         } catch (err) {
             dispatch(actions.authFailure(err?.response?.data?.message));
@@ -121,8 +121,8 @@ export const logout = () => {
 export const checkSession = () => {
     return async (dispatch) => {
         try {
-            //const user = await getMe();
-            //dispatch(actions.authSuccess(user));
+            const user = await api.getMe();
+            dispatch(actions.authSuccess(user));
         } catch (err) { }
         dispatch(actions.markSessionChecked())
     }
