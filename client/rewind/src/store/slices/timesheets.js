@@ -26,6 +26,18 @@ const { reducer: timesheetsReducer, actions } = createSlice({
             state.timesheets = [];
             state.error = action.payload;
         },
+        deleteTimesheetStart: (state) => {
+            state.isDeleting = true;
+        },
+        deleteTimesheetSuccess: (state, action) => {
+            state.isDeleting = false;
+            state.timesheets = state.timesheets.content.filter((timesheet) => timesheet.id !== action.payload.id);
+        },
+        deleteTimesheetFailure: (state, action) => {
+            state.isDeleting = false;
+            state.error = action.payload;
+        },
+
     },
 });
 
@@ -43,6 +55,22 @@ export const fetchUserTimesheets = ({ cursor }) => {
         }
     }
 };
+
+export const deleteTimesheet = ({ id }) => {
+    return async (dispatch) => {
+        dispatch(actions.deleteTimesheetStart());
+        try {
+            await api.deleteTimesheet({ id });
+            dispatch(actions.deleteTimesheetSuccess({ id }));
+            dispatch(fetchUserTimesheets({ cursor: 0 }));
+        } catch (err) {
+            dispatch(actions.deleteTimesheetFailure());
+        }
+    }
+};
+
+
+
 
 
 export { timesheetsReducer };

@@ -46,6 +46,12 @@ export const createTimesheet = async ({ fromDate }) => {
     return res.data;
 }
 
+export const deleteTimesheet = async ({ id }) => {
+    const res = await instance.delete(`/timesheets/${id}`);
+    return res.data;
+}
+
+
 
 const token = localStorage.getItem('token');
 if (token) {
