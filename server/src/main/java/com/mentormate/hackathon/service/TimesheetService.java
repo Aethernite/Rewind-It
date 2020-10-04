@@ -16,6 +16,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -39,6 +40,7 @@ public class TimesheetService {
         log.info("Start creating timesheet");
         User user = userService.checkIfUserExist(userEmail);
         Activity currentActivity = activityService.create(createTimesheetRequestDTO.getFromDate());
+        LocalDateTime localDateTime = LocalDateTime.now();
         Timesheet timesheet = new Timesheet(List.of(currentActivity), StatusType.OPEN, DEFAULT_TIMESHEET_TOTAL, user);
         TimesheetResponseDTO createTimesheetResponseDTO = modelMapper.map(timesheetRepository.save(timesheet), TimesheetResponseDTO.class);
         log.info("End creating timesheet and saved in database with id: {}", createTimesheetResponseDTO.getId());

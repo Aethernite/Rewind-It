@@ -36,9 +36,7 @@ public class OpenApiConfiguration {
         this.moduleName = moduleName;
         this.apiVersion = apiVersion;
     }
-
-
-
+    
     @Bean
     public OpenAPI customOpenAPI() {
         final String securitySchemeName = "JWT Token Authorization";

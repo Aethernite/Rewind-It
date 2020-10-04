@@ -48,12 +48,12 @@ public class DayOfTimesheetService {
         cal.setTime(convertedDatetime);
 
         for (int i = 0; i < 7; i++) {
-            cal.add(Calendar.DAY_OF_YEAR, 1);
             TimeZone tz = cal.getTimeZone();
             ZoneId zid = tz == null ? ZoneId.systemDefault() : tz.toZoneId();
             LocalDateTime localDateTime = LocalDateTime.ofInstant(cal.toInstant(), zid);
             DayOfTimesheet currentDayOfTimesheet = new DayOfTimesheet(localDateTime, 0);
             dayOfTimesheets.add(currentDayOfTimesheet);
+            cal.add(Calendar.DAY_OF_YEAR, 1);
         }
 
         return this.dayOfTimesheetRepository.saveAll(dayOfTimesheets);
