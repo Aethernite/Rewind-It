@@ -21,15 +21,14 @@
         <jackson-datatype.version>2.9.7</jackson-datatype.version>
         <jackson-databind-version>2.9.7</jackson-databind-version>
         <jwts.version>0.9.1</jwts.version>
+        <org.hibernate.hibernate-core>5.4.10.Final</org.hibernate.hibernate-core>
     </properties>
 
-
     <dependencies>
-        <!-- https://mvnrepository.com/artifact/org.hibernate/hibernate-core -->
         <dependency>
             <groupId>org.hibernate</groupId>
             <artifactId>hibernate-core</artifactId>
-            <version>5.4.10.Final</version>
+            <version>${org.hibernate.hibernate-core}</version>
         </dependency>
 
         <dependency>

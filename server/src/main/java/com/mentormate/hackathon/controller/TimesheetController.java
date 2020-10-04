@@ -2,9 +2,10 @@ package com.mentormate.hackathon.controller;
 
 import com.mentormate.hackathon.controller.handler.exception.UnAuthorizedException;
 import com.mentormate.hackathon.service.TimesheetService;
-import com.mentormate.hackathon.service.dto.CreateTimesheetRequestDTO;
-import com.mentormate.hackathon.service.dto.TimesheetResponseDTO;
-import com.mentormate.hackathon.service.dto.TimesheetUpdateRequestDTO;
+import com.mentormate.hackathon.service.dto.request.CreateTimesheetRequestDTO;
+import com.mentormate.hackathon.service.dto.request.TimesheetUpdateRequestDTO;
+import com.mentormate.hackathon.service.dto.response.ActivityResponseDTO;
+import com.mentormate.hackathon.service.dto.response.TimesheetResponseDTO;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -46,11 +47,9 @@ public class TimesheetController {
             @ApiResponse(responseCode = "400", description = "The request body is not correct"),
             @ApiResponse(responseCode = "500", description = "Internal Server Error")})
     @PostMapping
-    public ResponseEntity<TimesheetResponseDTO> createTimesheet(@Valid @RequestBody CreateTimesheetRequestDTO createTimesheetRequestDTO,
-                                                                Principal principal) {
-        if (principal == null) {
-            throw new UnAuthorizedException("Unauthorized");
-        }
+    public ResponseEntity<TimesheetResponseDTO> createActivityByTimesheetId(@Valid @RequestBody CreateTimesheetRequestDTO createTimesheetRequestDTO,
+                                                                            Principal principal) {
+        checkIfUserExist(principal);
         return new ResponseEntity<>(timesheetService.createTimesheet(createTimesheetRequestDTO, principal.getName()), HttpStatus.CREATED);
     }
 
@@ -63,9 +62,7 @@ public class TimesheetController {
             @Parameter(description = "Page number") @RequestParam(value = "page") int page,
             @Parameter(description = "Size number - how many items to return") @RequestParam("size") int size,
             Principal principal) {
-        if (principal == null) {
-            throw new UnAuthorizedException("Unauthorized");
-        }
+        checkIfUserExist(principal);
         return ResponseEntity.ok(timesheetService.getAll(page, size, principal.getName()));
     }
 
@@ -79,9 +76,7 @@ public class TimesheetController {
             @Parameter(description = "Id of the timesheet to be obtained.")
             @PathVariable("timesheetId") @NotBlank @Size(min = 1) Long timesheetId,
             Principal principal) {
-        if (principal == null) {
-            throw new UnAuthorizedException("Unauthorized");
-        }
+        checkIfUserExist(principal);
         return ResponseEntity.ok(timesheetService.getById(timesheetId, principal.getName()));
     }
 
@@ -96,9 +91,7 @@ public class TimesheetController {
             @Parameter(description = "Id of the timesheetId to be obtained.")
             @PathVariable("timesheetId") @NotBlank @Size(min = 1) Long timesheetId, @Valid @RequestBody TimesheetUpdateRequestDTO timesheetUpdateRequestDTO,
             Principal principal) {
-        if (principal == null) {
-            throw new UnAuthorizedException("Unauthorized");
-        }
+        checkIfUserExist(principal);
         return ResponseEntity.ok(timesheetService.updateTimesheetById(timesheetId, timesheetUpdateRequestDTO, principal.getName()));
     }
 
@@ -112,24 +105,59 @@ public class TimesheetController {
     public ResponseEntity<TimesheetResponseDTO> updateTimesheetStatusById(
             @Parameter(description = "Id of the timesheetId to be obtained.")
             @PathVariable("timesheetId") @NotBlank @Size(min = 1) Long timesheetId, Principal principal) {
-        if (principal == null) {
-            throw new UnAuthorizedException("Unauthorized");
-        }
+        checkIfUserExist(principal);
         return ResponseEntity.ok(timesheetService.updateTimesheetStatus(timesheetId, principal.getName()));
     }
 
     @Operation(summary = "Delete timesheet by id", description = "This request method delete timesheet by id", tags = {"Timesheet"})
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "204", description = "Deleted timesheet"),
+            @ApiResponse(responseCode = "200", description = "Deleted timesheet"),
             @ApiResponse(responseCode = "404", description = "Timesheet not found"),
             @ApiResponse(responseCode = "500", description = "Internal Server Error")})
     @DeleteMapping("/{timesheetId}")
     public ResponseEntity<TimesheetResponseDTO> deleteTimesheetById(
             @Parameter(description = "Id of the timesheet to be obtained.")
             @PathVariable("timesheetId") @NotBlank @Size(min = 1) Long timesheetId, Principal principal) {
+        checkIfUserExist(principal);
+        return ResponseEntity.ok(timesheetService.deleteTimesheetById(timesheetId, principal.getName()));
+    }
+
+    @Operation(summary = "Create activity", description = "This request method is used for creating new activity", tags = {"Activity"})
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "201", description = "Activity is created successfully"),
+            @ApiResponse(responseCode = "400", description = "The request body is not correct"),
+            @ApiResponse(responseCode = "500", description = "Internal Server Error")})
+    @PostMapping("/{timesheetId}/activities")
+    public ResponseEntity<ActivityResponseDTO> createActivityByTimesheetId(
+            @Parameter(description = "Id of the timesheet to be obtained.")
+            @PathVariable("timesheetId") @NotBlank @Size(min = 1) Long timesheetId,
+            Principal principal) {
+        checkIfUserExist(principal);
+        return new ResponseEntity(timesheetService.addActivityToTimesheet(timesheetId, principal.getName()), HttpStatus.CREATED);
+    }
+
+    @Operation(summary = "Delete activity by timesheet id", description = "This request method delete timesheet by id", tags = {"Activity"})
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Deleted timesheet"),
+            @ApiResponse(responseCode = "404", description = "Timesheet not found"),
+            @ApiResponse(responseCode = "500", description = "Internal Server Error")})
+    @DeleteMapping("/{timesheetId}/activities/{activityId}")
+    public ResponseEntity<TimesheetResponseDTO> deleteActivityByTimesheetId(
+            @Parameter(description = "Id of the timesheet to be obtained.")
+            @PathVariable("timesheetId") @NotBlank @Size(min = 1) Long timesheetId,
+            @PathVariable("activityId") @NotBlank @Size(min = 1) Long activityId,
+            Principal principal) {
+        checkIfUserExist(principal);
+        return ResponseEntity.ok(timesheetService.deleteActivityFromTimesheet(timesheetId, activityId, principal.getName()));
+    }
+
+    /**
+     * @param principal get {@link Principal}
+     * @throws UnAuthorizedException if {@link Principal} is null
+     */
+    private void checkIfUserExist(Principal principal) {
         if (principal == null) {
             throw new UnAuthorizedException("Unauthorized");
         }
-        return ResponseEntity.ok(timesheetService.deleteTimesheetById(timesheetId, principal.getName()));
     }
 }

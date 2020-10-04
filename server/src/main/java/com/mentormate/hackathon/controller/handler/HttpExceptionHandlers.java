@@ -60,9 +60,9 @@ public class HttpExceptionHandlers {
      * @param e current exception
      * @return json with message about existing error
      */
-    @ExceptionHandler({AuthenticationException.class, UnAuthorizedException.class})
+    @ExceptionHandler(UnAuthorizedException.class)
     public ResponseEntity<Map<String, String>> unauthorizedException(AuthenticationException e) {
-        return new ResponseEntity<>(Map.of("message", "Unauthorized"), HttpStatus.UNAUTHORIZED);
+        return new ResponseEntity<>(Map.of("message", e.getMessage()), HttpStatus.UNAUTHORIZED);
     }
 
     /**

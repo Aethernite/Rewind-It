@@ -45,8 +45,7 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
     public void configure(AuthenticationManagerBuilder authenticationManagerBuilder) throws Exception {
         authenticationManagerBuilder.userDetailsService(userDetailsService).passwordEncoder(passwordEncoder());
     }
-
-
+    
     /**
      * {@inheritDoc}
      */
@@ -55,8 +54,7 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
     public AuthenticationManager authenticationManagerBean() throws Exception {
         return super.authenticationManagerBean();
     }
-
-
+    
     /**
      * Register {@link PasswordEncoder} as bean in spring context with scope singleton(default)
      */
@@ -80,10 +78,8 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
                 .antMatchers("/api/v1/auth/login").permitAll()
                 .antMatchers("/api/v1/auth/me").hasAuthority("ROLE_REGULAR")
                 .antMatchers("/api/v1/timesheets").hasAuthority("ROLE_REGULAR");
-               
 
         http.addFilterBefore(authenticationJwtTokenFilter(), UsernamePasswordAuthenticationFilter.class);
     }
-
-
+    
 }

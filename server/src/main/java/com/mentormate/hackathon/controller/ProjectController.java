@@ -1,7 +1,7 @@
 package com.mentormate.hackathon.controller;
 
 import com.mentormate.hackathon.service.ProjectService;
-import com.mentormate.hackathon.service.dto.ProjectResponseDTO;
+import com.mentormate.hackathon.service.dto.response.ProjectResponseDTO;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;

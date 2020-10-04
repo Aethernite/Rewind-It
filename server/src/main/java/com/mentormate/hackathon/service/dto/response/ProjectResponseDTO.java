@@ -1,4 +1,4 @@
-package com.mentormate.hackathon.service.dto;
+package com.mentormate.hackathon.service.dto.response;
 
 import com.mentormate.hackathon.persistence.entity.Task;
 import io.swagger.v3.oas.annotations.media.Schema;
