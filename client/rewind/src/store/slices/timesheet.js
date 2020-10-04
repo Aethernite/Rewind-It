@@ -156,13 +156,13 @@ export const deleteCurrentTimesheet = () => {
         const id = getState().timesheet.timesheet.id;
         dispatch(actions.deleteCurrentTimesheetStart());
         try {
-            api.deleteTimesheet({ id });
+            api.deleteTimesheet({id});
             dispatch(actions.deleteCurrentTimesheetSuccess());
         } catch (err) {
             dispatch(actions.deleteCurrentTimesheetFailure());
         }
     }
-};
+}
 
 export const addActivity = (payload) => {
     return async (dispatch) => {

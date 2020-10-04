@@ -40,12 +40,12 @@ export const TimesheetsPage = () => {
     console.log(timesheets);
 
     React.useEffect(() => {
-        dispatch(fetchUserTimesheets({cursor: 0}));
+        dispatch(fetchUserTimesheets({ cursor: 0 }));
     }, [dispatch]);
 
 
     const handlePageChange = e => {
-        dispatch(fetchUserTimesheets({cursor: e.selected}));
+        dispatch(fetchUserTimesheets({ cursor: e.selected }));
     }
     const [modalShow, setModalShow] = React.useState(false);
 

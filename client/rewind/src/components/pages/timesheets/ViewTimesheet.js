@@ -55,7 +55,12 @@ export const ViewTimesheet = () => {
     console.log(timesheet);
 
     React.useEffect(() => {
-        dispatch(fetchTimesheet({id}));
+        const fetch = async () => {
+           await dispatch(fetchTimesheet({id}));
+        }
+
+        fetch().catch(() => {});
+
     }, [dispatch])
 
     const [modalShow, setModalShow] = React.useState(false);
