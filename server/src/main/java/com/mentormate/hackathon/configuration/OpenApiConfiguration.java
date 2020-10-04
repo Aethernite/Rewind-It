@@ -4,6 +4,7 @@ import io.swagger.v3.oas.models.Components;
 import io.swagger.v3.oas.models.OpenAPI;
 import io.swagger.v3.oas.models.info.Contact;
 import io.swagger.v3.oas.models.info.Info;
+import io.swagger.v3.oas.models.security.SecurityScheme;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -14,17 +15,25 @@ import org.springframework.context.annotation.Configuration;
  */
 @Configuration
 public class OpenApiConfiguration {
+
     /**
      * Allows definitions to be appeared globally
      */
     @Bean
     public OpenAPI customOpenAPI() {
-        Contact contact = new Contact().name("Timesheet API");
+        Contact contact = new Contact().name("Estate agency API");
 
         return new OpenAPI().components(new Components()).info(
-                new Info().title("Timesheet API")
+                new Info().title("Estate agency API")
                         .description("This is a sample Spring Boot RESTful service using springdoc-openapi and OpenAPI 3.")
                         .version("1.0.0")
-                        .contact(contact));
+                        .contact(contact))
+                .components(new Components()
+                        .addSecuritySchemes("JWT token",
+                                new SecurityScheme()
+                                        .type(SecurityScheme.Type.HTTP)
+                                        .scheme("bearer")
+                                        .bearerFormat("JWT")));
     }
 }
+

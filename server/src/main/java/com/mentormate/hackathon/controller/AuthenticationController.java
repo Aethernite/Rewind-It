@@ -1,10 +1,10 @@
 package com.mentormate.hackathon.controller;
 
 import com.mentormate.hackathon.service.AuthenticationService;
+import com.mentormate.hackathon.service.dto.JwtResponseDTO;
 import com.mentormate.hackathon.service.dto.LoginRequestDTO;
 import com.mentormate.hackathon.service.dto.LoginResponseDTO;
 import com.mentormate.hackathon.service.dto.RegisterRequestDTO;
-import com.mentormate.hackathon.service.dto.RegisterResponseDTO;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
@@ -32,27 +32,28 @@ public class AuthenticationController {
 
     private final AuthenticationService authenticationService;
 
-    @Operation(summary = "login", description = "This request method login user", tags = {"Login"})
-    @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "Return user info"),
-            @ApiResponse(responseCode = "400", description = "The request body is not correct"),
-            @ApiResponse(responseCode = "401", description = "Authentication Failure"),
-            @ApiResponse(responseCode = "500", description = "Internal Server Error")})
-    @PostMapping("/login")
-    public ResponseEntity<LoginResponseDTO> login(@RequestBody @Valid LoginRequestDTO loginRequestDTO, HttpServletRequest httpServletRequest) {
-        return ResponseEntity.ok(authenticationService.loginUser(loginRequestDTO, httpServletRequest));
-    }
-
-    @Operation(summary = "register", description = "This request method create user in database", tags = {"Register"})
+    @Operation(summary = "sign up", description = "This request method create user in database", tags = {"signUp"})
     @ApiResponses(value = {
             @ApiResponse(responseCode = "201", description = "User is created successfully"),
             @ApiResponse(responseCode = "400", description = "The request body is not correct"),
             @ApiResponse(responseCode = "409", description = "Entity already exists"),
             @ApiResponse(responseCode = "500", description = "Internal Server Error")})
-    @PostMapping("/register")
-    public ResponseEntity<RegisterResponseDTO> register(@RequestBody @Valid RegisterRequestDTO registerRequestDTO) {
-        return new ResponseEntity<>(authenticationService.registerUser(registerRequestDTO), HttpStatus.CREATED);
+    @PostMapping("/signup")
+    public ResponseEntity<LoginResponseDTO> register(@RequestBody @Valid RegisterRequestDTO registerRequestDTO) {
+        return new ResponseEntity(authenticationService.signUp(registerRequestDTO), HttpStatus.CREATED);
     }
+
+    @Operation(summary = "sign in", description = "This request method login user", tags = {"signIn"})
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Return jwt"),
+            @ApiResponse(responseCode = "400", description = "The request body is not correct"),
+            @ApiResponse(responseCode = "401", description = "Authentication Failure"),
+            @ApiResponse(responseCode = "500", description = "Internal Server Error")})
+    @PostMapping("/signin")
+    public ResponseEntity<JwtResponseDTO> login(@RequestBody @Valid LoginRequestDTO loginRequestDTO) {
+        return ResponseEntity.ok(authenticationService.signIn(loginRequestDTO));
+    }
+
 
     @Operation(summary = "logout", description = "This request method logout user.", tags = {"Logout"})
     @ApiResponses(value = {
@@ -61,7 +62,7 @@ public class AuthenticationController {
             @ApiResponse(responseCode = "500", description = "Internal Server Error")})
     @PostMapping("/logout")
     public ResponseEntity<Map<String, String>> logout(HttpServletRequest httpServletRequest) {
-        return ResponseEntity.ok(authenticationService.logout(httpServletRequest));
+        return ResponseEntity.ok(authenticationService.logout());
     }
 
 }

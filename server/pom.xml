@@ -20,6 +20,7 @@
         <openapi-ui.version>1.4.6</openapi-ui.version>
         <jackson-datatype.version>2.9.7</jackson-datatype.version>
         <jackson-databind-version>2.9.7</jackson-databind-version>
+        <jwts.version>0.9.1</jwts.version>
     </properties>
 
     <dependencies>
@@ -74,7 +75,11 @@
             <artifactId>springdoc-openapi-security</artifactId>
             <version>${openapi-ui.version}</version>
         </dependency>
-
+        <dependency>
+            <groupId>io.jsonwebtoken</groupId>
+            <artifactId>jjwt</artifactId>
+            <version>${jwts.version}</version>
+        </dependency>
         <dependency>
             <groupId>com.h2database</groupId>
             <artifactId>h2</artifactId>
