@@ -93,31 +93,9 @@ const { reducer: timesheetReducer, actions } = createSlice({
             state.isFetching = false;
             state.creationError = action.payload;
         },
-        setMonday: (state, action) => {
-            state.mondayTotal = action.payload.total;
+        reset: () => {
+            return initialState;
         },
-        setTuesday: (state, action) => {
-            state.tuesdayTotal = action.payload.total;
-        },
-        setWednesday: (state, action) => {
-            state.wednesdayTotal = action.payload.total;
-        },
-        setThursday: (state, action) => {
-            state.thursdayTotal = action.payload.total;
-        },
-        setFriday: (state, action) => {
-            state.fridayTotal = action.payload.total;
-        },
-        setSaturday: (state, action) => {
-            state.saturdayTotal = action.payload.total;
-        },
-        setSunday: (state, action) => {
-            state.sundayTotal = action.payload.total;
-        },
-        clearTimesheet: (state, action) => {
-            state.timesheet = null;
-        }
-
         // authStart: (state) => {
         //     state.isLoading = true;
         // },
@@ -199,11 +177,14 @@ export const deleteCurrentTimesheet = () => {
     }
 }
 
-export const addActivity = (payload) => {
-    return async (dispatch) => {
+export const addActivity = () => {
+    return async (dispatch, getState) => {
+        const id = getState().timesheet.timesheet.id;
+        console.log(id);
+        dispatch(actions.addCurrentTimesheetActivityStart());
         try {
-            dispatch(actions.addCurrentTimesheetActivityStart());
-            dispatch(actions.addCurrentTimesheetActivitySuccess(payload));
+            const result = await api.addActivityToTimesheet({ id });
+            dispatch(actions.addCurrentTimesheetActivitySuccess(result));
         } catch (error) {
             dispatch(actions.addCurrentTimesheetActivityFailure(error?.response?.data?.message));
         }
@@ -254,32 +235,6 @@ export const fetchTimesheet = ({ id }) => {
     }
 }
 
-export const setDay = ({ day, total }) => {
-    return async (dispatch) => {
-        switch (day) {
-            case "Monday":
-                dispatch(actions.setMonday(total));
-                break;
-            case "Tuesday":
-                dispatch(actions.setTuesday(total));
-                break;
-            case "Wednesday":
-                dispatch(actions.setWednesday(total));
-                break;
-            case "Thursday":
-                dispatch(actions.setThursday(total));
-                break;
-            case "Friday":
-                dispatch(actions.setFriday(total));
-                break;
-            case "Saturday":
-                dispatch(actions.setSaturday(total));
-                break;
-            case "Sunday":
-                dispatch(actions.setSaturday(total));
-        }
-    }
-
-}
+export const resetTimesheet = actions.reset;
 
 export { timesheetReducer };

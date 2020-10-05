@@ -6,7 +6,12 @@ import '@fortawesome/free-solid-svg-icons';
 import styled from 'styled-components';
 import TimesheetRow from './TimesheetRow';
 import { useDispatch, useSelector } from 'react-redux';
-import { deleteCurrentTimesheet, saveCurrentTimesheet, submitCurrentTimesheet } from '../store/slices/timesheet';
+import {
+    deleteCurrentTimesheet,
+    resetTimesheet,
+    saveCurrentTimesheet,
+    submitCurrentTimesheet
+} from '../store/slices/timesheet';
 import { fetchAllProjects } from '../store/slices/projects';
 import moment from 'moment';
 import { useFormik } from 'formik';
@@ -60,16 +65,12 @@ export const TimesheetTable = () => {
     const history = useHistory();
 
     React.useEffect(() => {
-        dispatch(fetchAllProjects());
-    }, [dispatch]);
+        if (timesheet !== null) {
+            dispatch(fetchAllProjects());
+        }
 
-    const monday = useSelector(state => state.timesheet.mondayTotal);
-    const tuesday = useSelector(state => state.timesheet.tuesdayTotal);
-    const wednesday = useSelector(state => state.timesheet.wednesdayTotal);
-    const thursday = useSelector(state => state.timesheet.thursdayTotal);
-    const friday = useSelector(state => state.timesheet.fridayTotal);
-    const saturday = useSelector(state => state.timesheet.saturdayTotal);
-    const sunday = useSelector(state => state.timesheet.sundayTotal);
+        return () => dispatch(resetTimesheet());
+    }, [dispatch])
 
     const formik = useFormik({
         initialValues: {
@@ -85,67 +86,96 @@ export const TimesheetTable = () => {
     return (
         <Container className="mt-5">
             <Col className="d-flex justify-content-center">
-                <form>
-                    <Table className="table" style={{ width: '1200px' }}>
-                        <thead style={{ height: '80px' }}>
-                            <tr style={{ height: '80px' }}>
-                                <th colSpan="11" className="h-100">
-                                    <span style={{ verticalAlign: 'top' }}>Timesheet for {timesheet.from} - {timesheet.to}</span>
-                                    <div className="float-right">
-                                        <i class="far fa-trash-alt mr-2 fa-2x" style={{ color: '#2e2e2e', transform: "translateY(5px)" }}></i>
-                                        <button type="button" class="btn btn-dark mr-3" onClick={console.log("Delete")}>DELETE</button>
-                                        <i class="far fa-save mr-2 fa-2x" style={{ color: '#2e2e2e', transform: "translateY(5px)" }}></i>
-                                        <button type="submit" class="btn btn-dark mr-3">SAVE</button>
+                <Table className="table" style={{ width: '1200px' }}>
+                    <thead style={{ height: '80px' }}>
+                        <tr style={{ height: '80px' }}>
+                            <th colSpan="11" className="h-100">
+                                <span style={{ verticalAlign: 'top' }}>Timesheet for {moment(timesheet.from).format("DD/MM/YYYY")} - {moment(timesheet.to).format("DD/MM/YYYY")}</span>
+                                <div className="float-right">
+                                    <i class="far fa-trash-alt mr-2 fa-2x" style={{ color: '#2e2e2e', transform: "translateY(5px)" }}></i>
+                                    <button type="button" class="btn btn-dark mr-3" onClick={() => setModalShow(true)}>DELETE</button>
+                                    <Modal
+                                        size="xs"
+                                        aria-labelledby="contained-modal-title-vcenter"
+                                        centered
+                                        show={modalShow}
+                                    >
+                                        <Modal.Header>
+                                            <Modal.Title style={{ margin: '0 auto' }}>Delete confirmation</Modal.Title>
+                                        </Modal.Header>
+                                        <Modal.Body style={{ display: "flex", height: "100%", justifyContent: "center", alignItems: "center" }}>
+                                            <h5 style={{ display: "flex", justifyContent: "center", alignItems: "center" }}>
+                                                <p style={{ justifyContent: "center", alignItems: "center", textAlign: 'center' }}>
+                                                    Are you sure you want to <br></br> delete the timesheet for week <br></br> {timesheet.from + ' - ' + timesheet.to + "?"}
+                                                </p>
+                                            </h5>
+                                        </Modal.Body>
+                                        <Modal.Footer>
+                                            <div style={{ display: "flex", width: "100%", justifyContent: "space-evenly" }}>
+                                                <IconYes className="fas fa-check-circle fa-3x" onClick={() => dispatch(deleteCurrentTimesheet())}></IconYes>
+                                                <IconNo className="fas fa-times-circle fa-3x" onClick={() => setModalShow(false)}></IconNo>
+                                            </div>
+                                        </Modal.Footer>
+                                    </Modal>
 
-                                        <i class="far fa-check-circle mr-2 fa-2x" style={{ color: '#2e2e2e', transform: "translateY(5px)" }}></i>
-                                        <button type="button" className="btn btn-dark mr-3" onClick={() => {
-                                            dispatch(submitCurrentTimesheet());
-                                            dispatch(fetchUserTimesheets(0));
-                                            let path = `/timesheet/home`;
-                                            history.push(path);
-                                        }}>SUBMIT
+                                    <i class="far fa-save mr-2 fa-2x" style={{ color: '#2e2e2e', transform: "translateY(5px)" }}></i>
+                                    <button type="button" class="btn btn-dark mr-3" onClick={() => {
+
+                                        dispatch(saveCurrentTimesheet());
+                                    }}>SAVE</button>
+
+                                    <i class="far fa-check-circle mr-2 fa-2x" style={{ color: '#2e2e2e', transform: "translateY(5px)" }}></i>
+                                    <button type="button" className="btn btn-dark mr-3" onClick={() => {
+                                        dispatch(submitCurrentTimesheet());
+                                        let path = `/timesheet/home`;
+                                        history.push(path);
+                                    }}>SUBMIT
                                     </button>
 
-                                        <span>Status: {timesheet.statusType}</span>
-                                    </div>
-                                </th>
-                            </tr>
-                        </thead>
-                        <thead className="thead-dark">
-                            <tr className="text-center">
-                                <th scope="col" style={{ width: '60px' }}>#</th>
-                                <th scope="col" style={{ width: '280px' }}>Client: Project</th>
-                                <th scope="col" style={{ width: '140px' }}>Task</th>
-                                <th scope="col" style={{ width: '60px' }}>{moment(timesheet.from).format('DD')} Mon</th>
-                                <th scope="col" style={{ width: '60px' }}>{moment(timesheet.from).add(1, 'day').format('DD')} Tue</th>
-                                <th scope="col" style={{ width: '60px' }}>{moment(timesheet.from).add(2, 'day').format('DD')} Wed</th>
-                                <th scope="col" style={{ width: '60px' }}>{moment(timesheet.from).add(3, 'day').format('DD')} Thu</th>
-                                <th scope="col" style={{ width: '60px' }}>{moment(timesheet.from).add(4, 'day').format('DD')} Fri</th>
-                                <th scope="col" style={{ width: '60px' }}>{moment(timesheet.from).add(5, 'day').format('DD')} Sat</th>
-                                <th scope="col" style={{ width: '60px' }}>{moment(timesheet.from).add(6, 'day').format('DD')} Sun</th>
-                                <th scope="col" style={{ width: '60px' }}>Total</th>
-                            </tr>
-                        </thead>
-                        <tbody className="text-center">
-                            {timesheet.activities.map((activity, index) => (
-                                <TimesheetRow activity={activity} formik={{ subformik: formik }} index={index}></TimesheetRow>
+                                    <span>Status: {timesheet.statusType}</span>
+                                </div>
+                            </th>
+                        </tr>
+                    </thead>
+                    <thead className="thead-dark">
+                        <tr className="text-center">
+                            <th scope="col" style={{ width: '60px' }}>#</th>
+                            <th scope="col" style={{ width: '280px' }}>Client: Project</th>
+                            <th scope="col" style={{ width: '140px' }}>Task</th>
+                            <th scope="col" style={{ width: '60px' }}>{moment(timesheet.from).format('DD')} Mon</th>
+                            <th scope="col" style={{ width: '60px' }}>{moment(timesheet.from).add(1, 'day').format('DD')} Tue</th>
+                            <th scope="col" style={{ width: '60px' }}>{moment(timesheet.from).add(2, 'day').format('DD')} Wed</th>
+                            <th scope="col" style={{ width: '60px' }}>{moment(timesheet.from).add(3, 'day').format('DD')} Thu</th>
+                            <th scope="col" style={{ width: '60px' }}>{moment(timesheet.from).add(4, 'day').format('DD')} Fri</th>
+                            <th scope="col" style={{ width: '60px' }}>{moment(timesheet.from).add(5, 'day').format('DD')} Sat</th>
+                            <th scope="col" style={{ width: '60px' }}>{moment(timesheet.from).add(6, 'day').format('DD')} Sun</th>
+                            <th scope="col" style={{ width: '60px' }}>Total</th>
+                        </tr>
+                    </thead>
+                    <tbody className="text-center">
+                        {
+
+                            timesheet && timesheet?.activities.map((activity, index) => (
+                                <TimesheetRow index={index} activity={activity}></TimesheetRow>
+
                             ))
-                            }
-                            <tr>
-                                <td></td>
-                                <td colSpan={2} style={{ textAlign: 'left', fontWeight: '500' }}>Total</td>
-                                <td>{monday}</td>
-                                <td>{tuesday}</td>
-                                <td>{wednesday}</td>
-                                <td>{thursday}</td>
-                                <td>{friday}</td>
-                                <td>{saturday}</td>
-                                <td>{sunday}</td>
-                                <td>60</td>
-                            </tr>
-                        </tbody>
-                    </Table>
-                </form>
+                        }
+                        <tr>
+                            <td></td>
+                            <td colSpan={2} style={{ textAlign: 'left', fontWeight: '500' }}>Total</td>
+                            <td>{
+                                0
+                            }</td>
+                            <td>8</td>
+                            <td>8</td>
+                            <td>8</td>
+                            <td>8</td>
+                            <td>8</td>
+                            <td>8</td>
+                            <td>60</td>
+                        </tr>
+                    </tbody>
+                </Table>
             </Col>
         </Container>
     )
