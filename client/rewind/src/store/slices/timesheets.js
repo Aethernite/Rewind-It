@@ -50,7 +50,6 @@ export const fetchUserTimesheets = ({ cursor }) => {
             const timesheets = await api.getTimesheetsForUser({ cursor, limit });
             dispatch(actions.fetchTimesheetsSuccess({ timesheets, cursor }));
         } catch (err) {
-            console.log(err);
             dispatch(actions.fetchTimesheetsFailure(err?.response?.data?.message));
         }
     }

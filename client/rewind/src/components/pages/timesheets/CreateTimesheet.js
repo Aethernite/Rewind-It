@@ -6,7 +6,7 @@ import { Week } from "../../common/Week";
 import "../../../css/forms.scss"
 import { useFormik } from 'formik';
 import { useDispatch, useSelector } from 'react-redux';
-import { createTimesheet } from "../../../store/slices/timesheet";
+import { clearTimesheet, createTimesheet } from "../../../store/slices/timesheet";
 import { Timesheet } from '../../Timesheet';
 
 const Form = styled.form`
@@ -63,6 +63,10 @@ export const CreateTimesheet = () => {
 
     const dispatch = useDispatch();
 
+    React.useEffect(() => {
+        dispatch(clearTimesheet());
+    }, [dispatch]);
+
     const formik = useFormik({
         initialValues: {
             period: ''
@@ -72,7 +76,6 @@ export const CreateTimesheet = () => {
             const splitted = values.period.split(" - ");
             const from = splitted[0];
             const to = splitted[1];
-            console.log(from);
             dispatch(createTimesheet({ from, to }));
         },
     });

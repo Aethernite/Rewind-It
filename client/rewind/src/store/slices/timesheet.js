@@ -7,6 +7,13 @@ const initialState = {
     error: null,
     isCreating: false,
     isDeleting: false,
+    mondayTotal: 0,
+    tuesdayTotal: 0,
+    wednesdayTotal: 0,
+    thursdayTotal: 0,
+    fridayTotal: 0,
+    saturdayTotal: 0,
+    sundayTotal: 0,
     isFetching: false
 };
 
@@ -73,10 +80,13 @@ const { reducer: timesheetReducer, actions } = createSlice({
             state.creationError = action.payload;
         },
         fetchTimesheetStart: (state) => {
+            debugger;
             state.isFetching = true;
         },
         fetchTimesheetSuccess: (state, action) => {
+            debugger;
             state.isFetching = false;
+            console.log(action.payload);
             state.timesheet = action.payload;
             state.creationError = null;
         },
@@ -187,7 +197,7 @@ export const addActivity = () => {
         // console.log(id);
         dispatch(actions.addCurrentTimesheetActivityStart());
         try {
-            const result = await api.addActivityToTimesheet({id});
+            const result = await api.addActivityToTimesheet({ id });
             dispatch(actions.addCurrentTimesheetActivitySuccess(result));
         } catch (error) {
             dispatch(actions.addCurrentTimesheetActivityFailure(error?.response?.data?.message));
@@ -205,6 +215,12 @@ export const deleteActivity = ({activityId}) => {
         } catch (error) {
             dispatch(actions.deleteActivityFailure(error?.response?.data?.message));
         }
+    }
+}
+
+export const clearTimesheet = () => {
+    return async (dispatch) => {
+        dispatch(actions.reset());
     }
 }
 
@@ -239,8 +255,7 @@ export const fetchTimesheet = ({id}) => {
     return async (dispatch) => {
         dispatch(actions.fetchTimesheetStart());
         try {
-            const result = await api.fetchTimesheetById({id});
-
+            const result = await api.fetchTimesheetById({ id });
             dispatch(actions.fetchTimesheetSuccess(result));
         } catch (error) {
             dispatch(actions.fetchTimesheetFailure(error?.response?.data?.message));

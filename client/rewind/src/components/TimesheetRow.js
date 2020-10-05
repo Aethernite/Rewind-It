@@ -8,7 +8,18 @@ import { useFormik } from 'formik';
 import { useSelector, useDispatch } from 'react-redux';
 import { TimesheetRowValidationSchema } from "../validations/schemas/TimesheetRowValidationSchema";
 import Select from 'react-select';
-import {addActivity, deleteActivity} from "../store/slices/timesheet";
+import { addActivity, deleteActivity } from "../store/slices/timesheet";
+import { setDay } from "../store/slices/timesheet";
+
+
+const Table = styled.table`
+border: 1px solid #2e2e2e;
+border-bottom: none;
+border-right: none;
+border-left: none;
+font-family: "Roboto", sans-serif;
+background-color: #fff;
+`;
 
 const Input = styled.input`
 text-align: center;
@@ -116,6 +127,7 @@ export const TimesheetRow = ({ submitted, activity, index }) => {
                 </th>
                 <td>
                     <Select
+                        form={id}
                         theme="primary"
                         defaultValue={projectDefault}
                         onChange={handleProjectChange}
@@ -127,6 +139,7 @@ export const TimesheetRow = ({ submitted, activity, index }) => {
                 </td>
                 <td>
                     <Select
+                        form={id}
                         defaultValue={taskDefault}
                         onChange={handleTaskChange}
                         value={selectedTaskOption || ''}
@@ -142,6 +155,7 @@ export const TimesheetRow = ({ submitted, activity, index }) => {
                             <i class="fas fa-info-circle" style={{ color: formik.errors.monday ? "red" : "#2e2e2e" }}></i>
                         </Tippy>
                     </div>
+
                 </td>
                 <td>
                     <Input disabled={isSubmitted} name="tuesday" maxLength={4} className={`form-control ${formik.errors.tuesday ? "is-invalid" : ""}`} form={id} onBlur={formik.handleBlur} onChange={formik.handleChange} />

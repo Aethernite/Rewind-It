@@ -91,7 +91,7 @@ const LoginPage = () => {
                             <Logo>Rewind</Logo>
                             <Header>LOGIN</Header>
                         </div>
-                        {/*{error && <Alert variant="danger">{error}</Alert>}*/}
+                        {error && <Alert variant="danger">{error}</Alert>}
                     </div>
                     <FormGroup>
                         {formik.touched.email && formik.errors.email &&

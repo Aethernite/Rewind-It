@@ -91,7 +91,7 @@ export const login = ({ email, password }) => {
             dispatch(actions.authStart());
             await api.login({ email, password });
             const user = await api.getMe();
-            console.log(user);
+
             dispatch(actions.authSuccess(user));
         } catch (err) {
             dispatch(actions.authFailure(err?.response?.data?.message));

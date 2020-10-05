@@ -1,6 +1,6 @@
 import React from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css';
-import { Container, Col } from 'react-bootstrap';
+import { Container, Col, Modal } from 'react-bootstrap';
 import '@fortawesome/fontawesome-free/css/all.min.css';
 import '@fortawesome/free-solid-svg-icons';
 import styled from 'styled-components';
@@ -14,8 +14,10 @@ import {
 } from '../store/slices/timesheet';
 import { fetchAllProjects } from '../store/slices/projects';
 import moment from 'moment';
-import { Modal } from "react-bootstrap";
-import {useHistory} from "react-router-dom"
+import { useFormik } from 'formik';
+import { schema } from '../validations/schemas/TimesheetRowValidationSchema';
+import { useHistory } from "react-router-dom"
+import { fetchUserTimesheets } from '../store/slices/timesheets';
 
 const Table = styled.table`
 border: 1px solid #2e2e2e;
@@ -48,7 +50,6 @@ transition: transform 0.2s;
 }
 `;
 
-
 const sum = arr => {
     let sum = 0;
     arr.forEach(element => {
@@ -58,7 +59,7 @@ const sum = arr => {
     return sum;
 }
 
-export const TimesheetTable = ({ from, to }) => {
+export const TimesheetTable = () => {
     const dispatch = useDispatch();
     const timesheet = useSelector(state => state.timesheet.timesheet);
     const history = useHistory();
@@ -72,7 +73,6 @@ export const TimesheetTable = ({ from, to }) => {
     }, [dispatch])
 
     const [modalShow, setModalShow] = React.useState(false);
-
 
 
     return (
@@ -152,9 +152,9 @@ export const TimesheetTable = ({ from, to }) => {
                         {
 
                             timesheet && timesheet?.activities.map((activity, index) => (
-                            <TimesheetRow index={index} activity={activity}></TimesheetRow>
+                                <TimesheetRow index={index} activity={activity}></TimesheetRow>
 
-                        ))
+                            ))
                         }
                         <tr>
                             <td></td>
