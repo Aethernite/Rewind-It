@@ -51,7 +51,6 @@ const sum = arr => {
 }
 
 export const TimesheetRow = ({ submitted, activity, index }) => {
-    const projects = useSelector(state => state.projects.projects);
     const timesheet = useSelector(state => state.timesheet.timesheet);
     const dispatch = useDispatch();
     const projects = useSelector(state => state.projects.projects);

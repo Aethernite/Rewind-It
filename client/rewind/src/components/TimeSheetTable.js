@@ -1,6 +1,6 @@
 import React from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css';
-import { Container, Col } from 'react-bootstrap';
+import { Container, Col, Modal } from 'react-bootstrap';
 import '@fortawesome/fontawesome-free/css/all.min.css';
 import '@fortawesome/free-solid-svg-icons';
 import styled from 'styled-components';
@@ -72,15 +72,7 @@ export const TimesheetTable = () => {
         return () => dispatch(resetTimesheet());
     }, [dispatch])
 
-    const formik = useFormik({
-        initialValues: {
-        },
-
-        onSubmit: (values) => {
-
-            console.log("submitting");
-        },
-    });
+    const [modalShow, setModalShow] = React.useState(false);
 
 
     return (

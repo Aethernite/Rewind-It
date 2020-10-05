@@ -193,7 +193,7 @@ export const addActivity = () => {
 
 export const clearTimesheet = () => {
     return async (dispatch) => {
-        dispatch(actions.clearTimesheet());
+        dispatch(actions.reset());
     }
 }
 
@@ -234,6 +234,7 @@ export const fetchTimesheet = ({ id }) => {
         }
     }
 }
+
 
 export const resetTimesheet = actions.reset;
 
