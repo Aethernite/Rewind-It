@@ -86,7 +86,6 @@ const { reducer: timesheetReducer, actions } = createSlice({
         fetchTimesheetSuccess: (state, action) => {
             debugger;
             state.isFetching = false;
-            console.log(action.payload);
             state.timesheet = action.payload;
             state.creationError = null;
         },
@@ -114,6 +113,9 @@ const { reducer: timesheetReducer, actions } = createSlice({
         },
         setSunday: (state, action) => {
             state.sundayTotal = action.payload.total;
+        },
+        clearTimesheet: (state, action) => {
+            state.timesheet = null;
         }
 
         // authStart: (state) => {
@@ -208,6 +210,12 @@ export const addActivity = (payload) => {
     }
 }
 
+export const clearTimesheet = () => {
+    return async (dispatch) => {
+        dispatch(actions.clearTimesheet());
+    }
+}
+
 export const submitCurrentTimesheet = () => {
     return async (dispatch, getState) => {
         const id = getState().timesheet.timesheet.id;
@@ -227,7 +235,6 @@ export const saveCurrentTimesheet = () => {
         dispatch(actions.saveTimesheetStart());
         try {
             const result = await api.saveTimesheet({ id });
-            console.log(result);
             dispatch(actions.submitTimesheetSuccess());
         } catch (error) {
             actions.saveTimesheetFailure(error?.response?.data?.message)
@@ -240,7 +247,6 @@ export const fetchTimesheet = ({ id }) => {
         dispatch(actions.fetchTimesheetStart());
         try {
             const result = await api.fetchTimesheetById({ id });
-            console.log(result);
             dispatch(actions.fetchTimesheetSuccess(result));
         } catch (error) {
             dispatch(actions.fetchTimesheetFailure(error?.response?.data?.message));

@@ -29,7 +29,6 @@ transition: transform 0.2s;
 `;
 export const ConfirmationBox = (props) => {
     const dispatch = useDispatch();
-    console.log(props);
 
     const handleDispatch = () => {
         props.onHide();

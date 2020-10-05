@@ -9,7 +9,6 @@ import { useDispatch, useSelector } from 'react-redux';
 import { deleteCurrentTimesheet, saveCurrentTimesheet, submitCurrentTimesheet } from '../store/slices/timesheet';
 import { fetchAllProjects } from '../store/slices/projects';
 import moment from 'moment';
-import { Modal } from "react-bootstrap";
 import { useFormik } from 'formik';
 import { schema } from '../validations/schemas/TimesheetRowValidationSchema';
 import { useHistory } from "react-router-dom"
@@ -46,7 +45,6 @@ transition: transform 0.2s;
 }
 `;
 
-
 const sum = arr => {
     let sum = 0;
     arr.forEach(element => {
@@ -63,21 +61,7 @@ export const TimesheetTable = () => {
 
     React.useEffect(() => {
         dispatch(fetchAllProjects());
-    }, []);
-
-    const [modalShow, setModalShow] = React.useState(false);
-
-    const formik = useFormik({
-        initialValues: {
-            timesheet: timesheet,
-        },
-
-        onSubmit: (values) => {
-            console.log(values);
-        },
-        validationSchema: schema
-    });
-
+    }, [dispatch]);
 
     const monday = useSelector(state => state.timesheet.mondayTotal);
     const tuesday = useSelector(state => state.timesheet.tuesdayTotal);
@@ -87,6 +71,15 @@ export const TimesheetTable = () => {
     const saturday = useSelector(state => state.timesheet.saturdayTotal);
     const sunday = useSelector(state => state.timesheet.sundayTotal);
 
+    const formik = useFormik({
+        initialValues: {
+        },
+
+        onSubmit: (values) => {
+
+            console.log("submitting");
+        },
+    });
 
 
     return (
@@ -100,35 +93,9 @@ export const TimesheetTable = () => {
                                     <span style={{ verticalAlign: 'top' }}>Timesheet for {timesheet.from} - {timesheet.to}</span>
                                     <div className="float-right">
                                         <i class="far fa-trash-alt mr-2 fa-2x" style={{ color: '#2e2e2e', transform: "translateY(5px)" }}></i>
-                                        <button type="button" class="btn btn-dark mr-3" onClick={() => setModalShow(true)}>DELETE</button>
-                                        <Modal
-                                            size="xs"
-                                            aria-labelledby="contained-modal-title-vcenter"
-                                            centered
-                                            show={modalShow}
-                                        >
-                                            <Modal.Header>
-                                                <Modal.Title style={{ margin: '0 auto' }}>Delete confirmation</Modal.Title>
-                                            </Modal.Header>
-                                            <Modal.Body style={{ display: "flex", height: "100%", justifyContent: "center", alignItems: "center" }}>
-                                                <h5 style={{ display: "flex", justifyContent: "center", alignItems: "center" }}>
-                                                    <p style={{ justifyContent: "center", alignItems: "center", textAlign: 'center' }}>
-                                                        Are you sure you want to <br></br> delete the timesheet for week <br></br> {timesheet.from + ' - ' + timesheet.to + "?"}
-                                                    </p>
-                                                </h5>
-                                            </Modal.Body>
-                                            <Modal.Footer>
-                                                <div style={{ display: "flex", width: "100%", justifyContent: "space-evenly" }}>
-                                                    <IconYes className="fas fa-check-circle fa-3x" onClick={() => dispatch(deleteCurrentTimesheet())}></IconYes>
-                                                    <IconNo className="fas fa-times-circle fa-3x" onClick={() => setModalShow(false)}></IconNo>
-                                                </div>
-                                            </Modal.Footer>
-                                        </Modal>
-
+                                        <button type="button" class="btn btn-dark mr-3" onClick={console.log("Delete")}>DELETE</button>
                                         <i class="far fa-save mr-2 fa-2x" style={{ color: '#2e2e2e', transform: "translateY(5px)" }}></i>
-                                        <button type="button" class="btn btn-dark mr-3" onClick={() => {
-                                            dispatch(saveCurrentTimesheet());
-                                        }}>SAVE</button>
+                                        <button type="submit" class="btn btn-dark mr-3">SAVE</button>
 
                                         <i class="far fa-check-circle mr-2 fa-2x" style={{ color: '#2e2e2e', transform: "translateY(5px)" }}></i>
                                         <button type="button" className="btn btn-dark mr-3" onClick={() => {

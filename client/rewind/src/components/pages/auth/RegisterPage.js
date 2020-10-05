@@ -1,7 +1,7 @@
 import React from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import styled from 'styled-components';
-import {FormGroup, Container, Col, Alert, Spinner} from 'react-bootstrap';
+import { FormGroup, Container, Col, Alert, Spinner } from 'react-bootstrap';
 import { useFormik } from 'formik';
 import "../../../css/Animation.css";
 import classNames from 'classnames';
@@ -9,7 +9,7 @@ import { RegisterValidationSchema } from "../../../validations/schemas/RegisterV
 import "../../../css/forms.scss";
 import { useDispatch, useSelector } from 'react-redux';
 import { register } from '../../../store/slices/auth';
-import {Link, useHistory} from "react-router-dom";
+import { Link, useHistory } from "react-router-dom";
 
 const Title = styled.h1`
   font-family: 'Lobster', cursive;
@@ -93,9 +93,10 @@ export const RegisterPage = () => {
                             <Header>REGISTER</Header>
                         </div>
                     </div>
-                    {/*{error &&*/}
-                    {/*    <Alert variant="danger">{error}</Alert>*/}
-                    {/*}*/}
+                    {error &&
+                        <Alert variant="danger">{error}</Alert>
+                    }
+
                     <FormGroup className="form-group">
                         {formik.touched.email && formik.errors.email &&
                             <Alert variant="danger">{formik.errors.email}</Alert>}
@@ -154,7 +155,7 @@ export const RegisterPage = () => {
                     <FormGroup className="form-group">
                         <div className="col-md-12 text-center ">
                             <a href="# " onClick={handleSubmit} className="btn-flip mb-3" data-back="Register" data-front="Register" style={{ textDecoration: 'none', display: isLoading ? "none" : "" }}> </a>
-                            <button ref={submit} form="myform" type="submit" style={{ display: 'none' }}  onClick={() => {
+                            <button ref={submit} form="myform" type="submit" style={{ display: 'none' }} onClick={() => {
                                 let path = `/login`;
                                 history.push(path);
                             }}></button>

@@ -12,7 +12,6 @@ export const register = async ({ email, password }) => {
 
 export const login = async ({ email, password }) => {
     const res = await instance.post('/auth/login', { email, password });
-    console.log(res.data);
     const { token, user } = res.data;
     instance.defaults.headers['Authorization'] = `Bearer ${token}`;
     localStorage.setItem('token', token);
