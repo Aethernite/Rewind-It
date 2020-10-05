@@ -8,7 +8,7 @@ import { useFormik } from 'formik';
 import { useSelector, useDispatch } from 'react-redux';
 import { TimesheetRowValidationSchema } from "../validations/schemas/TimesheetRowValidationSchema";
 import Select from 'react-select';
-import {addActivity} from "../store/slices/timesheet";
+import {addActivity, deleteActivity} from "../store/slices/timesheet";
 
 const Input = styled.input`
 text-align: center;
@@ -47,15 +47,15 @@ export const TimesheetRow = ({ submitted, activity, index }) => {
     const [selectedTaskOption, setSelectedTaskOption] = React.useState(activity?.task?.name);
     const [selectedProjectOption, setSelectedProjectOption] = React.useState(activity?.project?.name);
     const [currentId, setCurrentId] = React.useState(timesheet.id);
-    let counter = 0;
+
+    const deleteActivityOfSheet = ({timesheetId, activityId}) => {
+        dispatch(deleteActivity({timesheetId, activityId}));
+    }
 
     const isSubmitted = submitted === "SUBMITTED";
 
     const projectOptions = [] = projects.filter(project => project.name != '').map((project) => project = { value: project.id, label: project.name });
     const taskOptions = [] = selectedProjectOption ? projects.filter(project => project.id === selectedProjectOption.value)[0].tasks.filter(task => task.name != '').map((task) => task = { value: task.id, label: task.name }) : [];
-
-    console.log(activity);
-    console.log(timesheet.activities);
 
     const formik = useFormik({
         initialValues: {
@@ -111,7 +111,7 @@ export const TimesheetRow = ({ submitted, activity, index }) => {
                 <th>
                     <div className="mt-2">
                         {timesheet?.activities?.length > 1 && (<><span className="d-inline-block ml-1">{index}</span>
-                        <Icon className="d-inline-block fa fa-trash pl-2"></Icon></>)}
+                        <Icon onClick={() => deleteActivityOfSheet({timesheetId: timesheet?.id, activityId: activity?.id})} className="d-inline-block fa fa-trash pl-2"></Icon></>)}
                     </div>
                 </th>
                 <td>

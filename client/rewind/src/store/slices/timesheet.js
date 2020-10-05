@@ -73,17 +73,28 @@ const { reducer: timesheetReducer, actions } = createSlice({
             state.creationError = action.payload;
         },
         fetchTimesheetStart: (state) => {
-            debugger;
             state.isFetching = true;
         },
         fetchTimesheetSuccess: (state, action) => {
-            debugger;
             state.isFetching = false;
-            console.log(action.payload);
             state.timesheet = action.payload;
             state.creationError = null;
         },
         fetchTimesheetFailure: (state, action) => {
+            state.isFetching = false;
+            state.creationError = action.payload;
+        },
+        deleteActivityStart: (state) => {
+            state.isFetching = true;
+        },
+        deleteActivitySuccess: (state, action) => {
+            state.isFetching = false;
+            // state.timesheet.activities
+            state.timesheet.activities.map(activity => activity.id !== action.payload);
+
+            state.creationError = null;
+        },
+        deleteActivityFailure: (state, action) => {
             state.isFetching = false;
             state.creationError = action.payload;
         },
@@ -150,7 +161,6 @@ export const createTimesheet = ({ from, to }) => {
             const format = split[2] + "-" + split[1] + "-" + split[0];
             const timesheet = await api.createTimesheet({ fromDate: format });
             dispatch(actions.createTimesheetSuccess(timesheet));
-            console.log(timesheet);
         } catch (err) {
             dispatch(actions.createTimesheetFailure(err?.response?.data?.message));
         }
@@ -174,13 +184,26 @@ export const deleteCurrentTimesheet = () => {
 export const addActivity = () => {
     return async (dispatch, getState) => {
         const id = getState().timesheet.timesheet.id;
-        console.log(id);
+        // console.log(id);
         dispatch(actions.addCurrentTimesheetActivityStart());
         try {
             const result = await api.addActivityToTimesheet({id});
             dispatch(actions.addCurrentTimesheetActivitySuccess(result));
         } catch (error) {
             dispatch(actions.addCurrentTimesheetActivityFailure(error?.response?.data?.message));
+        }
+    }
+}
+
+export const deleteActivity = ({activityId}) => {
+    return async (dispatch, getState) => {
+        const timesheetId = getState().timesheet.timesheet.id;
+        dispatch(actions.deleteActivityStart());
+        try {
+            // const result = await api.deleteActivityOfTimesheet({timesheetId, activityId});
+            dispatch(actions.deleteActivitySuccess({activityId}));
+        } catch (error) {
+            dispatch(actions.deleteActivityFailure(error?.response?.data?.message));
         }
     }
 }
@@ -217,7 +240,7 @@ export const fetchTimesheet = ({id}) => {
         dispatch(actions.fetchTimesheetStart());
         try {
             const result = await api.fetchTimesheetById({id});
-            console.log(result);
+
             dispatch(actions.fetchTimesheetSuccess(result));
         } catch (error) {
             dispatch(actions.fetchTimesheetFailure(error?.response?.data?.message));
