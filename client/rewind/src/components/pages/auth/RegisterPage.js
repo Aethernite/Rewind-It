@@ -149,9 +149,9 @@ export const RegisterPage = () => {
                             onChange={formik.handleChange}
                             placeholder="Confirm Password" />
                     </FormGroup>
-                    <FormGroup className="form-group">
-                        <p className="text-center">By signing up you accept our <a href="#TermsOfUse">Terms Of Use</a></p>
-                    </FormGroup>
+                    {/*<FormGroup className="form-group">*/}
+                        {/*<p className="text-center">By signing up you accept our <a href="#TermsOfUse">Terms Of Use</a></p>*/}
+                    {/*</FormGroup>*/}
                     <FormGroup className="form-group">
                         <div className="col-md-12 text-center ">
                             <a href="# " onClick={handleSubmit} className="btn-flip mb-3" data-back="Register" data-front="Register" style={{ textDecoration: 'none', display: isLoading ? "none" : "" }}> </a>

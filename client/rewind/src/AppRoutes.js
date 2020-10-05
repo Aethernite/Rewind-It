@@ -4,12 +4,10 @@ import LoginPage from "./components/pages/auth/LoginPage";
 import { RegisterPage } from "./components/pages/auth/RegisterPage";
 import { CreateTimesheet } from "./components/pages/timesheets/CreateTimesheet";
 import { ViewTimesheet } from "./components/pages/timesheets/ViewTimesheet";
-import TimesheetTable from "./components/TimeSheetTable";
 import Background from "./components/Background";
 import { useSelector } from "react-redux";
 import { TimesheetsPage } from "./components/pages/timesheets/TimesheetsPage";
 import { NavBar } from "./components/layout/NavBar";
-import { Timesheet } from './components/Timesheet';
 
 export const AppRoutes = () => {
     const user = useSelector(state => state.auth.user);

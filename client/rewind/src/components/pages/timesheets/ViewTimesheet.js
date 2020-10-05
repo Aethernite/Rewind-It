@@ -72,6 +72,26 @@ export const ViewTimesheet = ({ view }) => {
                                     <span
                                         style={{ verticalAlign: 'top' }}>Timesheet for {moment(timesheet?.from).format('DD/MM/YYYY')} - {moment(timesheet?.to).format('DD/MM/YYYY')}</span>
                                     <div className="float-right">
+                                        {timesheet.statusType === "OPEN" && (<i className="far fa-trash-alt mr-2 fa-2x"
+                                           style={{color: '#2e2e2e', transform: "translateY(5px)"}}></i>)}
+                                        {timesheet.statusType === "OPEN" && <button type="button" className="btn btn-dark mr-3"
+                                                >DELETE
+                                        </button>}
+                                        {timesheet.statusType === "OPEN" && <i className="far fa-save mr-2 fa-2x"
+                                           style={{color: '#2e2e2e', transform: "translateY(5px)"}}></i>}
+                                        {timesheet.statusType === "OPEN" && <button type="button" className="btn btn-dark mr-3" onClick={() => {
+
+                                            dispatch(saveCurrentTimesheet());
+                                        }}>SAVE
+                                        </button>}
+                                        {timesheet.statusType === "OPEN" && <i className="far fa-check-circle mr-2 fa-2x"
+                                           style={{color: '#2e2e2e', transform: "translateY(5px)"}}></i>}
+                                        {timesheet.statusType === "OPEN" && <button type="button" className="btn btn-dark mr-3" onClick={() => {
+                                            dispatch(submitCurrentTimesheet());
+                                            let path = `/timesheet/home`;
+                                            history.push(path);
+                                        }}>SUBMIT
+                                        </button>}
                                         <span>Status: {timesheet?.statusType}</span>
                                     </div>
                                 </th>
