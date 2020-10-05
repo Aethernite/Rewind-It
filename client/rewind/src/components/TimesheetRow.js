@@ -50,7 +50,7 @@ const sum = arr => {
     return sum;
 }
 
-export const TimesheetRow = ({ submitted, activity, index }) => {
+export const TimesheetRow = ({ hours ,submitted, activity, index }) => {
     const projects = useSelector(state => state.projects.projects);
     const timesheet = useSelector(state => state.timesheet.timesheet);
     const dispatch = useDispatch();
@@ -66,7 +66,17 @@ export const TimesheetRow = ({ submitted, activity, index }) => {
     const isSubmitted = submitted === "SUBMITTED";
 
     const projectOptions = [] = projects.filter(project => project.name != '').map((project) => project = { value: project.id, label: project.name });
-    const taskOptions = [] = selectedProjectOption ? projects.filter(project => project.id === selectedProjectOption.value)[0].tasks.filter(task => task.name != '').map((task) => task = { value: task.id, label: task.name }) : [];
+    const taskOptions = [] = selectedProjectOption ? projects.filter(project => project.id === selectedProjectOption.value)[0]?.tasks.filter(task => task.name != '').map((task) => task = { value: task.id, label: task.name }) : [];
+
+    const addOnChange = (day, value) => {
+        console.log("Day: " + day);
+        console.log("Value: " + value);
+        console.log("Index: " + index);
+
+        // // hours.day = 0;
+        // hours[day] = value;
+        // console.log("Hours: " + hours);
+    }
 
     const formik = useFormik({
         initialValues: {
@@ -150,7 +160,7 @@ export const TimesheetRow = ({ submitted, activity, index }) => {
                 </td>
                 <td>
                     <div>
-                        <Input disabled={isSubmitted} name="monday" maxLength={4} className={`form-control ${formik.errors.monday ? "is-invalid" : ""}`} form={id} onBlur={formik.handleBlur} onChange={formik.handleChange} />
+                        <Input disabled={isSubmitted} name="monday" maxLength={4} className={`form-control ${formik.errors.monday ? "is-invalid" : ""}`} form={id} onBlur={formik.handleBlur} onChange={(event) => addOnChange(event.target.name, event.target.value)} />
                         <Tippy content={formik.errors.monday ? "Only positive numbers allowed 0-24!" : "This input is for the work hours \n on a certain task!"} arrow={true} placement='bottom' theme={formik.errors.monday ? "danger" : "dark"} style={{ display: "inline-block" }}>
                             <i class="fas fa-info-circle" style={{ color: formik.errors.monday ? "red" : "#2e2e2e" }}></i>
                         </Tippy>

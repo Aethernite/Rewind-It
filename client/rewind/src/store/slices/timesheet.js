@@ -80,11 +80,9 @@ const { reducer: timesheetReducer, actions } = createSlice({
             state.creationError = action.payload;
         },
         fetchTimesheetStart: (state) => {
-            debugger;
             state.isFetching = true;
         },
         fetchTimesheetSuccess: (state, action) => {
-            debugger;
             state.isFetching = false;
             console.log(action.payload);
             state.timesheet = action.payload;
