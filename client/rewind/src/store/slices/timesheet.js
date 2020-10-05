@@ -7,6 +7,13 @@ const initialState = {
     error: null,
     isCreating: false,
     isDeleting: false,
+    mondayTotal: 0,
+    tuesdayTotal: 0,
+    wednesdayTotal: 0,
+    thursdayTotal: 0,
+    fridayTotal: 0,
+    saturdayTotal: 0,
+    sundayTotal: 0,
     isFetching: false
 };
 
@@ -79,7 +86,6 @@ const { reducer: timesheetReducer, actions } = createSlice({
         fetchTimesheetSuccess: (state, action) => {
             debugger;
             state.isFetching = false;
-            console.log(action.payload);
             state.timesheet = action.payload;
             state.creationError = null;
         },
@@ -150,7 +156,7 @@ export const createTimesheet = ({ from, to }) => {
             const format = split[2] + "-" + split[1] + "-" + split[0];
             const timesheet = await api.createTimesheet({ fromDate: format });
             dispatch(actions.createTimesheetSuccess(timesheet));
-            console.log(timesheet);
+
         } catch (err) {
             dispatch(actions.createTimesheetFailure(err?.response?.data?.message));
         }
@@ -163,7 +169,7 @@ export const deleteCurrentTimesheet = () => {
         const id = getState().timesheet.timesheet.id;
         dispatch(actions.deleteCurrentTimesheetStart());
         try {
-            await api.deleteTimesheet({id});
+            await api.deleteTimesheet({ id });
             dispatch(actions.deleteCurrentTimesheetSuccess());
         } catch (err) {
             dispatch(actions.deleteCurrentTimesheetFailure());
@@ -177,11 +183,17 @@ export const addActivity = () => {
         console.log(id);
         dispatch(actions.addCurrentTimesheetActivityStart());
         try {
-            const result = await api.addActivityToTimesheet({id});
+            const result = await api.addActivityToTimesheet({ id });
             dispatch(actions.addCurrentTimesheetActivitySuccess(result));
         } catch (error) {
             dispatch(actions.addCurrentTimesheetActivityFailure(error?.response?.data?.message));
         }
+    }
+}
+
+export const clearTimesheet = () => {
+    return async (dispatch) => {
+        dispatch(actions.reset());
     }
 }
 
@@ -190,7 +202,7 @@ export const submitCurrentTimesheet = () => {
         const id = getState().timesheet.timesheet.id;
         dispatch(actions.submitTimesheetStart());
         try {
-            await api.submitTimesheet({id});
+            await api.submitTimesheet({ id });
             dispatch(actions.submitTimesheetSuccess());
         } catch (error) {
             actions.submitTimesheetFailure(error?.response?.data?.message)
@@ -203,8 +215,7 @@ export const saveCurrentTimesheet = () => {
         const id = getState().timesheet.timesheet.id;
         dispatch(actions.saveTimesheetStart());
         try {
-            const result = await api.saveTimesheet({id});
-            console.log(result);
+            const result = await api.saveTimesheet({ id });
             dispatch(actions.submitTimesheetSuccess());
         } catch (error) {
             actions.saveTimesheetFailure(error?.response?.data?.message)
@@ -212,18 +223,18 @@ export const saveCurrentTimesheet = () => {
     }
 }
 
-export const fetchTimesheet = ({id}) => {
+export const fetchTimesheet = ({ id }) => {
     return async (dispatch) => {
         dispatch(actions.fetchTimesheetStart());
         try {
-            const result = await api.fetchTimesheetById({id});
-            console.log(result);
+            const result = await api.fetchTimesheetById({ id });
             dispatch(actions.fetchTimesheetSuccess(result));
         } catch (error) {
             dispatch(actions.fetchTimesheetFailure(error?.response?.data?.message));
         }
     }
 }
+
 
 export const resetTimesheet = actions.reset;
 
