@@ -8,7 +8,7 @@ import { useFormik } from 'formik';
 import { useSelector, useDispatch } from 'react-redux';
 import { TimesheetRowValidationSchema } from "../validations/schemas/TimesheetRowValidationSchema";
 import Select from 'react-select';
-import { addActivity } from "../store/slices/timesheet";
+import { addActivity, deleteActivity } from "../store/slices/timesheet";
 import { setDay } from "../store/slices/timesheet";
 
 
@@ -51,23 +51,22 @@ const sum = arr => {
 }
 
 export const TimesheetRow = ({ submitted, activity, index }) => {
+    const projects = useSelector(state => state.projects.projects);
     const timesheet = useSelector(state => state.timesheet.timesheet);
     const dispatch = useDispatch();
-    const projects = useSelector(state => state.projects.projects);
-
     const id = "row";
     const [selectedTaskOption, setSelectedTaskOption] = React.useState(activity?.task?.name);
     const [selectedProjectOption, setSelectedProjectOption] = React.useState(activity?.project?.name);
     const [currentId, setCurrentId] = React.useState(timesheet.id);
-    let counter = 0;
+
+    const deleteActivityOfSheet = ({timesheetId, activityId}) => {
+        dispatch(deleteActivity({timesheetId, activityId}));
+    }
 
     const isSubmitted = submitted === "SUBMITTED";
 
     const projectOptions = [] = projects.filter(project => project.name != '').map((project) => project = { value: project.id, label: project.name });
     const taskOptions = [] = selectedProjectOption ? projects.filter(project => project.id === selectedProjectOption.value)[0].tasks.filter(task => task.name != '').map((task) => task = { value: task.id, label: task.name }) : [];
-
-    console.log(activity);
-    console.log(timesheet.activities);
 
     const formik = useFormik({
         initialValues: {
@@ -84,7 +83,13 @@ export const TimesheetRow = ({ submitted, activity, index }) => {
         },
 
         onSubmit: (values) => {
-            console.log("Submitting");
+            values.total = (formik.values.monday !== '' ? parseFloat(formik.values.monday) : 0) +
+                (formik.values.tuesday !== '' ? parseFloat(formik.values.tuesday) : 0) +
+                (formik.values.wednesday !== '' ? parseFloat(formik.values.wednesday) : 0) +
+                (formik.values.thursday !== '' ? parseFloat(formik.values.thursday) : 0) +
+                (formik.values.friday !== '' ? parseFloat(formik.values.friday) : 0) +
+                (formik.values.saturday !== '' ? parseFloat(formik.values.saturday) : 0) +
+                (formik.values.sunday !== '' ? parseFloat(formik.values.sunday) : 0);
         },
         validationSchema: TimesheetRowValidationSchema,
     });
@@ -110,12 +115,14 @@ export const TimesheetRow = ({ submitted, activity, index }) => {
 
     return (
         <>
+            <form onSubmit={formik.handleSubmit} id={id}>
 
+            </form>
             <tr>
                 <th>
                     <div className="mt-2">
                         {timesheet?.activities?.length > 1 && (<><span className="d-inline-block ml-1">{index}</span>
-                            <Icon className="d-inline-block fa fa-trash pl-2"></Icon></>)}
+                        <Icon onClick={() => deleteActivityOfSheet({timesheetId: timesheet?.id, activityId: activity?.id})} className="d-inline-block fa fa-trash pl-2"></Icon></>)}
                     </div>
                 </th>
                 <td>
@@ -163,7 +170,7 @@ export const TimesheetRow = ({ submitted, activity, index }) => {
                     </Tippy>
                 </td >
                 <td>
-                    <Input disabled={isSubmitted} name="thursday" maxLength={4} className={`form-control ${formik.errors.thursday ? "is-invalid" : ""}`} form={id} onBlur={formik.handleBlur} onChange={formik.handleChange} />
+                    <Input disabled={isSubmitted} name="thursday" maxLength={4} className={`form-control ${formik.errors.thursday ? "is-invalid" : ""}`} form={id} onBlur={formik.handleBlur} onChange={formik.handleChange}  />
                     <Tippy content={formik.errors.thursday ? "Only positive numbers allowed 0-24!" : "This input is for the work hours \n on a certain task!"} arrow={true} placement='bottom' theme={formik.errors.thursday ? "danger" : "dark"} style={{ display: "inline-block" }}>
                         <i class="fas fa-info-circle" style={{ color: formik.errors.thursday ? "red" : "#2e2e2e" }}></i>
                     </Tippy>
@@ -195,11 +202,8 @@ export const TimesheetRow = ({ submitted, activity, index }) => {
                     formik.values.saturday,
                     formik.values.sunday].filter(hour => !isNaN(hour)).map(Number))
                 }
-
                 </td>
-
             </tr>
-
         </>
     )
 };

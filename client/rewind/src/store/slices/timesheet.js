@@ -86,10 +86,25 @@ const { reducer: timesheetReducer, actions } = createSlice({
         fetchTimesheetSuccess: (state, action) => {
             debugger;
             state.isFetching = false;
+            console.log(action.payload);
             state.timesheet = action.payload;
             state.creationError = null;
         },
         fetchTimesheetFailure: (state, action) => {
+            state.isFetching = false;
+            state.creationError = action.payload;
+        },
+        deleteActivityStart: (state) => {
+            state.isFetching = true;
+        },
+        deleteActivitySuccess: (state, action) => {
+            state.isFetching = false;
+            // state.timesheet.activities
+            state.timesheet.activities.map(activity => activity.id !== action.payload);
+
+            state.creationError = null;
+        },
+        deleteActivityFailure: (state, action) => {
             state.isFetching = false;
             state.creationError = action.payload;
         },
@@ -156,7 +171,6 @@ export const createTimesheet = ({ from, to }) => {
             const format = split[2] + "-" + split[1] + "-" + split[0];
             const timesheet = await api.createTimesheet({ fromDate: format });
             dispatch(actions.createTimesheetSuccess(timesheet));
-
         } catch (err) {
             dispatch(actions.createTimesheetFailure(err?.response?.data?.message));
         }
@@ -169,7 +183,7 @@ export const deleteCurrentTimesheet = () => {
         const id = getState().timesheet.timesheet.id;
         dispatch(actions.deleteCurrentTimesheetStart());
         try {
-            await api.deleteTimesheet({ id });
+            await api.deleteTimesheet({id});
             dispatch(actions.deleteCurrentTimesheetSuccess());
         } catch (err) {
             dispatch(actions.deleteCurrentTimesheetFailure());
@@ -180,13 +194,26 @@ export const deleteCurrentTimesheet = () => {
 export const addActivity = () => {
     return async (dispatch, getState) => {
         const id = getState().timesheet.timesheet.id;
-        console.log(id);
+        // console.log(id);
         dispatch(actions.addCurrentTimesheetActivityStart());
         try {
             const result = await api.addActivityToTimesheet({ id });
             dispatch(actions.addCurrentTimesheetActivitySuccess(result));
         } catch (error) {
             dispatch(actions.addCurrentTimesheetActivityFailure(error?.response?.data?.message));
+        }
+    }
+}
+
+export const deleteActivity = ({activityId}) => {
+    return async (dispatch, getState) => {
+        const timesheetId = getState().timesheet.timesheet.id;
+        dispatch(actions.deleteActivityStart());
+        try {
+            // const result = await api.deleteActivityOfTimesheet({timesheetId, activityId});
+            dispatch(actions.deleteActivitySuccess({activityId}));
+        } catch (error) {
+            dispatch(actions.deleteActivityFailure(error?.response?.data?.message));
         }
     }
 }
@@ -202,7 +229,7 @@ export const submitCurrentTimesheet = () => {
         const id = getState().timesheet.timesheet.id;
         dispatch(actions.submitTimesheetStart());
         try {
-            await api.submitTimesheet({ id });
+            await api.submitTimesheet({id});
             dispatch(actions.submitTimesheetSuccess());
         } catch (error) {
             actions.submitTimesheetFailure(error?.response?.data?.message)
@@ -215,7 +242,8 @@ export const saveCurrentTimesheet = () => {
         const id = getState().timesheet.timesheet.id;
         dispatch(actions.saveTimesheetStart());
         try {
-            const result = await api.saveTimesheet({ id });
+            const result = await api.saveTimesheet({id});
+            console.log(result);
             dispatch(actions.submitTimesheetSuccess());
         } catch (error) {
             actions.saveTimesheetFailure(error?.response?.data?.message)
@@ -223,7 +251,7 @@ export const saveCurrentTimesheet = () => {
     }
 }
 
-export const fetchTimesheet = ({ id }) => {
+export const fetchTimesheet = ({id}) => {
     return async (dispatch) => {
         dispatch(actions.fetchTimesheetStart());
         try {
@@ -234,7 +262,6 @@ export const fetchTimesheet = ({ id }) => {
         }
     }
 }
-
 
 export const resetTimesheet = actions.reset;
 

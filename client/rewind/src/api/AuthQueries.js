@@ -70,6 +70,11 @@ export const addActivityToTimesheet = async ({ id }) => {
     return res.data;
 }
 
+export const deleteActivityOfTimesheet = async ({ timesheetId, activityId }) => {
+    const res = await instance.delete(`/timesheets/${timesheetId}/activities/${activityId}`);
+    return res.data;
+}
+
 const token = localStorage.getItem('token');
 if (token) {
     instance.defaults.headers['Authorization'] = `Bearer ${token}`;

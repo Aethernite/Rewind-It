@@ -69,7 +69,7 @@ export const TimesheetTable = () => {
             dispatch(fetchAllProjects());
         }
 
-        return () => dispatch(resetTimesheet());
+        // return () => dispatch(resetTimesheet());
     }, [dispatch])
 
     const [modalShow, setModalShow] = React.useState(false);
@@ -104,7 +104,11 @@ export const TimesheetTable = () => {
                                         </Modal.Body>
                                         <Modal.Footer>
                                             <div style={{ display: "flex", width: "100%", justifyContent: "space-evenly" }}>
-                                                <IconYes className="fas fa-check-circle fa-3x" onClick={() => dispatch(deleteCurrentTimesheet())}></IconYes>
+                                                <IconYes className="fas fa-check-circle fa-3x" onClick={() => {
+                                                    dispatch(deleteCurrentTimesheet())
+                                                    let path = `/timesheet/home`;
+                                                    history.push(path);
+                                                }}/>
                                                 <IconNo className="fas fa-times-circle fa-3x" onClick={() => setModalShow(false)}></IconNo>
                                             </div>
                                         </Modal.Footer>
