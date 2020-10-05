@@ -109,7 +109,7 @@ export const ViewTimesheet = () => {
                         </thead>
                         <tbody className="text-center">
                         {timesheet?.activities.map((activity, index) => (
-                            <TimesheetRow index={index} activity={activity}></TimesheetRow>
+                            <TimesheetRow submitted={timesheet.statusType} index={index} activity={activity}></TimesheetRow>
                         ))
                         }
                         <tr>
