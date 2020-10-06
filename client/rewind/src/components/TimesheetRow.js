@@ -61,6 +61,10 @@ export const TimesheetRow = ({ hours ,submitted, activity, index }) => {
     const [selectedProjectOption, setSelectedProjectOption] = React.useState(activity?.project?.name);
     const [currentId, setCurrentId] = React.useState(timesheet.id);
 
+    // let temp = Object.assign({activities: timesheet.activities, statusType: timesheet.statusType, total: timesheet.total}, {activities: timesheet.activities, statusType: timesheet.statusType, total: timesheet.total});
+
+    console.log(temp);
+
     const deleteActivityOfSheet = ({timesheetId, activityId}) => {
         dispatch(deleteActivity({timesheetId, activityId}));
     }
@@ -82,10 +86,35 @@ export const TimesheetRow = ({ hours ,submitted, activity, index }) => {
         formik.values[day] = value;
         console.log("Formik value: " + formik.values[day])
         console.log("Activity id: " + activity.id);
-        console.log("Activity monday: " + moment(activity.timesheetDays[0].date).format("YYYY-MM-DD"))
-        // // hours.day = 0;
-        // hours[day] = value;
-        // console.log("Hours: " + hours);
+        let dayDate = 0;
+        switch (day) {
+            case "monday":
+                dayDate = 0;
+                break;
+            case "tuesday":
+                dayDate = 1;
+                break;
+            case "wednesday":
+                dayDate = 2;
+                break;
+            case "thursday":
+                dayDate = 3;
+                break;
+            case "friday":
+                dayDate = 4;
+                break;
+            case "saturday":
+                dayDate = 5;
+                break;
+            case "sunday":
+                dayDate = 6;
+                break;
+        }
+
+        console.log("Activity date: " + moment(activity.timesheetDays[dayDate].date).format("YYYY-MM-DD"))
+
+        temp.activities[index].timesheetDays[dayDate].hours = value;
+        temp.activities[index].timesheetDays[dayDate].date = moment(activity.timesheetDays[dayDate].date).format("YYYY-MM-DD");
     }
 
     const formik = useFormik({
