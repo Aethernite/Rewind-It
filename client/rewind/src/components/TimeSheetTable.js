@@ -77,6 +77,11 @@ export const TimesheetTable = () => {
 
     const [modalShow, setModalShow] = React.useState(false);
 
+    const saveRequestBody = {
+        activities: timesheet.activities,
+        statusType: timesheet.statusType,
+
+    }
 
     return (
         <Container className="mt-5">
@@ -162,16 +167,14 @@ export const TimesheetTable = () => {
                         <tr>
                             <td></td>
                             <td colSpan={2} style={{ textAlign: 'left', fontWeight: '500' }}>Total</td>
-                            <td>{
-                                0
-                            }</td>
-                            <td>8</td>
-                            <td>8</td>
-                            <td>8</td>
-                            <td>8</td>
-                            <td>8</td>
-                            <td>8</td>
-                            <td>60</td>
+                            <td>{timesheet.mondayTotal}</td>
+                            <td>{timesheet.tuesdayTotal}</td>
+                            <td>{timesheet.wednesdayTotal}</td>
+                            <td>{timesheet.thursdayTotal}</td>
+                            <td>{timesheet.fridayTotal}</td>
+                            <td>{timesheet.saturdayTotal}</td>
+                            <td>{timesheet.sundayTotal}</td>
+                            <td>{timesheet.total}</td>
                         </tr>
                     </tbody>
                 </Table>

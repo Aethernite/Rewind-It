@@ -14,6 +14,7 @@ const initialState = {
     fridayTotal: 0,
     saturdayTotal: 0,
     sundayTotal: 0,
+    total: 0,
     isFetching: false
 };
 
@@ -72,7 +73,7 @@ const { reducer: timesheetReducer, actions } = createSlice({
         },
         saveTimesheetSuccess: (state, action) => {
             state.isCreating = false;
-            state.timesheet = action.payload;
+            // state.timesheet = action.payload;
             state.creationError = null;
         },
         saveTimesheetFailure: (state, action) => {
@@ -104,6 +105,82 @@ const { reducer: timesheetReducer, actions } = createSlice({
         },
         deleteActivityFailure: (state, action) => {
             state.isFetching = false;
+            state.creationError = action.payload;
+        },
+        saveProjectStart: (state) => {
+            state.isCreating = true;
+        },
+        saveProjectSuccess: (state, action) => {
+            state.isCreating = false;
+            // state.timesheet.activities
+            console.log(action.payload);
+            state.timesheet.activities[action.payload.index].project.name = action.payload.project;
+
+            state.creationError = null;
+        },
+        saveProjectFailure: (state, action) => {
+            state.isCreating = false;
+            state.creationError = action.payload;
+        },
+        saveTaskStart: (state) => {
+            state.isCreating = true;
+        },
+        saveTaskSuccess: (state, action) => {
+            state.isCreating = false;
+            // state.timesheet.activities
+            console.log(action.payload);
+            state.timesheet.activities[action.payload.index].task.name = action.payload.task;
+
+            state.creationError = null;
+        },
+        saveTaskFailure: (state, action) => {
+            state.isCreating = false;
+            state.creationError = action.payload;
+        },
+        saveDayStart: (state) => {
+            state.isCreating = true;
+        },
+        saveDaySuccess: (state, action) => {
+            state.isCreating = false;
+            // state.timesheet.activities
+            console.log(action.payload);
+            state.timesheet.activities[action.payload.index].timesheetDays[action.payload.day].date = action.payload.date;
+            state.timesheet.activities[action.payload.index].timesheetDays[action.payload.day].hours = action.payload.value;
+
+            let monday = 0;
+            state.timesheet.activities.forEach((activity) => monday += +activity.timesheetDays[0].hours);
+            state.mondayTotal = monday;
+
+            let tuesday = 0;
+            state.timesheet.activities.forEach((activity) => tuesday += +activity.timesheetDays[1].hours);
+            state.tuesdayTotal = tuesday;
+
+            let wednesday = 0;
+            state.timesheet.activities.forEach((activity) => wednesday += +activity.timesheetDays[2].hours);
+            state.wednesdayTotal = wednesday;
+
+            let thursday = 0;
+            state.timesheet.activities.forEach((activity) => thursday += +activity.timesheetDays[3].hours);
+            state.thursdayTotal = thursday;
+
+            let friday = 0;
+            state.timesheet.activities.forEach((activity) => friday += +activity.timesheetDays[4].hours);
+            state.fridayTotal = friday;
+
+            let saturday = 0;
+            state.timesheet.activities.forEach((activity) => saturday += +activity.timesheetDays[5].hours);
+            state.saturdayTotal = saturday;
+
+            let sunday = 0;
+            state.timesheet.activities.forEach((activity) => sunday += +activity.timesheetDays[6].hours);
+            state.sundayTotal = sunday;
+
+            state.total = monday + tuesday + wednesday + thursday + friday + saturday + sunday;
+
+            state.creationError = null;
+        },
+        saveDayFailure: (state, action) => {
+            state.isCreating = false;
             state.creationError = action.payload;
         },
         reset: () => {
@@ -168,6 +245,7 @@ export const createTimesheet = ({ from, to }) => {
             const split = from.split(/\//);
             const format = split[2] + "-" + split[1] + "-" + split[0];
             const timesheet = await api.createTimesheet({ fromDate: format });
+            console.log(timesheet);
             dispatch(actions.createTimesheetSuccess(timesheet));
         } catch (err) {
             dispatch(actions.createTimesheetFailure(err?.response?.data?.message));
@@ -242,8 +320,18 @@ export const saveCurrentTimesheet = () => {
         const id = getState().timesheet.timesheet.id;
         dispatch(actions.saveTimesheetStart());
         try {
-            const result = await api.saveTimesheet({id});
-            console.log(result);
+            const activitiesBody = getState().timesheet.timesheet.activities;
+            const statusBody = getState().timesheet.timesheet.statusType;
+            const totalBody = getState().timesheet.total;
+
+            const requestBody = {
+                activities: activitiesBody,
+                statusType: statusBody,
+                total: totalBody
+            }
+            console.log(requestBody);
+            await api.saveTimesheet({id, requestBody});
+
             dispatch(actions.submitTimesheetSuccess());
         } catch (error) {
             actions.saveTimesheetFailure(error?.response?.data?.message)
@@ -259,6 +347,39 @@ export const fetchTimesheet = ({id}) => {
             dispatch(actions.fetchTimesheetSuccess(result));
         } catch (error) {
             dispatch(actions.fetchTimesheetFailure(error?.response?.data?.message));
+        }
+    }
+}
+
+export const saveProjectInStore = ({project, index}) => {
+    return async (dispatch) => {
+        dispatch(actions.saveProjectStart());
+        try {
+            dispatch(actions.saveProjectSuccess({project, index}));
+        } catch (error) {
+            dispatch(actions.saveProjectFailure())
+        }
+    }
+}
+
+export const saveTaskInStore = ({task, index}) => {
+    return async (dispatch) => {
+        dispatch(actions.saveTaskStart());
+        try {
+            dispatch(actions.saveTaskSuccess({task, index}));
+        } catch (error) {
+            dispatch(actions.saveTaskFailure())
+        }
+    }
+}
+
+export const saveDayInStore = ({day, value, date, index}) => {
+    return async (dispatch) => {
+        dispatch(actions.saveDayStart());
+        try {
+            dispatch(actions.saveDaySuccess({day, value, date, index}));
+        } catch (error) {
+            dispatch(actions.saveDayFailure())
         }
     }
 }
