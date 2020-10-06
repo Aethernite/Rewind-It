@@ -98,7 +98,7 @@ const { reducer: timesheetReducer, actions } = createSlice({
         deleteActivitySuccess: (state, action) => {
             state.isFetching = false;
             // state.timesheet.activities
-            state.timesheet.activities.map(activity => activity.id !== action.payload);
+            state.timesheet.activities = state.timesheet.activities.filter(activity => activity.id !== action.payload);
 
             state.creationError = null;
         },
@@ -196,20 +196,22 @@ export const addActivity = () => {
         dispatch(actions.addCurrentTimesheetActivityStart());
         try {
             const result = await api.addActivityToTimesheet({ id });
-            dispatch(actions.addCurrentTimesheetActivitySuccess(result));
+            console.log(result.activities[result.activities.length - 1]);
+            dispatch(actions.addCurrentTimesheetActivitySuccess(result.activities[result.activities.length - 1]));
         } catch (error) {
             dispatch(actions.addCurrentTimesheetActivityFailure(error?.response?.data?.message));
         }
     }
 }
 
-export const deleteActivity = ({activityId}) => {
+export const deleteActivity = ({timesheetId, activityId}) => {
     return async (dispatch, getState) => {
-        const timesheetId = getState().timesheet.timesheet.id;
+        // const timesheetId = getState().timesheet.timesheet.id;
         dispatch(actions.deleteActivityStart());
         try {
-            // const result = await api.deleteActivityOfTimesheet({timesheetId, activityId});
-            dispatch(actions.deleteActivitySuccess({activityId}));
+            await api.deleteActivityOfTimesheet({timesheetId, activityId});
+
+            dispatch(actions.deleteActivitySuccess(activityId));
         } catch (error) {
             dispatch(actions.deleteActivityFailure(error?.response?.data?.message));
         }

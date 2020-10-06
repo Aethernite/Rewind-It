@@ -8,8 +8,10 @@ import { useFormik } from 'formik';
 import { useSelector, useDispatch } from 'react-redux';
 import { TimesheetRowValidationSchema } from "../validations/schemas/TimesheetRowValidationSchema";
 import Select from 'react-select';
-import { addActivity, deleteActivity } from "../store/slices/timesheet";
+import {addActivity, deleteActivity, fetchTimesheet} from "../store/slices/timesheet";
 import { setDay } from "../store/slices/timesheet";
+import {fetchAllProjects} from "../store/slices/projects";
+import moment from "moment";
 
 
 const Table = styled.table`
@@ -63,6 +65,11 @@ export const TimesheetRow = ({ hours ,submitted, activity, index }) => {
         dispatch(deleteActivity({timesheetId, activityId}));
     }
 
+    React.useEffect(() => {
+        dispatch(fetchAllProjects());
+
+    }, [dispatch])
+
     const isSubmitted = submitted === "SUBMITTED";
 
     const projectOptions = [] = projects.filter(project => project.name != '').map((project) => project = { value: project.id, label: project.name });
@@ -72,7 +79,10 @@ export const TimesheetRow = ({ hours ,submitted, activity, index }) => {
         console.log("Day: " + day);
         console.log("Value: " + value);
         console.log("Index: " + index);
-
+        formik.values[day] = value;
+        console.log("Formik value: " + formik.values[day])
+        console.log("Activity id: " + activity.id);
+        console.log("Activity monday: " + moment(activity.timesheetDays[0].date).format("YYYY-MM-DD"))
         // // hours.day = 0;
         // hours[day] = value;
         // console.log("Hours: " + hours);
@@ -131,7 +141,7 @@ export const TimesheetRow = ({ hours ,submitted, activity, index }) => {
             <tr>
                 <th>
                     <div className="mt-2">
-                        {timesheet?.activities?.length > 1 && (<><span className="d-inline-block ml-1">{index}</span>
+                        {timesheet?.activities?.length > 1 && timesheet.activities.length -1 !== index && (<><span className="d-inline-block ml-1">{index}</span>
                         <Icon onClick={() => deleteActivityOfSheet({timesheetId: timesheet?.id, activityId: activity?.id})} className="d-inline-block fa fa-trash pl-2"></Icon></>)}
                     </div>
                 </th>
@@ -168,37 +178,37 @@ export const TimesheetRow = ({ hours ,submitted, activity, index }) => {
 
                 </td>
                 <td>
-                    <Input disabled={isSubmitted} name="tuesday" maxLength={4} className={`form-control ${formik.errors.tuesday ? "is-invalid" : ""}`} form={id} onBlur={formik.handleBlur} onChange={formik.handleChange} />
+                    <Input disabled={isSubmitted} name="tuesday" maxLength={4} className={`form-control ${formik.errors.tuesday ? "is-invalid" : ""}`} form={id} onBlur={formik.handleBlur} onChange={(event) => addOnChange(event.target.name, event.target.value)} />
                     <Tippy content={formik.errors.tuesday ? "Only positive numbers allowed 0-24!" : "This input is for the work hours \n on a certain task!"} arrow={true} placement='bottom' theme={formik.errors.tuesday ? "danger" : "dark"} style={{ display: "inline-block" }}>
                         <i class="fas fa-info-circle" style={{ color: formik.errors.tuesday ? "red" : "#2e2e2e" }}></i>
                     </Tippy>
                 </td>
                 <td>
-                    <Input disabled={isSubmitted} name="wednesday" maxLength={4} className={`form-control ${formik.errors.wednesday ? "is-invalid" : ""}`} form={id} onBlur={formik.handleBlur} onChange={formik.handleChange} />
+                    <Input disabled={isSubmitted} name="wednesday" maxLength={4} className={`form-control ${formik.errors.wednesday ? "is-invalid" : ""}`} form={id} onBlur={formik.handleBlur} onChange={(event) => addOnChange(event.target.name, event.target.value)} />
                     <Tippy content={formik.errors.wednesday ? "Only positive numbers allowed 0-24!" : "This input is for the work hours \n on a certain task!"} arrow={true} placement='bottom' theme={formik.errors.wednesday ? "danger" : "dark"} style={{ display: "inline-block" }}>
                         <i class="fas fa-info-circle" style={{ color: formik.errors.wednesday ? "red" : "#2e2e2e" }}></i>
                     </Tippy>
                 </td >
                 <td>
-                    <Input disabled={isSubmitted} name="thursday" maxLength={4} className={`form-control ${formik.errors.thursday ? "is-invalid" : ""}`} form={id} onBlur={formik.handleBlur} onChange={formik.handleChange}  />
+                    <Input disabled={isSubmitted} name="thursday" maxLength={4} className={`form-control ${formik.errors.thursday ? "is-invalid" : ""}`} form={id} onBlur={formik.handleBlur} onChange={(event) => addOnChange(event.target.name, event.target.value)}  />
                     <Tippy content={formik.errors.thursday ? "Only positive numbers allowed 0-24!" : "This input is for the work hours \n on a certain task!"} arrow={true} placement='bottom' theme={formik.errors.thursday ? "danger" : "dark"} style={{ display: "inline-block" }}>
                         <i class="fas fa-info-circle" style={{ color: formik.errors.thursday ? "red" : "#2e2e2e" }}></i>
                     </Tippy>
                 </td>
                 <td>
-                    <Input disabled={isSubmitted} name="friday" maxLength={4} className={`form-control ${formik.errors.friday ? "is-invalid" : ""}`} form={id} onBlur={formik.handleBlur} onChange={formik.handleChange} />
+                    <Input disabled={isSubmitted} name="friday" maxLength={4} className={`form-control ${formik.errors.friday ? "is-invalid" : ""}`} form={id} onBlur={formik.handleBlur} onChange={(event) => addOnChange(event.target.name, event.target.value)} />
                     <Tippy content={formik.errors.friday ? "Only positive numbers allowed 0-24!" : "This input is for the work hours \n on a certain task!"} arrow={true} placement='bottom' theme={formik.errors.friday ? "danger" : "dark"} style={{ display: "inline-block" }}>
                         <i class="fas fa-info-circle" style={{ color: formik.errors.friday ? "red" : "#2e2e2e" }}></i>
                     </Tippy>
                 </td>
                 <td>
-                    <Input disabled={isSubmitted} name="saturday" maxLength={4} className={`form-control ${formik.errors.saturday ? "is-invalid" : ""}`} form={id} onBlur={formik.handleBlur} onChange={formik.handleChange} />
+                    <Input disabled={isSubmitted} name="saturday" maxLength={4} className={`form-control ${formik.errors.saturday ? "is-invalid" : ""}`} form={id} onBlur={formik.handleBlur} onChange={(event) => addOnChange(event.target.name, event.target.value)} />
                     <Tippy content={formik.errors.saturday ? "Only positive numbers allowed 0-24!" : "This input is for the work hours \n on a certain task!"} arrow={true} placement='bottom' theme={formik.errors.saturday ? "danger" : "dark"} style={{ display: "inline-block" }}>
                         <i class="fas fa-info-circle" style={{ color: formik.errors.saturday ? "red" : "#2e2e2e" }}></i>
                     </Tippy>
                 </td>
                 <td>
-                    <Input disabled={isSubmitted} name="sunday" maxLength={4} className={`form-control ${formik.errors.sunday ? "is-invalid" : ""}`} form={id} onBlur={formik.handleBlur} onChange={formik.handleChange} />
+                    <Input disabled={isSubmitted} name="sunday" maxLength={4} className={`form-control ${formik.errors.sunday ? "is-invalid" : ""}`} form={id} onBlur={formik.handleBlur} onChange={(event) => addOnChange(event.target.name, event.target.value)} />
                     <Tippy content={formik.errors.sunday ? "Only positive numbers allowed 0-24!" : "This input is for the work hours \n on a certain task!"} arrow={true} placement='bottom' theme={formik.errors.sunday ? "danger" : "dark"} style={{ display: "inline-block" }}>
                         <i class="fas fa-info-circle" style={{ color: formik.errors.sunday ? "red" : "#2e2e2e" }}></i>
                     </Tippy>
