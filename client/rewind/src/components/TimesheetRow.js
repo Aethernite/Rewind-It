@@ -85,12 +85,12 @@ export const TimesheetRow = ({ hours ,submitted, activity, index }) => {
     const projectOptions = [] = projects.filter(project => project.name != '').map((project) => project = { value: project.id, label: project.name });
     const taskOptions = [] = selectedProjectOption ? projects.filter(project => project.id === selectedProjectOption.value)[0]?.tasks.filter(task => task.name != '').map((task) => task = { value: task.id, label: task.name }) : [];
 
-    const addOnChangeProject = ({project, index}) => {
-        dispatch(saveProjectInStore({project, index}))
+    const addOnChangeProject = ({project, id, index}) => {
+        dispatch(saveProjectInStore({project, id, index}))
     }
 
-    const addOnChangeTask = ({task, index}) => {
-        dispatch(saveTaskInStore({task, index}));
+    const addOnChangeTask = ({task, id, index}) => {
+        dispatch(saveTaskInStore({task, id, index}));
     }
 
     const addOnChangeDay = ({dayName, value, index}) => {
@@ -178,13 +178,15 @@ export const TimesheetRow = ({ hours ,submitted, activity, index }) => {
         setSelectedProjectOption(e);
         setSelectedTaskOption(null);
 
-        addOnChangeProject({project: e.label, index: index});
+        console.log(e);
+
+        addOnChangeProject({project: e.label, id: e.value, index: index});
     }
 
     const handleTaskChange = (e) => {
         setSelectedTaskOption(e);
 
-        addOnChangeTask({task: e.label, index: index});
+        addOnChangeTask({task: e.label, id: e.value, index: index});
     }
 
     return (

@@ -85,7 +85,6 @@ const { reducer: timesheetReducer, actions } = createSlice({
         },
         fetchTimesheetSuccess: (state, action) => {
             state.isFetching = false;
-            console.log(action.payload);
             state.timesheet = action.payload;
             state.creationError = null;
         },
@@ -115,6 +114,7 @@ const { reducer: timesheetReducer, actions } = createSlice({
             // state.timesheet.activities
             console.log(action.payload);
             state.timesheet.activities[action.payload.index].project.name = action.payload.project;
+            state.timesheet.activities[action.payload.index].project.id = action.payload.id;
 
             state.creationError = null;
         },
@@ -130,6 +130,7 @@ const { reducer: timesheetReducer, actions } = createSlice({
             // state.timesheet.activities
             console.log(action.payload);
             state.timesheet.activities[action.payload.index].task.name = action.payload.task;
+            state.timesheet.activities[action.payload.index].task.id = action.payload.id;
 
             state.creationError = null;
         },
@@ -143,7 +144,7 @@ const { reducer: timesheetReducer, actions } = createSlice({
         saveDaySuccess: (state, action) => {
             state.isCreating = false;
             // state.timesheet.activities
-            console.log(action.payload);
+            // console.log(action.payload);
             state.timesheet.activities[action.payload.index].timesheetDays[action.payload.day].date = action.payload.date;
             state.timesheet.activities[action.payload.index].timesheetDays[action.payload.day].hours = action.payload.value;
 
@@ -245,7 +246,11 @@ export const createTimesheet = ({ from, to }) => {
             const split = from.split(/\//);
             const format = split[2] + "-" + split[1] + "-" + split[0];
             const timesheet = await api.createTimesheet({ fromDate: format });
-            console.log(timesheet);
+
+            let a = timesheet.activities.timesheetDays.map(day => {
+                day.date = moment(day.date).format("YYYY-MM-DD");
+            })
+            console.log(a);
             dispatch(actions.createTimesheetSuccess(timesheet));
         } catch (err) {
             dispatch(actions.createTimesheetFailure(err?.response?.data?.message));
@@ -320,17 +325,11 @@ export const saveCurrentTimesheet = () => {
         const id = getState().timesheet.timesheet.id;
         dispatch(actions.saveTimesheetStart());
         try {
-            const activitiesBody = getState().timesheet.timesheet.activities;
-            const statusBody = getState().timesheet.timesheet.statusType;
-            const totalBody = getState().timesheet.total;
+            const activities = getState().timesheet.timesheet.activities.slice(0, getState().timesheet.timesheet.activities.length);
+            const statusType = getState().timesheet.timesheet.statusType;
+            const total = getState().timesheet.total;
 
-            const requestBody = {
-                activities: activitiesBody,
-                statusType: statusBody,
-                total: totalBody
-            }
-            console.log(requestBody);
-            await api.saveTimesheet({id, requestBody});
+            await api.saveTimesheet({id, activities, statusType, total});
 
             dispatch(actions.submitTimesheetSuccess());
         } catch (error) {
@@ -351,22 +350,22 @@ export const fetchTimesheet = ({id}) => {
     }
 }
 
-export const saveProjectInStore = ({project, index}) => {
+export const saveProjectInStore = ({project, id, index}) => {
     return async (dispatch) => {
         dispatch(actions.saveProjectStart());
         try {
-            dispatch(actions.saveProjectSuccess({project, index}));
+            dispatch(actions.saveProjectSuccess({project, id, index}));
         } catch (error) {
             dispatch(actions.saveProjectFailure())
         }
     }
 }
 
-export const saveTaskInStore = ({task, index}) => {
+export const saveTaskInStore = ({task, id, index}) => {
     return async (dispatch) => {
         dispatch(actions.saveTaskStart());
         try {
-            dispatch(actions.saveTaskSuccess({task, index}));
+            dispatch(actions.saveTaskSuccess({task, id, index}));
         } catch (error) {
             dispatch(actions.saveTaskFailure())
         }

@@ -55,8 +55,8 @@ export const submitTimesheet = async ({ id }) => {
     return res.data;
 }
 
-export const saveTimesheet = async ({ id, requestBody }) => {
-    const res = await instance.put(`/timesheets/${id}`, {requestBody});
+export const saveTimesheet = async ({ id, activities, statusType, total }) => {
+    const res = await instance.put(`/timesheets/${id}`, {activities, statusType, total});
     return res.data;
 }
 
