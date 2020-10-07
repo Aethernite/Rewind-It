@@ -124,8 +124,9 @@ export const TimesheetTable = () => {
 
                                     <i class="far fa-save mr-2 fa-2x" style={{ color: '#2e2e2e', transform: "translateY(5px)" }}></i>
                                     <button type="button" class="btn btn-dark mr-3" onClick={() => {
-
                                         dispatch(saveCurrentTimesheet());
+                                        let path = `/timesheet/home`;
+                                        history.push(path);
                                     }}>SAVE</button>
 
                                     <i class="far fa-check-circle mr-2 fa-2x" style={{ color: '#2e2e2e', transform: "translateY(5px)" }}></i>

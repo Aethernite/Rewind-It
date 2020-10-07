@@ -50,7 +50,7 @@ const { reducer: timesheetReducer, actions } = createSlice({
         },
         addCurrentTimesheetActivitySuccess: (state, action) => {
             state.isCreating = false;
-            state.timesheet.activities.push(action.payload);
+            state.timesheet.activities = action.payload;
         },
         addCurrentTimesheetActivityFailure: (state, action) => {
             state.isCreating = false;
@@ -247,11 +247,11 @@ export const createTimesheet = ({ from, to }) => {
             const format = split[2] + "-" + split[1] + "-" + split[0];
             const timesheet = await api.createTimesheet({ fromDate: format });
 
-            let a = timesheet.activities.timesheetDays.map(day => {
+            let a = timesheet.activities[0].timesheetDays.map(day => {
                 day.date = moment(day.date).format("YYYY-MM-DD");
             })
-            console.log(a);
-            dispatch(actions.createTimesheetSuccess(timesheet));
+            // console.log(a);
+            dispatch(actions.createTimesheetSuccess(a));
         } catch (err) {
             dispatch(actions.createTimesheetFailure(err?.response?.data?.message));
         }
@@ -279,8 +279,16 @@ export const addActivity = () => {
         dispatch(actions.addCurrentTimesheetActivityStart());
         try {
             const result = await api.addActivityToTimesheet({ id });
-            console.log(result.activities[result.activities.length - 1]);
-            dispatch(actions.addCurrentTimesheetActivitySuccess(result.activities[result.activities.length - 1]));
+            console.log(result.activities);
+
+            let a = result.activities.map(activity => activity.timesheetDays.map(day => {
+                day.date = moment(day.date).format("YYYY-MM-DD");
+            }))
+
+            // console.log(a);
+            //     [result.activities.length - 1]
+
+            dispatch(actions.addCurrentTimesheetActivitySuccess(result.activities));
         } catch (error) {
             dispatch(actions.addCurrentTimesheetActivityFailure(error?.response?.data?.message));
         }
@@ -343,6 +351,7 @@ export const fetchTimesheet = ({id}) => {
         dispatch(actions.fetchTimesheetStart());
         try {
             const result = await api.fetchTimesheetById({ id });
+            console.log(result);
             dispatch(actions.fetchTimesheetSuccess(result));
         } catch (error) {
             dispatch(actions.fetchTimesheetFailure(error?.response?.data?.message));

@@ -82,8 +82,9 @@ export const TimesheetRow = ({ hours ,submitted, activity, index }) => {
 
     const isSubmitted = submitted === "SUBMITTED";
 
+    debugger;
     const projectOptions = [] = projects.filter(project => project.name != '').map((project) => project = { value: project.id, label: project.name });
-    const taskOptions = [] = selectedProjectOption ? projects.filter(project => project.id === selectedProjectOption.value)[0]?.tasks.filter(task => task.name != '').map((task) => task = { value: task.id, label: task.name }) : [];
+    // let taskOptions = [] = selectedProjectOption ? projects.filter(project => project.id === selectedProjectOption.value)[0]?.tasks.filter(task => task?.name != '').map((task) => task = { value: task?.id, label: task?.name }) : [];
 
     const addOnChangeProject = ({project, id, index}) => {
         dispatch(saveProjectInStore({project, id, index}))
@@ -178,7 +179,9 @@ export const TimesheetRow = ({ hours ,submitted, activity, index }) => {
         setSelectedProjectOption(e);
         setSelectedTaskOption(null);
 
-        console.log(e);
+        // taskOptions = projects[e.value - 1].tasks;
+
+        console.log(projects[e.value - 1].tasks);
 
         addOnChangeProject({project: e.label, id: e.value, index: index});
     }
@@ -189,6 +192,9 @@ export const TimesheetRow = ({ hours ,submitted, activity, index }) => {
         addOnChangeTask({task: e.label, id: e.value, index: index});
     }
 
+    let mondayHours = timesheet.activities[index].timesheetDays[0].hours;
+
+    console.log(mondayHours);
     return (
         <>
             <form onSubmit={formik.handleSubmit} id={id}>
@@ -219,14 +225,14 @@ export const TimesheetRow = ({ hours ,submitted, activity, index }) => {
                         defaultValue={taskDefault}
                         onChange={handleTaskChange}
                         value={selectedTaskOption || ''}
-                        options={taskOptions}
+                        // options={taskOptions}
                         className="react-select"
                         isDisabled={isSubmitted}
                     />
                 </td>
                 <td>
                     <div>
-                        <Input disabled={isSubmitted} name="monday" maxLength={4} className={`form-control ${formik.errors.monday ? "is-invalid" : ""}`} form={id} onBlur={formik.handleBlur} onChange={(event) => addOnChangeDay({dayName: event.target.name, value: event.target.value, index: index})} />
+                        <Input disabled={isSubmitted} name="monday" maxLength={4} className={`form-control ${formik.errors.monday ? "is-invalid" : ""}`} form={id} onBlur={formik.handleBlur} onChange={(event) => addOnChangeDay({dayName: event.target.name, value: event.target.value, index: index})}></Input>
                         <Tippy content={formik.errors.monday ? "Only positive numbers allowed 0-24!" : "This input is for the work hours \n on a certain task!"} arrow={true} placement='bottom' theme={formik.errors.monday ? "danger" : "dark"} style={{ display: "inline-block" }}>
                             <i class="fas fa-info-circle" style={{ color: formik.errors.monday ? "red" : "#2e2e2e" }}></i>
                         </Tippy>
