@@ -83,6 +83,8 @@ export const TimesheetTable = () => {
 
     }
 
+
+
     return (
         <Container className="mt-5">
             <Col className="d-flex justify-content-center">
@@ -158,9 +160,7 @@ export const TimesheetTable = () => {
                         </tr>
                     </thead>
                     <tbody className="text-center">
-                        {
-
-                            timesheet && timesheet?.activities.map((activity, index) => (
+                        {timesheet && timesheet?.activities.map((activity, index) => (
                                 <TimesheetRow index={index} activity={activity}></TimesheetRow>
 
                             ))

@@ -82,9 +82,12 @@ export const TimesheetRow = ({ hours ,submitted, activity, index }) => {
 
     const isSubmitted = submitted === "SUBMITTED";
 
-    debugger;
     const projectOptions = [] = projects.filter(project => project.name != '').map((project) => project = { value: project.id, label: project.name });
-    // let taskOptions = [] = selectedProjectOption ? projects.filter(project => project.id === selectedProjectOption.value)[0]?.tasks.filter(task => task?.name != '').map((task) => task = { value: task?.id, label: task?.name }) : [];
+    let taskOptions = [];
+
+    if (!projects.isLoading) {
+        taskOptions = selectedProjectOption ? projects.filter(project => project.id === selectedProjectOption.value)[0]?.tasks.filter(task => task?.name != '').map((task) => task = { value: task?.id, label: task?.name }) : [];
+    }
 
     const addOnChangeProject = ({project, id, index}) => {
         dispatch(saveProjectInStore({project, id, index}))
@@ -208,7 +211,7 @@ export const TimesheetRow = ({ hours ,submitted, activity, index }) => {
                     </div>
                 </th>
                 <td>
-                    <Select
+                    {timesheet.activities[index].project.name === "" && <Select
                         form={id}
                         theme="primary"
                         defaultValue={projectDefault}
@@ -217,7 +220,17 @@ export const TimesheetRow = ({ hours ,submitted, activity, index }) => {
                         value={selectedProjectOption || ''}
                         className="react-select"
                         isDisabled={isSubmitted}
-                    />
+                    />}
+                    {timesheet.activities[index].project.name !== "" && <Select
+                        form={id}
+                        theme="primary"
+                        defaultValue={projectDefault}
+                        onChange={handleProjectChange}
+                        options={projectOptions}
+                        value={timesheet.activities[index].project.name}
+                        className="react-select"
+                        isDisabled={isSubmitted}
+                    />}
                 </td>
                 <td>
                     <Select
@@ -225,7 +238,7 @@ export const TimesheetRow = ({ hours ,submitted, activity, index }) => {
                         defaultValue={taskDefault}
                         onChange={handleTaskChange}
                         value={selectedTaskOption || ''}
-                        // options={taskOptions}
+                        options={taskOptions}
                         className="react-select"
                         isDisabled={isSubmitted}
                     />

@@ -251,7 +251,7 @@ export const createTimesheet = ({ from, to }) => {
                 day.date = moment(day.date).format("YYYY-MM-DD");
             })
             // console.log(a);
-            dispatch(actions.createTimesheetSuccess(a));
+            dispatch(actions.createTimesheetSuccess(timesheet));
         } catch (err) {
             dispatch(actions.createTimesheetFailure(err?.response?.data?.message));
         }
@@ -339,7 +339,7 @@ export const saveCurrentTimesheet = () => {
 
             await api.saveTimesheet({id, activities, statusType, total});
 
-            dispatch(actions.submitTimesheetSuccess());
+            dispatch(actions.saveTimesheetSuccess());
         } catch (error) {
             actions.saveTimesheetFailure(error?.response?.data?.message)
         }
