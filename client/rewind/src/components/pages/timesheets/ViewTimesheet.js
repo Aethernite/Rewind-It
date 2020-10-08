@@ -51,8 +51,8 @@ export const ViewTimesheet = ({ view }) => {
 
     const dispatch = useDispatch();
 
-
     const timesheet = useSelector(state => state?.timesheet?.timesheet);
+    const timesheetHours = useSelector(state => state?.timesheet);
     const history = useHistory();
 
     React.useEffect(() => {
@@ -132,16 +132,14 @@ export const ViewTimesheet = ({ view }) => {
                             <tr>
                                 <td></td>
                                 <td colSpan={2} style={{ textAlign: 'left', fontWeight: '500' }}>Total</td>
-                                <td>{
-                                    0
-                                }</td>
-                                <td>8</td>
-                                <td>8</td>
-                                <td>8</td>
-                                <td>8</td>
-                                <td>8</td>
-                                <td>8</td>
-                                <td>60</td>
+                                <td>{timesheetHours.mondayTotal ? timesheetHours.mondayTotal : 0}</td>
+                                <td>{timesheetHours.tuesdayTotal}</td>
+                                <td>{timesheetHours.wednesdayTotal}</td>
+                                <td>{timesheetHours.thursdayTotal}</td>
+                                <td>{timesheetHours.fridayTotal}</td>
+                                <td>{timesheetHours.saturdayTotal}</td>
+                                <td>{timesheetHours.sundayTotal}</td>
+                                <td>{timesheetHours.total}</td>
                             </tr>
                         </tbody>
                     </Table>

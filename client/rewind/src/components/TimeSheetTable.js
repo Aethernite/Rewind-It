@@ -77,6 +77,13 @@ export const TimesheetTable = () => {
 
     const [modalShow, setModalShow] = React.useState(false);
 
+    const saveRequestBody = {
+        activities: timesheet.activities,
+        statusType: timesheet.statusType,
+
+    }
+
+
 
     return (
         <Container className="mt-5">
@@ -119,8 +126,9 @@ export const TimesheetTable = () => {
 
                                     <i class="far fa-save mr-2 fa-2x" style={{ color: '#2e2e2e', transform: "translateY(5px)" }}></i>
                                     <button type="button" class="btn btn-dark mr-3" onClick={() => {
-
                                         dispatch(saveCurrentTimesheet());
+                                        let path = `/timesheet/home`;
+                                        history.push(path);
                                     }}>SAVE</button>
 
                                     <i class="far fa-check-circle mr-2 fa-2x" style={{ color: '#2e2e2e', transform: "translateY(5px)" }}></i>
@@ -152,9 +160,7 @@ export const TimesheetTable = () => {
                         </tr>
                     </thead>
                     <tbody className="text-center">
-                        {
-
-                            timesheet && timesheet?.activities.map((activity, index) => (
+                        {timesheet && timesheet?.activities.map((activity, index) => (
                                 <TimesheetRow index={index} activity={activity}></TimesheetRow>
 
                             ))
@@ -162,16 +168,14 @@ export const TimesheetTable = () => {
                         <tr>
                             <td></td>
                             <td colSpan={2} style={{ textAlign: 'left', fontWeight: '500' }}>Total</td>
-                            <td>{
-                                0
-                            }</td>
-                            <td>8</td>
-                            <td>8</td>
-                            <td>8</td>
-                            <td>8</td>
-                            <td>8</td>
-                            <td>8</td>
-                            <td>60</td>
+                            <td>{timesheet.mondayTotal}</td>
+                            <td>{timesheet.tuesdayTotal}</td>
+                            <td>{timesheet.wednesdayTotal}</td>
+                            <td>{timesheet.thursdayTotal}</td>
+                            <td>{timesheet.fridayTotal}</td>
+                            <td>{timesheet.saturdayTotal}</td>
+                            <td>{timesheet.sundayTotal}</td>
+                            <td>{timesheet.total}</td>
                         </tr>
                     </tbody>
                 </Table>
