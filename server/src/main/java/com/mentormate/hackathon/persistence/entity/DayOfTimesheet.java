@@ -10,6 +10,7 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Table;
 import java.time.LocalDateTime;
@@ -19,17 +20,19 @@ import java.time.LocalDateTime;
  *
  * @author Polina Usheva
  */
-@Entity
 @Data
-@NoArgsConstructor(access = AccessLevel.PROTECTED)
+@Entity
 @AllArgsConstructor
-@EqualsAndHashCode(callSuper = true)
 @Table(name = "dayOfTimesheet")
+@EqualsAndHashCode(callSuper = true)
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class DayOfTimesheet extends BaseEntity {
 
+    @Column
     @JsonSerialize(using = ToStringSerializer.class)
     @JsonDeserialize(using = ParseDeserializer.class)
     private LocalDateTime date;
 
+    @Column
     private Integer hours;
 }

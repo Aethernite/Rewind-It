@@ -37,7 +37,9 @@ const { reducer: timesheetsReducer, actions } = createSlice({
             state.isDeleting = false;
             state.error = action.payload;
         },
-
+        reset: () => {
+            return initialState;
+        },
     },
 });
 
@@ -68,9 +70,7 @@ export const deleteTimesheet = ({ id }) => {
     }
 };
 
-
-
-
+export const resetTimesheets = actions.reset;
 
 export { timesheetsReducer };
 

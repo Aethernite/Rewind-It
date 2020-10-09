@@ -19,12 +19,12 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 /**
  * Created by Vladislav Penchev on 2020/10/02
  */
-
 @Slf4j
 @Service
 @RequiredArgsConstructor
@@ -66,6 +66,13 @@ public class TimesheetService {
         return createTimesheetResponseDTO;
     }
 
+    /**
+     * Create new {@link Timesheet} in our application
+     *
+     * @param timesheetId id of the {@link Timesheet}
+     * @param userEmail   email of current login user
+     * @return {@link Timesheet} that is saved in our database converted to {@link TimesheetResponseDTO}
+     */
     public TimesheetResponseDTO addActivityToTimesheet(Long timesheetId, String userEmail) {
         log.info("Start creating timesheet");
         User user = userService.checkIfUserExist(userEmail);
@@ -117,8 +124,11 @@ public class TimesheetService {
         User user = userService.checkIfUserExist(userEmail);
         Timesheet timesheet = checkIfTimesheetExists(timesheetId, user.getId());
         List<Activity> activities = timesheetUpdateRequestDTO.getActivities()
-                .stream().map(activity -> modelMapper.map(activity, Activity.class))
-                .collect(Collectors.toList());
+                .stream().map(activity -> {
+                    Activity currentActivity = modelMapper.map(activity, Activity.class);
+                    currentActivity.getProject().setTasks(Set.of(currentActivity.getTask()));
+                    return currentActivity;
+                }).collect(Collectors.toList());
         timesheet.setActivities(activities);
         timesheet.setTotal(timesheetUpdateRequestDTO.getTotal());
         timesheet = timesheetRepository.save(timesheet);
@@ -161,18 +171,21 @@ public class TimesheetService {
         return timesheetResponseDTO;
     }
 
+    /**
+     * Delete {@link Activity} of {@link Timesheet} by it's id
+     *
+     * @param activityId  Id of the {@link Activity} that we want to delete
+     * @param timesheetId Id of the {@link Timesheet}
+     * @param userEmail   email of current login user
+     * @return Deleted {@link TimesheetResponseDTO} corresponding {@link Timesheet}
+     */
     public TimesheetResponseDTO deleteActivityFromTimesheet(Long timesheetId, Long activityId, String userEmail) {
         log.info("Start deleting timesheet with id: {}", timesheetId);
         User user = userService.checkIfUserExist(userEmail);
         Timesheet timesheet = checkIfTimesheetExists(timesheetId, user.getId());
-//        List<Activity> collect = timesheet.getActivities().stream()
-//                .filter(activity -> activity.getId() != activityId)
-//                .collect(Collectors.toList());
         activityRepository.deleteById(activityId);
-//        TimesheetResponseDTO timesheetResponseDTO = modelMapper.map(timesheetRepository.save(timesheet), TimesheetResponseDTO.class);
         log.info("Deleted timesheet with id: {}", timesheetId);
-//        return timesheetResponseDTO;
-        return null;
+        return modelMapper.map(timesheet, TimesheetResponseDTO.class);
     }
 
     /**

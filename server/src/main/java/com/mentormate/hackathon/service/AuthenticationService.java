@@ -6,9 +6,9 @@ import com.mentormate.hackathon.persistence.entity.RoleType;
 import com.mentormate.hackathon.persistence.entity.User;
 import com.mentormate.hackathon.persistence.repository.RoleRepository;
 import com.mentormate.hackathon.persistence.repository.UserRepository;
-import com.mentormate.hackathon.service.dto.response.JwtResponseDTO;
 import com.mentormate.hackathon.service.dto.request.LoginRequestDTO;
 import com.mentormate.hackathon.service.dto.request.RegisterRequestDTO;
+import com.mentormate.hackathon.service.dto.response.JwtResponseDTO;
 import com.mentormate.hackathon.service.dto.response.RegisterResponseDTO;
 import com.mentormate.hackathon.utils.JwtUtils;
 import lombok.RequiredArgsConstructor;
@@ -81,13 +81,12 @@ public class AuthenticationService {
                 new UsernamePasswordAuthenticationToken(loginRequestDTO.getEmail(), loginRequestDTO.getPassword()));
         SecurityContextHolder.getContext().setAuthentication(authentication);
         String jwt = jwtUtils.generateJwtToken(authentication);
-        return new JwtResponseDTO(jwt,authentication.getName());
+        return new JwtResponseDTO(jwt, authentication.getName());
     }
 
     /**
      * Used for user logout.
      *
-     * @param httpServletRequest current request
      * @return {@link Map} with key message and value contains information about successful logout
      */
     public Map<String, String> logout() {

@@ -62,6 +62,7 @@ const sum = arr => {
 export const TimesheetTable = () => {
     const dispatch = useDispatch();
     const timesheet = useSelector(state => state.timesheet.timesheet);
+    const timesheetHours = useSelector(state => state?.timesheet);
     const history = useHistory();
 
     // let hours = {monday: 0, tuesday: 0, wednesday: 0, thursday: 0, friday: 0, saturday: 0, sunday: 0};
@@ -76,6 +77,13 @@ export const TimesheetTable = () => {
     }, [dispatch])
 
     const [modalShow, setModalShow] = React.useState(false);
+
+    const saveRequestBody = {
+        activities: timesheet.activities,
+        statusType: timesheet.statusType,
+
+    }
+
 
 
     return (
@@ -108,7 +116,8 @@ export const TimesheetTable = () => {
                                         <Modal.Footer>
                                             <div style={{ display: "flex", width: "100%", justifyContent: "space-evenly" }}>
                                                 <IconYes className="fas fa-check-circle fa-3x" onClick={() => {
-                                                    dispatch(deleteCurrentTimesheet())
+                                                    dispatch(deleteCurrentTimesheet());
+                                                    dispatch(fetchUserTimesheets({ cursor: 0 }));
                                                     let path = `/timesheet/home`;
                                                     history.push(path);
                                                 }}/>
@@ -118,14 +127,17 @@ export const TimesheetTable = () => {
                                     </Modal>
 
                                     <i class="far fa-save mr-2 fa-2x" style={{ color: '#2e2e2e', transform: "translateY(5px)" }}></i>
-                                    <button type="button" class="btn btn-dark mr-3" onClick={() => {
-
-                                        dispatch(saveCurrentTimesheet());
+                                    <button type="button" class="btn btn-dark mr-3" onClick={async () => {
+                                        await dispatch(saveCurrentTimesheet());
+                                        dispatch(fetchUserTimesheets({ cursor: 0 }));
+                                        let path = `/timesheet/home`;
+                                        history.push(path);
                                     }}>SAVE</button>
 
                                     <i class="far fa-check-circle mr-2 fa-2x" style={{ color: '#2e2e2e', transform: "translateY(5px)" }}></i>
-                                    <button type="button" className="btn btn-dark mr-3" onClick={() => {
-                                        dispatch(submitCurrentTimesheet());
+                                    <button type="button" className="btn btn-dark mr-3" onClick={async () => {
+                                        await dispatch(submitCurrentTimesheet());
+                                        dispatch(fetchUserTimesheets({ cursor: 0 }));
                                         let path = `/timesheet/home`;
                                         history.push(path);
                                     }}>SUBMIT
@@ -152,9 +164,7 @@ export const TimesheetTable = () => {
                         </tr>
                     </thead>
                     <tbody className="text-center">
-                        {
-
-                            timesheet && timesheet?.activities.map((activity, index) => (
+                        {timesheet && timesheet?.activities.map((activity, index) => (
                                 <TimesheetRow index={index} activity={activity}></TimesheetRow>
 
                             ))
@@ -162,16 +172,14 @@ export const TimesheetTable = () => {
                         <tr>
                             <td></td>
                             <td colSpan={2} style={{ textAlign: 'left', fontWeight: '500' }}>Total</td>
-                            <td>{
-                                0
-                            }</td>
-                            <td>8</td>
-                            <td>8</td>
-                            <td>8</td>
-                            <td>8</td>
-                            <td>8</td>
-                            <td>8</td>
-                            <td>60</td>
+                            <td>{timesheetHours.mondayTotal ? timesheetHours.mondayTotal : 0}</td>
+                            <td>{timesheetHours.tuesdayTotal}</td>
+                            <td>{timesheetHours.wednesdayTotal}</td>
+                            <td>{timesheetHours.thursdayTotal}</td>
+                            <td>{timesheetHours.fridayTotal}</td>
+                            <td>{timesheetHours.saturdayTotal}</td>
+                            <td>{timesheetHours.sundayTotal}</td>
+                            <td>{timesheetHours.total}</td>
                         </tr>
                     </tbody>
                 </Table>

@@ -4,7 +4,7 @@ import { Button, Col, Container, Modal } from "react-bootstrap";
 import { useHistory, useRouteMatch } from "react-router-dom";
 import moment from "moment";
 import {
-    deleteCurrentTimesheet, fetchTimesheet,
+    deleteCurrentTimesheet, fetchTimesheet, resetTimesheet,
     saveCurrentTimesheet,
     submitCurrentTimesheet
 } from "../../../store/slices/timesheet";
@@ -12,6 +12,7 @@ import styled from "styled-components";
 import { fetchAllProjects } from "../../../store/slices/projects";
 import TimesheetRow from "../../TimesheetRow";
 import { fetchTimesheetById } from "../../../api/AuthQueries";
+import {fetchUserTimesheets, resetTimesheets} from "../../../store/slices/timesheets";
 
 const Table = styled.table`
 border: 1px solid #2e2e2e;
@@ -51,14 +52,17 @@ export const ViewTimesheet = ({ view }) => {
 
     const dispatch = useDispatch();
 
-
     const timesheet = useSelector(state => state?.timesheet?.timesheet);
+    const timesheetHours = useSelector(state => state?.timesheet);
     const history = useHistory();
+    const [modalShow, setModalShow] = React.useState(false);
 
     React.useEffect(() => {
         if (id !== null) {
             dispatch(fetchTimesheet({ id }));
         }
+
+        return () => dispatch(resetTimesheets());
     }, [dispatch, id])
 
     if (timesheet) {
@@ -74,20 +78,51 @@ export const ViewTimesheet = ({ view }) => {
                                     <div className="float-right">
                                         {timesheet.statusType === "OPEN" && (<i className="far fa-trash-alt mr-2 fa-2x"
                                            style={{color: '#2e2e2e', transform: "translateY(5px)"}}></i>)}
-                                        {timesheet.statusType === "OPEN" && <button type="button" className="btn btn-dark mr-3"
-                                                >DELETE
-                                        </button>}
+                                        {timesheet.statusType === "OPEN" &&
+                                        <button type="button" className="btn btn-dark mr-3"
+                                                onClick={() => setModalShow(true)}>DELETE</button>}
+                                        <Modal
+                                            size="xs"
+                                            aria-labelledby="contained-modal-title-vcenter"
+                                            centered
+                                            show={modalShow}
+                                        >
+                                            <Modal.Header>
+                                                <Modal.Title style={{ margin: '0 auto' }}>Delete confirmation</Modal.Title>
+                                            </Modal.Header>
+                                            <Modal.Body style={{ display: "flex", height: "100%", justifyContent: "center", alignItems: "center" }}>
+                                                <h5 style={{ display: "flex", justifyContent: "center", alignItems: "center" }}>
+                                                    <p style={{ justifyContent: "center", alignItems: "center", textAlign: 'center' }}>
+                                                        Are you sure you want to <br></br> delete the timesheet for week <br></br> {timesheet.from + ' - ' + timesheet.to + "?"}
+                                                    </p>
+                                                </h5>
+                                            </Modal.Body>
+                                            <Modal.Footer>
+                                                <div style={{ display: "flex", width: "100%", justifyContent: "space-evenly" }}>
+                                                    <IconYes className="fas fa-check-circle fa-3x" onClick={async () => {
+                                                        await dispatch(deleteCurrentTimesheet());
+                                                        dispatch(fetchUserTimesheets({ cursor: 0 }));
+                                                        let path = `/timesheet/home`;
+                                                        history.push(path);
+                                                    }}/>
+                                                    <IconNo className="fas fa-times-circle fa-3x" onClick={() => setModalShow(false)}></IconNo>
+                                                </div>
+                                            </Modal.Footer>
+                                        </Modal>
                                         {timesheet.statusType === "OPEN" && <i className="far fa-save mr-2 fa-2x"
                                            style={{color: '#2e2e2e', transform: "translateY(5px)"}}></i>}
-                                        {timesheet.statusType === "OPEN" && <button type="button" className="btn btn-dark mr-3" onClick={() => {
-
-                                            dispatch(saveCurrentTimesheet());
+                                        {timesheet.statusType === "OPEN" && <button type="button" className="btn btn-dark mr-3" onClick={async () => {
+                                            await dispatch(saveCurrentTimesheet());
+                                            dispatch(fetchUserTimesheets({ cursor: 0 }));
+                                            let path = `/timesheet/home`;
+                                            history.push(path);
                                         }}>SAVE
                                         </button>}
                                         {timesheet.statusType === "OPEN" && <i className="far fa-check-circle mr-2 fa-2x"
                                            style={{color: '#2e2e2e', transform: "translateY(5px)"}}></i>}
-                                        {timesheet.statusType === "OPEN" && <button type="button" className="btn btn-dark mr-3" onClick={() => {
-                                            dispatch(submitCurrentTimesheet());
+                                        {timesheet.statusType === "OPEN" && <button type="button" className="btn btn-dark mr-3" onClick={async () => {
+                                            await dispatch(submitCurrentTimesheet());
+                                            dispatch(fetchUserTimesheets({ cursor: 0 }));
                                             let path = `/timesheet/home`;
                                             history.push(path);
                                         }}>SUBMIT
@@ -132,16 +167,14 @@ export const ViewTimesheet = ({ view }) => {
                             <tr>
                                 <td></td>
                                 <td colSpan={2} style={{ textAlign: 'left', fontWeight: '500' }}>Total</td>
-                                <td>{
-                                    0
-                                }</td>
-                                <td>8</td>
-                                <td>8</td>
-                                <td>8</td>
-                                <td>8</td>
-                                <td>8</td>
-                                <td>8</td>
-                                <td>60</td>
+                                <td>{timesheetHours.mondayTotal ? timesheetHours.mondayTotal : 0}</td>
+                                <td>{timesheetHours.tuesdayTotal}</td>
+                                <td>{timesheetHours.wednesdayTotal}</td>
+                                <td>{timesheetHours.thursdayTotal}</td>
+                                <td>{timesheetHours.fridayTotal}</td>
+                                <td>{timesheetHours.saturdayTotal}</td>
+                                <td>{timesheetHours.sundayTotal}</td>
+                                <td>{timesheetHours.total}</td>
                             </tr>
                         </tbody>
                     </Table>
