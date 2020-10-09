@@ -7,6 +7,7 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.ManyToMany;
@@ -20,14 +21,15 @@ import java.util.Set;
  *
  * @author Polina Usheva
  */
-@Entity
 @Data
-@NoArgsConstructor(access = AccessLevel.PROTECTED)
+@Entity
 @AllArgsConstructor
-@EqualsAndHashCode(callSuper = true)
 @Table(name = "projects")
+@EqualsAndHashCode(callSuper = true)
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Project extends BaseEntity {
 
+    @Column
     @NotNull(message = "Project name must be valid.")
     private String name;
 

@@ -20,19 +20,19 @@ import java.util.List;
  *
  * @author Polina Usheva
  */
-@Entity
 @Data
-@NoArgsConstructor(access = AccessLevel.PROTECTED)
+@Entity
 @AllArgsConstructor
-@EqualsAndHashCode(callSuper = true)
 @Table(name = "activities")
+@EqualsAndHashCode(callSuper = true)
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Activity extends BaseEntity {
 
-    @OneToOne(cascade = CascadeType.MERGE)
+    @OneToOne(cascade = CascadeType.DETACH)
     @JoinColumn(name = "project_id", referencedColumnName = "id")
     private Project project;
 
-    @OneToOne(cascade = CascadeType.MERGE)
+    @OneToOne(cascade = CascadeType.DETACH)
     @JoinColumn(name = "task_id", referencedColumnName = "id")
     private Task task;
 

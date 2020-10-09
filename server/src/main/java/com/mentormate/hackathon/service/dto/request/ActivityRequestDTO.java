@@ -22,11 +22,11 @@ public class ActivityRequestDTO {
 
     @NotNull(message = "Project must not be null.")
     @Schema(name = "project", description = "The project for the current activity")
-    private Project project;
+    private ProjectRequestDTO project;
 
     @NotNull(message = "Task must not be null.")
     @Schema(name = "task", description = "The task for the current activity")
-    private Task task;
+    private TaskRequestDTO task;
     
     @NotNull(message = "Timesheet days cannot be null")
     @Schema(name = "timesheetDays", description = "The timesheet days for the current activity")

@@ -6,6 +6,7 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Table;
 
@@ -14,13 +15,14 @@ import javax.persistence.Table;
  *
  * @author Polina Usheva
  */
-@Entity
 @Data
-@NoArgsConstructor(access = AccessLevel.PROTECTED)
+@Entity
+@Table(name = "tasks")
 @AllArgsConstructor
 @EqualsAndHashCode(callSuper = true)
-@Table(name = "tasks")
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Task extends BaseEntity {
 
+    @Column
     private String name;
 }

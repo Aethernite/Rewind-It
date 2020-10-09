@@ -27,9 +27,7 @@ import java.util.stream.Collectors;
 public class ProjectService {
 
     private final TaskService taskService;
-
     private final ProjectRepository projectRepository;
-
     private final ModelMapper modelMapper;
 
     /**
@@ -84,34 +82,6 @@ public class ProjectService {
             Project devcamp2 = new Project("MentorMate L&D : 2020.2.Devcamp", taskSet);
             projectRepository.save(devcamp2);
         }
-    }
-
-    /**
-     * Gets project by an id.
-     *
-     * @param id the project id
-     * @return the project response dto by id
-     */
-    public ProjectResponseDTO getById(Long id) {
-        log.info("Get project by id: {}", id);
-
-        return this.projectRepository
-                .findById(id)
-                .map(project -> this.modelMapper.map(project, ProjectResponseDTO.class))
-                .orElseThrow(() -> new NotFoundException(String.format("Project with id %s - not found", id)));
-
-    }
-
-    /**
-     * Returns a project, when searched by id.
-     *
-     * @param id the id of the wanted project
-     * @return the project entity
-     */
-    public Project find(Long id) {
-        return projectRepository
-                .findById(id)
-                .orElseThrow(() -> new NotFoundException(String.format("Project with id: %s - not found", id)));
     }
 
     /**
