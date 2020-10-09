@@ -28,11 +28,11 @@ import java.util.List;
 @Table(name = "activities")
 public class Activity extends BaseEntity {
 
-    @OneToOne(cascade = CascadeType.MERGE)
+    @OneToOne(cascade = CascadeType.DETACH)
     @JoinColumn(name = "project_id", referencedColumnName = "id")
     private Project project;
 
-    @OneToOne(cascade = CascadeType.MERGE)
+    @OneToOne(cascade = CascadeType.DETACH)
     @JoinColumn(name = "task_id", referencedColumnName = "id")
     private Task task;
 

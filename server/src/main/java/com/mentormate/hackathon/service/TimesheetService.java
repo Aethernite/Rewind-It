@@ -19,6 +19,7 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 /**
@@ -117,8 +118,11 @@ public class TimesheetService {
         User user = userService.checkIfUserExist(userEmail);
         Timesheet timesheet = checkIfTimesheetExists(timesheetId, user.getId());
         List<Activity> activities = timesheetUpdateRequestDTO.getActivities()
-                .stream().map(activity -> modelMapper.map(activity, Activity.class))
-                .collect(Collectors.toList());
+                .stream().map(activity -> {
+                    Activity currentActivity = modelMapper.map(activity, Activity.class);
+                    currentActivity.getProject().setTasks(Set.of(currentActivity.getTask()));
+                    return currentActivity;
+                }).collect(Collectors.toList());
         timesheet.setActivities(activities);
         timesheet.setTotal(timesheetUpdateRequestDTO.getTotal());
         timesheet = timesheetRepository.save(timesheet);

@@ -62,6 +62,7 @@ const sum = arr => {
 export const TimesheetTable = () => {
     const dispatch = useDispatch();
     const timesheet = useSelector(state => state.timesheet.timesheet);
+    const timesheetHours = useSelector(state => state?.timesheet);
     const history = useHistory();
 
     // let hours = {monday: 0, tuesday: 0, wednesday: 0, thursday: 0, friday: 0, saturday: 0, sunday: 0};
@@ -115,7 +116,8 @@ export const TimesheetTable = () => {
                                         <Modal.Footer>
                                             <div style={{ display: "flex", width: "100%", justifyContent: "space-evenly" }}>
                                                 <IconYes className="fas fa-check-circle fa-3x" onClick={() => {
-                                                    dispatch(deleteCurrentTimesheet())
+                                                    dispatch(deleteCurrentTimesheet());
+                                                    dispatch(fetchUserTimesheets({ cursor: 0 }));
                                                     let path = `/timesheet/home`;
                                                     history.push(path);
                                                 }}/>
@@ -168,14 +170,14 @@ export const TimesheetTable = () => {
                         <tr>
                             <td></td>
                             <td colSpan={2} style={{ textAlign: 'left', fontWeight: '500' }}>Total</td>
-                            <td>{timesheet.mondayTotal}</td>
-                            <td>{timesheet.tuesdayTotal}</td>
-                            <td>{timesheet.wednesdayTotal}</td>
-                            <td>{timesheet.thursdayTotal}</td>
-                            <td>{timesheet.fridayTotal}</td>
-                            <td>{timesheet.saturdayTotal}</td>
-                            <td>{timesheet.sundayTotal}</td>
-                            <td>{timesheet.total}</td>
+                            <td>{timesheetHours.mondayTotal ? timesheetHours.mondayTotal : 0}</td>
+                            <td>{timesheetHours.tuesdayTotal}</td>
+                            <td>{timesheetHours.wednesdayTotal}</td>
+                            <td>{timesheetHours.thursdayTotal}</td>
+                            <td>{timesheetHours.fridayTotal}</td>
+                            <td>{timesheetHours.saturdayTotal}</td>
+                            <td>{timesheetHours.sundayTotal}</td>
+                            <td>{timesheetHours.total}</td>
                         </tr>
                     </tbody>
                 </Table>
