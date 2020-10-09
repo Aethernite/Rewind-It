@@ -127,15 +127,17 @@ export const TimesheetTable = () => {
                                     </Modal>
 
                                     <i class="far fa-save mr-2 fa-2x" style={{ color: '#2e2e2e', transform: "translateY(5px)" }}></i>
-                                    <button type="button" class="btn btn-dark mr-3" onClick={() => {
-                                        dispatch(saveCurrentTimesheet());
+                                    <button type="button" class="btn btn-dark mr-3" onClick={async () => {
+                                        await dispatch(saveCurrentTimesheet());
+                                        dispatch(fetchUserTimesheets({ cursor: 0 }));
                                         let path = `/timesheet/home`;
                                         history.push(path);
                                     }}>SAVE</button>
 
                                     <i class="far fa-check-circle mr-2 fa-2x" style={{ color: '#2e2e2e', transform: "translateY(5px)" }}></i>
-                                    <button type="button" className="btn btn-dark mr-3" onClick={() => {
-                                        dispatch(submitCurrentTimesheet());
+                                    <button type="button" className="btn btn-dark mr-3" onClick={async () => {
+                                        await dispatch(submitCurrentTimesheet());
+                                        dispatch(fetchUserTimesheets({ cursor: 0 }));
                                         let path = `/timesheet/home`;
                                         history.push(path);
                                     }}>SUBMIT

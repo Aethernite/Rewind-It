@@ -111,16 +111,18 @@ export const ViewTimesheet = ({ view }) => {
                                         </Modal>
                                         {timesheet.statusType === "OPEN" && <i className="far fa-save mr-2 fa-2x"
                                            style={{color: '#2e2e2e', transform: "translateY(5px)"}}></i>}
-                                        {timesheet.statusType === "OPEN" && <button type="button" className="btn btn-dark mr-3" onClick={() => {
-                                            dispatch(saveCurrentTimesheet());
+                                        {timesheet.statusType === "OPEN" && <button type="button" className="btn btn-dark mr-3" onClick={async () => {
+                                            await dispatch(saveCurrentTimesheet());
+                                            dispatch(fetchUserTimesheets({ cursor: 0 }));
                                             let path = `/timesheet/home`;
                                             history.push(path);
                                         }}>SAVE
                                         </button>}
                                         {timesheet.statusType === "OPEN" && <i className="far fa-check-circle mr-2 fa-2x"
                                            style={{color: '#2e2e2e', transform: "translateY(5px)"}}></i>}
-                                        {timesheet.statusType === "OPEN" && <button type="button" className="btn btn-dark mr-3" onClick={() => {
-                                            dispatch(submitCurrentTimesheet());
+                                        {timesheet.statusType === "OPEN" && <button type="button" className="btn btn-dark mr-3" onClick={async () => {
+                                            await dispatch(submitCurrentTimesheet());
+                                            dispatch(fetchUserTimesheets({ cursor: 0 }));
                                             let path = `/timesheet/home`;
                                             history.push(path);
                                         }}>SUBMIT
