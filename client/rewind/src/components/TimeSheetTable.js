@@ -84,8 +84,6 @@ export const TimesheetTable = () => {
 
     }
 
-
-
     return (
         <Container className="mt-5">
             <Col className="d-flex justify-content-center">
