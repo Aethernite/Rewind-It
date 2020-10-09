@@ -211,26 +211,16 @@ export const TimesheetRow = ({ hours ,submitted, activity, index }) => {
                     </div>
                 </th>
                 <td>
-                    {timesheet.activities[index].project.name === "" && <Select
+                    <Select
                         form={id}
                         theme="primary"
                         defaultValue={projectDefault}
                         onChange={handleProjectChange}
                         options={projectOptions}
-                        value={selectedProjectOption || ''}
+                        value={selectedProjectOption}
                         className="react-select"
                         isDisabled={isSubmitted}
-                    />}
-                    {timesheet.activities[index].project.name !== "" && <Select
-                        form={id}
-                        theme="primary"
-                        defaultValue={projectDefault}
-                        onChange={handleProjectChange}
-                        options={projectOptions}
-                        value={timesheet.activities[index].project.name}
-                        className="react-select"
-                        isDisabled={isSubmitted}
-                    />}
+                    />
                 </td>
                 <td>
                     <Select
