@@ -13,6 +13,7 @@ import { fetchAllProjects } from "../../../store/slices/projects";
 import TimesheetRow from "../../TimesheetRow";
 import { fetchTimesheetById } from "../../../api/AuthQueries";
 import {fetchUserTimesheets, resetTimesheets} from "../../../store/slices/timesheets";
+import {clearTimesheet} from "../../../store/slices/timesheet";
 
 const Table = styled.table`
 border: 1px solid #2e2e2e;
@@ -58,11 +59,10 @@ export const ViewTimesheet = ({ view }) => {
     const [modalShow, setModalShow] = React.useState(false);
 
     React.useEffect(() => {
-        if (id !== null) {
+        
             dispatch(fetchTimesheet({ id }));
-        }
-
-        return () => dispatch(resetTimesheets());
+        
+        //return () => dispatch(resetTimesheets());
     }, [dispatch, id])
 
     if (timesheet) {

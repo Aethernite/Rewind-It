@@ -64,6 +64,8 @@ export const TimesheetTable = () => {
     const timesheet = useSelector(state => state.timesheet.timesheet);
     const timesheetHours = useSelector(state => state?.timesheet);
     const history = useHistory();
+    const [errors,setErrors] = React.useState(false);
+
 
     // let hours = {monday: 0, tuesday: 0, wednesday: 0, thursday: 0, friday: 0, saturday: 0, sunday: 0};
     // console.log(hours);
@@ -77,6 +79,7 @@ export const TimesheetTable = () => {
     }, [dispatch])
 
     const [modalShow, setModalShow] = React.useState(false);
+
 
     const saveRequestBody = {
         activities: timesheet.activities,
@@ -163,8 +166,7 @@ export const TimesheetTable = () => {
                     </thead>
                     <tbody className="text-center">
                         {timesheet && timesheet?.activities.map((activity, index) => (
-                                <TimesheetRow index={index} activity={activity}></TimesheetRow>
-
+                                <TimesheetRow index={index} activity={activity} errors={errors} setErrors={(val) => setErrors(val)}></TimesheetRow>
                             ))
                         }
                         <tr>

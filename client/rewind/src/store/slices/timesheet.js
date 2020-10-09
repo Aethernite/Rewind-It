@@ -151,31 +151,66 @@ const { reducer: timesheetReducer, actions } = createSlice({
             state.timesheet.activities[action.payload.index].timesheetDays[action.payload.day].hours = action.payload.value;
 
             let monday = 0;
-            state.timesheet.activities.forEach((activity) => monday += +activity.timesheetDays[0].hours);
+            state.timesheet.activities.forEach((activity) => {
+
+                if(!isNaN(activity.timesheetDays[0].hours) && activity.timesheetDays[0].hours>0){
+                    monday += +activity.timesheetDays[0].hours
+                }
+                
+            });
             state.mondayTotal = monday;
 
             let tuesday = 0;
-            state.timesheet.activities.forEach((activity) => tuesday += +activity.timesheetDays[1].hours);
+            state.timesheet.activities.forEach((activity) => {
+
+                if(!isNaN(activity.timesheetDays[1].hours) && activity.timesheetDays[1].hours>0){
+                    tuesday += +activity.timesheetDays[1].hours
+                }
+                
+            });
             state.tuesdayTotal = tuesday;
 
             let wednesday = 0;
-            state.timesheet.activities.forEach((activity) => wednesday += +activity.timesheetDays[2].hours);
+            state.timesheet.activities.forEach((activity) => {
+
+                if(!isNaN(activity.timesheetDays[2].hours) && activity.timesheetDays[2].hours>0){
+                    wednesday += +activity.timesheetDays[2].hours
+                }
+                
+            });
             state.wednesdayTotal = wednesday;
 
             let thursday = 0;
-            state.timesheet.activities.forEach((activity) => thursday += +activity.timesheetDays[3].hours);
+            state.timesheet.activities.forEach((activity) => {
+                if(!isNaN(activity.timesheetDays[3].hours) && activity.timesheetDays[3].hours>0){
+                    thursday += +activity.timesheetDays[3].hours
+                }                
+            });
+
             state.thursdayTotal = thursday;
 
             let friday = 0;
-            state.timesheet.activities.forEach((activity) => friday += +activity.timesheetDays[4].hours);
+            state.timesheet.activities.forEach((activity) => {
+                if(!isNaN(activity.timesheetDays[4].hours) && activity.timesheetDays[4].hours>0){
+                    friday += +activity.timesheetDays[4].hours
+                }                
+            });
             state.fridayTotal = friday;
 
             let saturday = 0;
-            state.timesheet.activities.forEach((activity) => saturday += +activity.timesheetDays[5].hours);
+            state.timesheet.activities.forEach((activity) => {
+                if(!isNaN(activity.timesheetDays[5].hours) && activity.timesheetDays[5].hours>0){
+                    saturday += +activity.timesheetDays[5].hours
+                }                
+            });
             state.saturdayTotal = saturday;
 
             let sunday = 0;
-            state.timesheet.activities.forEach((activity) => sunday += +activity.timesheetDays[6].hours);
+            state.timesheet.activities.forEach((activity) => {
+                if(!isNaN(activity.timesheetDays[6].hours) && activity.timesheetDays[6].hours>0){
+                    sunday += +activity.timesheetDays[6].hours
+                }                
+            });
             state.sundayTotal = sunday;
 
             state.total = monday + tuesday + wednesday + thursday + friday + saturday + sunday;
@@ -254,7 +289,6 @@ export const deleteActivity = ({timesheetId, activityId}) => {
         dispatch(actions.deleteActivityStart());
         try {
             await api.deleteActivityOfTimesheet({timesheetId, activityId});
-
             dispatch(actions.deleteActivitySuccess(activityId));
         } catch (error) {
             dispatch(actions.deleteActivityFailure(error?.response?.data?.message));

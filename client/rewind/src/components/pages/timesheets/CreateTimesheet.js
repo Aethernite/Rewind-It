@@ -7,7 +7,7 @@ import "../../../css/forms.scss"
 import { useFormik } from 'formik';
 import { useDispatch, useSelector } from 'react-redux';
 import { clearTimesheet, createTimesheet } from "../../../store/slices/timesheet";
-import { Timesheet } from '../../Timesheet';
+import { Timesheet } from '../../Timesheet.js';
 
 const Form = styled.form`
  position: relative;
