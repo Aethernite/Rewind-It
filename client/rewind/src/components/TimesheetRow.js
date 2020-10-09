@@ -85,6 +85,9 @@ export const TimesheetRow = ({ hours ,submitted, activity, index }) => {
     const projectOptions = [] = projects.filter(project => project.name != '').map((project) => project = { value: project.id, label: project.name });
     let taskOptions = [];
 
+    const projectsSelect = projects.map(project => project = project.name);
+    console.log(projectsSelect);
+
     if (!projects.isLoading) {
         taskOptions = selectedProjectOption ? projects.filter(project => project.id === selectedProjectOption.value)[0]?.tasks.filter(task => task?.name != '').map((task) => task = { value: task?.id, label: task?.name }) : [];
     }
