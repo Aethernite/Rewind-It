@@ -20,12 +20,12 @@ import java.util.List;
  *
  * @author Polina Usheva
  */
-@Entity
 @Data
-@NoArgsConstructor(access = AccessLevel.PROTECTED)
+@Entity
 @AllArgsConstructor
-@EqualsAndHashCode(callSuper = true)
 @Table(name = "activities")
+@EqualsAndHashCode(callSuper = true)
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Activity extends BaseEntity {
 
     @OneToOne(cascade = CascadeType.DETACH)

@@ -22,7 +22,6 @@ import java.util.stream.Collectors;
 public class TaskService {
 
     private final TaskRepository taskRepository;
-
     private final ModelMapper modelMapper;
 
     /**
@@ -86,16 +85,5 @@ public class TaskService {
             taskRepository.save(research);
         }
     }
-
-    /**
-     * Returns a task, when searched by id.
-     *
-     * @param id the id of the wanted task
-     * @return the task entity
-     */
-    public Task find(Long id) {
-        return taskRepository
-                .findById(id)
-                .orElseThrow(() -> new NotFoundException(String.format("Task with id: %s - not found ", id)));
-    }
+    
 }

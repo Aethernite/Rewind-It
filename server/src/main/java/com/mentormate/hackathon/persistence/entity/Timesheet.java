@@ -35,28 +35,28 @@ import java.util.List;
 @EqualsAndHashCode(callSuper = true)
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Timesheet extends BaseEntity {
-
-    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    @JoinColumn(name = "timesheet_id")
-    private List<Activity> activities;
-
+    
     @Enumerated(EnumType.STRING)
     private StatusType statusType;
 
     @Column
     private double total;
 
+    @Column(name = "from_date")
     @JsonSerialize(using = ToStringSerializer.class)
     @JsonDeserialize(using = ParseDeserializer.class)
-    @Column(name = "from_date")
     LocalDate fromDate;
 
+    @Column(name = "to_date")
     @JsonSerialize(using = ToStringSerializer.class)
     @JsonDeserialize(using = ParseDeserializer.class)
-    @Column(name = "to_date")            
     LocalDate toDate;
     
     @ManyToOne(fetch = FetchType.LAZY)
     private User user;
 
+    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @JoinColumn(name = "timesheet_id")
+    private List<Activity> activities;
+    
 }

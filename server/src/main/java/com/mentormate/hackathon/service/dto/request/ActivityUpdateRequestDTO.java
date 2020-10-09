@@ -1,12 +1,12 @@
 package com.mentormate.hackathon.service.dto.request;
 
 import com.mentormate.hackathon.persistence.entity.DayOfTimesheet;
-import com.mentormate.hackathon.persistence.entity.Project;
-import com.mentormate.hackathon.persistence.entity.Task;
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.validation.annotation.Validated;
 
+import javax.validation.constraints.NotNull;
 import java.util.List;
 
 /**
@@ -16,11 +16,17 @@ import java.util.List;
 @Validated
 @NoArgsConstructor
 public class ActivityUpdateRequestDTO {
+    
+    @NotNull(message = "Id of activity must not be null.")
+    @Schema(name = "id", description = "Id of activity")
     private Long id;
 
-    private Project project;
+    @Schema(name = "project", description = "Project of activity")
+    private ProjectRequestDTO project;
+    
+    @Schema(name = "task", description = "task of Activity")
+    private TaskRequestDTO task;
 
-    private Task task;
-
+    @Schema(name = "timesheetDays", description = "Collection of timesheet days")
     private List<DayOfTimesheet> timesheetDays;
 }

@@ -1,6 +1,5 @@
 package com.mentormate.hackathon.persistence.entity;
 
-import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -20,7 +19,6 @@ import javax.persistence.MappedSuperclass;
 public abstract class BaseEntity {
 
     @Id
-    @Schema(description = "id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 }

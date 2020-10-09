@@ -7,8 +7,11 @@ import com.mentormate.hackathon.utils.ParseDeserializer;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.validation.annotation.Validated;
 
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 import java.time.LocalDateTime;
 
 /**
@@ -21,6 +24,8 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 public class CreateTimesheetRequestDTO {
 
+    @DateTimeFormat(pattern = "YYYY-MM-DD")
+    @NotNull(message = "Start date must not be empty")
     @JsonSerialize(using = ToStringSerializer.class)
     @JsonDeserialize(using = ParseDeserializer.class)
     private LocalDateTime fromDate;

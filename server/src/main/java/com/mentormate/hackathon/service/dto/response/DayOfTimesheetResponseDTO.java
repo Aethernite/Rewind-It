@@ -1,6 +1,7 @@
 package com.mentormate.hackathon.service.dto.response;
 
 import io.swagger.v3.oas.annotations.media.Schema;
+import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -13,6 +14,7 @@ import java.time.LocalDate;
  */
 @Data
 @NoArgsConstructor
+@AllArgsConstructor
 public class DayOfTimesheetResponseDTO {
 
     @Schema(name = "id", description = "Id of day of timesheet")
