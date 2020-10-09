@@ -80,8 +80,9 @@ export const ViewTimesheet = ({ view }) => {
                                         {timesheet.statusType === "OPEN" && <i className="far fa-save mr-2 fa-2x"
                                            style={{color: '#2e2e2e', transform: "translateY(5px)"}}></i>}
                                         {timesheet.statusType === "OPEN" && <button type="button" className="btn btn-dark mr-3" onClick={() => {
-
                                             dispatch(saveCurrentTimesheet());
+                                            let path = `/timesheet/home`;
+                                            history.push(path);
                                         }}>SAVE
                                         </button>}
                                         {timesheet.statusType === "OPEN" && <i className="far fa-check-circle mr-2 fa-2x"

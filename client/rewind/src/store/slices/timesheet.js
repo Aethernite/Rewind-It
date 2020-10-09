@@ -50,11 +50,13 @@ const { reducer: timesheetReducer, actions } = createSlice({
         },
         addCurrentTimesheetActivitySuccess: (state, action) => {
             state.isCreating = false;
-            state.timesheet.activities = action.payload;
+            console.log(action.payload);
+            state.timesheet.activities.push(action.payload[action.payload.length - 1]);
+            state.error = null;
         },
         addCurrentTimesheetActivityFailure: (state, action) => {
             state.isCreating = false;
-            // state.timesheet.error = action.payload;
+            state.timesheet.error = action.payload;
         },
         submitTimesheetStart: (state) => {
             state.isCreating = true;
@@ -351,7 +353,11 @@ export const fetchTimesheet = ({id}) => {
         dispatch(actions.fetchTimesheetStart());
         try {
             const result = await api.fetchTimesheetById({ id });
-            console.log(result);
+
+            result.activities.forEach(activity => activity.timesheetDays.forEach(day => {
+                day.date = moment(day.date).format("YYYY-MM-DD");
+            }))
+
             dispatch(actions.fetchTimesheetSuccess(result));
         } catch (error) {
             dispatch(actions.fetchTimesheetFailure(error?.response?.data?.message));
