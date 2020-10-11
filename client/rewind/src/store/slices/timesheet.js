@@ -175,10 +175,6 @@ export const createTimesheet = ({ from, to }) => {
             const format = split[2] + "-" + split[1] + "-" + split[0];
             const timesheet = await api.createTimesheet({ fromDate: format });
 
-            let a = timesheet.activities[0].timesheetDays.map(day => {
-                day.date = moment(day.date).format("YYYY-MM-DD");
-            })
-            // console.log(a);
             dispatch(actions.createTimesheetSuccess(timesheet));
         } catch (err) {
             dispatch(actions.createTimesheetFailure(err?.response?.data?.message));

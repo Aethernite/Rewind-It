@@ -52,6 +52,7 @@ export const ViewTimesheet = ({ view }) => {
 
     const dispatch = useDispatch();
 
+    const [errors, setErrors] = React.useState(null);
     const timesheet = useSelector(state => state?.timesheet?.timesheet);
     const timesheetHours = useSelector(state => state?.timesheet);
     const history = useHistory();
@@ -67,6 +68,14 @@ export const ViewTimesheet = ({ view }) => {
             dispatch(resetTimesheet());
         }
     }, [dispatch, id])
+
+    const setFormikErrors = (newValue) => {
+        setErrors(newValue);
+    }
+
+    // console.log(errors);
+
+    const hasOneProject = timesheet?.activities?.length <= 1;
 
     if (timesheet) {
         return (
@@ -114,7 +123,7 @@ export const ViewTimesheet = ({ view }) => {
                                         </Modal>
                                         {timesheet.statusType === "OPEN" && <i className="far fa-save mr-2 fa-2x"
                                            style={{color: '#2e2e2e', transform: "translateY(5px)"}}></i>}
-                                        {timesheet.statusType === "OPEN" && <button type="button" className="btn btn-dark mr-3" onClick={async () => {
+                                        {timesheet.statusType === "OPEN" && <button type="button" disabled={hasOneProject || errors} className="btn btn-dark mr-3" onClick={async () => {
                                             await dispatch(saveCurrentTimesheet());
                                             dispatch(fetchUserTimesheets({ cursor: 0 }));
                                             let path = `/timesheet/home`;
@@ -123,7 +132,7 @@ export const ViewTimesheet = ({ view }) => {
                                         </button>}
                                         {timesheet.statusType === "OPEN" && <i className="far fa-check-circle mr-2 fa-2x"
                                            style={{color: '#2e2e2e', transform: "translateY(5px)"}}></i>}
-                                        {timesheet.statusType === "OPEN" && <button type="button" className="btn btn-dark mr-3" onClick={async () => {
+                                        {timesheet.statusType === "OPEN" && <button type="button" disabled={hasOneProject || errors} className="btn btn-dark mr-3" onClick={async () => {
                                             await dispatch(submitCurrentTimesheet());
                                             dispatch(fetchUserTimesheets({ cursor: 0 }));
                                             let path = `/timesheet/home`;
@@ -164,7 +173,7 @@ export const ViewTimesheet = ({ view }) => {
                         </thead>
                         <tbody className="text-center">
                             {timesheet?.activities.map((activity, index) => (
-                                <TimesheetRow key={activity.id} submitted={timesheet.statusType} index={index} activity={activity}></TimesheetRow>
+                                <TimesheetRow key={activity.id} setFormikErrors={setFormikErrors} submitted={timesheet.statusType} index={index} activity={activity}></TimesheetRow>
                             ))
                             }
                             <tr>
