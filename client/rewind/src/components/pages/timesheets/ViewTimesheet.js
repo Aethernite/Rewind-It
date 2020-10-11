@@ -62,7 +62,10 @@ export const ViewTimesheet = ({ view }) => {
             dispatch(fetchTimesheet({ id }));
         }
 
-        return () => dispatch(resetTimesheets());
+        return () => {
+            dispatch(resetTimesheets());
+            dispatch(resetTimesheet());
+        }
     }, [dispatch, id])
 
     if (timesheet) {
@@ -161,7 +164,7 @@ export const ViewTimesheet = ({ view }) => {
                         </thead>
                         <tbody className="text-center">
                             {timesheet?.activities.map((activity, index) => (
-                                <TimesheetRow submitted={timesheet.statusType} index={index} activity={activity}></TimesheetRow>
+                                <TimesheetRow key={activity.id} submitted={timesheet.statusType} index={index} activity={activity}></TimesheetRow>
                             ))
                             }
                             <tr>

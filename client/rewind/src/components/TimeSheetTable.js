@@ -17,7 +17,7 @@ import moment from 'moment';
 import { useFormik } from 'formik';
 import { schema } from '../validations/schemas/TimesheetRowValidationSchema';
 import { useHistory } from "react-router-dom"
-import { fetchUserTimesheets } from '../store/slices/timesheets';
+import {fetchUserTimesheets, resetTimesheets} from '../store/slices/timesheets';
 
 const Table = styled.table`
 border: 1px solid #2e2e2e;
@@ -73,7 +73,10 @@ export const TimesheetTable = () => {
             dispatch(fetchAllProjects());
         }
 
-        // return () => dispatch(resetTimesheet());
+        return () => {
+            dispatch(resetTimesheets());
+            dispatch(resetTimesheet());
+        }
     }, [dispatch])
 
     const [modalShow, setModalShow] = React.useState(false);
@@ -163,7 +166,7 @@ export const TimesheetTable = () => {
                     </thead>
                     <tbody className="text-center">
                         {timesheet && timesheet?.activities.map((activity, index) => (
-                                <TimesheetRow index={index} activity={activity}></TimesheetRow>
+                                <TimesheetRow key={activity.id} index={index} activity={activity}></TimesheetRow>
 
                             ))
                         }
