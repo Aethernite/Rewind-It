@@ -1,5 +1,6 @@
 package com.mentormate.hackathon.utils;
 
+import com.mentormate.hackathon.controller.handler.exception.UnAuthorizedException;
 import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.MalformedJwtException;
@@ -13,6 +14,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 
+import javax.servlet.ServletException;
 import java.util.Date;
 
 
@@ -73,6 +75,7 @@ public class JwtUtils {
             LOGGER.error("Invalid JWT token: {}", e.getMessage());
         } catch (ExpiredJwtException e) {
             LOGGER.error("JWT token is expired: {}", e.getMessage());
+            throw new UnAuthorizedException(String.format("JWT token is expired: %s", e.getMessage()));
         } catch (UnsupportedJwtException e) {
             LOGGER.error("JWT token is unsupported: {}", e.getMessage());
         } catch (IllegalArgumentException e) {

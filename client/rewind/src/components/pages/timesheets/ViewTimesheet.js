@@ -52,7 +52,6 @@ export const ViewTimesheet = ({ view }) => {
 
     const dispatch = useDispatch();
 
-    const [errors, setErrors] = React.useState(null);
     const timesheet = useSelector(state => state?.timesheet?.timesheet);
     const timesheetHours = useSelector(state => state?.timesheet);
     const history = useHistory();

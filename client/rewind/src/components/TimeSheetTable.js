@@ -17,7 +17,7 @@ import moment from 'moment';
 import { useFormik } from 'formik';
 import { schema } from '../validations/schemas/TimesheetRowValidationSchema';
 import { useHistory } from "react-router-dom"
-import {fetchUserTimesheets, resetTimesheets} from '../store/slices/timesheets';
+import { fetchUserTimesheets } from '../store/slices/timesheets';
 
 const Table = styled.table`
 border: 1px solid #2e2e2e;
@@ -64,22 +64,20 @@ export const TimesheetTable = () => {
     const timesheet = useSelector(state => state.timesheet.timesheet);
     const timesheetHours = useSelector(state => state?.timesheet);
     const history = useHistory();
+    const [errors,setErrors] = React.useState(false);
 
-    // let hours = {monday: 0, tuesday: 0, wednesday: 0, thursday: 0, friday: 0, saturday: 0, sunday: 0};
-    // console.log(hours);
+
 
     React.useEffect(() => {
         if (timesheet !== null) {
             dispatch(fetchAllProjects());
         }
 
-        return () => {
-            dispatch(resetTimesheets());
-            dispatch(resetTimesheet());
-        }
+
     }, [dispatch])
 
     const [modalShow, setModalShow] = React.useState(false);
+
 
     const saveRequestBody = {
         activities: timesheet.activities,
@@ -168,8 +166,7 @@ export const TimesheetTable = () => {
                     </thead>
                     <tbody className="text-center">
                         {timesheet && timesheet?.activities.map((activity, index) => (
-                                <TimesheetRow key={activity.id} index={index} activity={activity}></TimesheetRow>
-
+                                <TimesheetRow key={activity.id} index={index} activity={activity} errors={errors} setErrors={(val) => setErrors(val)}></TimesheetRow>
                             ))
                         }
                         <tr>
