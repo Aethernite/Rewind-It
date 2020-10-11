@@ -45,3 +45,10 @@ background: linear-gradient(to bottom, #E5E5BE, #003973); /* W3C, IE 10+/ Edge, 
 .react-select{
   font-size: 0.8rem;
 }
+
+.react-invalid{
+  border: 1px solid #dc3545;
+  border-radius: 4px;
+  font-size: 0.8rem;
+}
+

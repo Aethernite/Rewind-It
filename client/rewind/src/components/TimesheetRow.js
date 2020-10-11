@@ -97,12 +97,6 @@ export const TimesheetRow = ({ hours ,submitted, activity, index, errors, setErr
     }
 
     const addOnChangeDay = ({dayName, value, index}) => {
-        console.log("Day: " + dayName);
-        console.log("Value: " + value);
-        console.log("Index: " + index);
-        //formik.values[dayName] = value;
-        console.log("Formik value: " + formik.values[dayName])
-        console.log("Activity id: " + activity.id);
         let day = 0;
         switch (dayName) {
             case "monday":
@@ -135,10 +129,10 @@ export const TimesheetRow = ({ hours ,submitted, activity, index, errors, setErr
                 break;
         }
 
-        console.log("Activity date: " + moment(activity.timesheetDays[day].date).format("YYYY-MM-DD"));
+    
 
         let date = moment(activity.timesheetDays[day].date).format("YYYY-MM-DD");
-        console.log(day)
+       
 
         value = parseFloat(value);
 
@@ -190,7 +184,7 @@ export const TimesheetRow = ({ hours ,submitted, activity, index, errors, setErr
 
         // taskOptions = projects[e.value - 1].tasks;
 
-        console.log(projects[e.value - 1].tasks);
+       
 
         addOnChangeProject({project: e.label, id: e.value, index: index});
     }
@@ -203,20 +197,22 @@ export const TimesheetRow = ({ hours ,submitted, activity, index, errors, setErr
 
     let mondayHours = timesheet.activities[index].timesheetDays[0].hours;
 
-    console.log(mondayHours);
+    console.log(formik.errors.task);
     return (
         <>
             <tr>
                 <th>
                     <div className="mt-2">
                         <span className="d-inline-block ml-1">{index+1}</span>
-                        {index !== timesheet.activities.length-1 && <Icon onClick={() => deleteActivityOfSheet({timesheetId: timesheet.id, activityId: activity.id})} className="d-inline-block fa fa-trash pl-2"></Icon>}
+                        {index !== timesheet.activities.length-1 && 
+                        <Icon onClick={() => deleteActivityOfSheet({timesheetId: timesheet.id, activityId: activity.id})} className="d-inline-block fa fa-trash pl-2"></Icon>
+                        }
                     </div>
                 </th>
                 <td>
                     <Select
                         form={id}
-                        theme="primary"
+                        theme="danger"
                         name="project"
                         defaultValue={projectDefault}
                         onChange={handleProjectChange}
@@ -234,7 +230,7 @@ export const TimesheetRow = ({ hours ,submitted, activity, index, errors, setErr
                         onChange={handleTaskChange}
                         value={selectedTaskOption || ''}
                         options={taskOptions}
-                        className="react-select"
+                        className={formik.errors.task? "react-invalid": "react-select"}                        
                         isDisabled={isSubmitted}
                     />
                 </td>

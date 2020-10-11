@@ -50,7 +50,7 @@ const { reducer: timesheetReducer, actions } = createSlice({
         },
         addCurrentTimesheetActivitySuccess: (state, action) => {
             state.isCreating = false;
-            console.log(action.payload);
+            
             state.timesheet.activities.push(action.payload[action.payload.length - 1]);
             state.error = null;
         },
@@ -114,7 +114,7 @@ const { reducer: timesheetReducer, actions } = createSlice({
         saveProjectSuccess: (state, action) => {
             state.isCreating = false;
             // state.timesheet.activities
-            console.log(action.payload);
+            
             state.timesheet.activities[action.payload.index].project.name = action.payload.project;
             state.timesheet.activities[action.payload.index].project.id = action.payload.id;
 
@@ -130,7 +130,7 @@ const { reducer: timesheetReducer, actions } = createSlice({
         saveTaskSuccess: (state, action) => {
             state.isCreating = false;
             // state.timesheet.activities
-            console.log(action.payload);
+           
             state.timesheet.activities[action.payload.index].task.name = action.payload.task;
             state.timesheet.activities[action.payload.index].task.id = action.payload.id;
 
@@ -145,8 +145,7 @@ const { reducer: timesheetReducer, actions } = createSlice({
         },
         saveDaySuccess: (state, action) => {
             state.isCreating = false;
-            // state.timesheet.activities
-            // console.log(action.payload);
+         
             state.timesheet.activities[action.payload.index].timesheetDays[action.payload.day].date = action.payload.date;
             state.timesheet.activities[action.payload.index].timesheetDays[action.payload.day].hours = action.payload.value;
 
@@ -238,7 +237,7 @@ export const createTimesheet = ({ from, to }) => {
             let a = timesheet.activities[0].timesheetDays.map(day => {
                 day.date = moment(day.date).format("YYYY-MM-DD");
             })
-            // console.log(a);
+           
             dispatch(actions.createTimesheetSuccess(timesheet));
         } catch (err) {
             dispatch(actions.createTimesheetFailure(err?.response?.data?.message));
@@ -263,18 +262,17 @@ export const deleteCurrentTimesheet = () => {
 export const addActivity = () => {
     return async (dispatch, getState) => {
         const id = getState().timesheet.timesheet.id;
-        // console.log(id);
+        
         dispatch(actions.addCurrentTimesheetActivityStart());
         try {
             const result = await api.addActivityToTimesheet({ id });
-            console.log(result.activities);
+
 
             let a = result.activities.map(activity => activity.timesheetDays.map(day => {
                 day.date = moment(day.date).format("YYYY-MM-DD");
             }))
 
-            // console.log(a);
-            //     [result.activities.length - 1]
+       
 
             dispatch(actions.addCurrentTimesheetActivitySuccess(result.activities));
         } catch (error) {

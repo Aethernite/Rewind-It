@@ -67,15 +67,13 @@ export const TimesheetTable = () => {
     const [errors,setErrors] = React.useState(false);
 
 
-    // let hours = {monday: 0, tuesday: 0, wednesday: 0, thursday: 0, friday: 0, saturday: 0, sunday: 0};
-    // console.log(hours);
 
     React.useEffect(() => {
         if (timesheet !== null) {
             dispatch(fetchAllProjects());
         }
 
-        // return () => dispatch(resetTimesheet());
+        
     }, [dispatch])
 
     const [modalShow, setModalShow] = React.useState(false);
@@ -166,7 +164,7 @@ export const TimesheetTable = () => {
                     </thead>
                     <tbody className="text-center">
                         {timesheet && timesheet?.activities.map((activity, index) => (
-                                <TimesheetRow index={index} activity={activity} errors={errors} setErrors={(val) => setErrors(val)}></TimesheetRow>
+                                <TimesheetRow key={activity.id} index={index} activity={activity} errors={errors} setErrors={(val) => setErrors(val)}></TimesheetRow>
                             ))
                         }
                         <tr>
