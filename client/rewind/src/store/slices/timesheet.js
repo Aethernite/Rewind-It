@@ -15,7 +15,8 @@ const initialState = {
     saturdayTotal: 0,
     sundayTotal: 0,
     total: 0,
-    isFetching: false
+    isFetching: false,
+    errors: [],
 };
 
 const { reducer: timesheetReducer, actions } = createSlice({
@@ -101,7 +102,7 @@ const { reducer: timesheetReducer, actions } = createSlice({
             state.isFetching = false;
             // state.timesheet.activities
             state.timesheet.activities = state.timesheet.activities.filter(activity => activity.id !== action.payload);
-
+            state.errors[action.payload] = null;
             state.creationError = null;
         },
         deleteActivityFailure: (state, action) => {
@@ -223,6 +224,9 @@ const { reducer: timesheetReducer, actions } = createSlice({
         reset: () => {
             return initialState;
         },
+        setErrors: (state, action) => {
+            state.errors[action.payload.activityId] = action.payload.errors;
+        }
     },
 });
 
@@ -379,6 +383,14 @@ export const saveDayInStore = ({day, value, date, index}) => {
             dispatch(actions.saveDayFailure())
         }
     }
+}
+
+
+export const setErrors = ({activityId, errors}) => {
+
+return async (dispatch) => {
+    dispatch(actions.setErrors({activityId, errors}));
+}
 }
 
 export const resetTimesheet = actions.reset;

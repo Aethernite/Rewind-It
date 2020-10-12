@@ -73,7 +73,6 @@ export const TimesheetTable = () => {
             dispatch(fetchAllProjects());
         }
 
-        
     }, [dispatch])
 
     const [modalShow, setModalShow] = React.useState(false);

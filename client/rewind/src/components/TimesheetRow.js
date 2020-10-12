@@ -15,7 +15,7 @@ import {
     saveProjectInStore,
     saveTaskInStore
 } from "../store/slices/timesheet";
-import { setDay } from "../store/slices/timesheet";
+import { setErrors } from "../store/slices/timesheet";
 import {fetchAllProjects} from "../store/slices/projects";
 import moment from "moment";
 
@@ -58,7 +58,7 @@ const sum = arr => {
     return sum;
 }
 
-export const TimesheetRow = ({ hours ,submitted, activity, index, errors, setErrors }) => {
+export const TimesheetRow = ({ hours ,submitted, activity, index}) => {
     const projects = useSelector(state => state.projects.projects);
     const timesheet = useSelector(state => state.timesheet.timesheet);
     const dispatch = useDispatch();
@@ -178,9 +178,11 @@ export const TimesheetRow = ({ hours ,submitted, activity, index, errors, setErr
         if (activities.length === index + 1) {
             dispatch(addActivity());
         }
-
+        
         setSelectedProjectOption(e);
+        formik.setFieldValue('project', e);
         setSelectedTaskOption(null);
+        formik.setFieldValue('task', null);
 
         // taskOptions = projects[e.value - 1].tasks;
 
@@ -191,13 +193,15 @@ export const TimesheetRow = ({ hours ,submitted, activity, index, errors, setErr
 
     const handleTaskChange = (e) => {
         setSelectedTaskOption(e);
+        formik.setFieldValue('task', e);
 
         addOnChangeTask({task: e.label, id: e.value, index: index});
     }
 
-    let mondayHours = timesheet.activities[index].timesheetDays[0].hours;
+    if(Object.keys(formik.errors).length > 0){
+         dispatch(setErrors({activityId:activity.id, errors:formik.errors}));
+    }
 
-    console.log(formik.errors.task);
     return (
         <>
             <tr>
