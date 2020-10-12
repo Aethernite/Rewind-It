@@ -13,9 +13,9 @@ import {
     deleteActivity,
     fetchTimesheet, saveDayInStore,
     saveProjectInStore,
-    saveTaskInStore
+    saveTaskInStore, setErrors
 } from "../store/slices/timesheet";
-import { setErrors } from "../store/slices/timesheet";
+import { setDay } from "../store/slices/timesheet";
 import {fetchAllProjects} from "../store/slices/projects";
 import moment from "moment";
 
@@ -178,7 +178,7 @@ export const TimesheetRow = ({ hours ,submitted, activity, index}) => {
         if (activities.length === index + 1) {
             dispatch(addActivity());
         }
-        
+
         setSelectedProjectOption(e);
         formik.setFieldValue('project', e);
         setSelectedTaskOption(null);
@@ -202,6 +202,7 @@ export const TimesheetRow = ({ hours ,submitted, activity, index}) => {
          dispatch(setErrors({activityId:activity.id, errors:formik.errors}));
     }
 
+    console.log(formik.errors.task);
     return (
         <>
             <tr>
