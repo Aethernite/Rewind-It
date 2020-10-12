@@ -1,19 +1,17 @@
 import { useDispatch, useSelector } from "react-redux";
 import React from "react";
-import { Button, Col, Container, Modal } from "react-bootstrap";
+import { Col, Container, Modal } from "react-bootstrap";
 import { useHistory, useRouteMatch } from "react-router-dom";
 import moment from "moment";
 import {
-    deleteCurrentTimesheet, fetchTimesheet, resetTimesheet,
+    deleteCurrentTimesheet, fetchTimesheet,
     saveCurrentTimesheet,
     submitCurrentTimesheet
 } from "../../../store/slices/timesheet";
 import styled from "styled-components";
-import { fetchAllProjects } from "../../../store/slices/projects";
 import TimesheetRow from "../../TimesheetRow";
-import { fetchTimesheetById } from "../../../api/AuthQueries";
-import {fetchUserTimesheets, resetTimesheets} from "../../../store/slices/timesheets";
-import {clearTimesheet} from "../../../store/slices/timesheet";
+import {fetchUserTimesheets} from "../../../store/slices/timesheets";
+
 
 const Table = styled.table`
 border: 1px solid #2e2e2e;

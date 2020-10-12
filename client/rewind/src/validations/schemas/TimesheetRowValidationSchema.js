@@ -1,10 +1,10 @@
 import * as Yup from "yup";
 
 const TimesheetRowValidationSchema = Yup.object({
-    project: Yup.string().required("Project must be selected!"),
+    project: Yup.string(),
     task: Yup.string().when("project", {
         is: project => project === null,
-        then: Yup.string().required(),
+        then: Yup.string(),
         otherwise: Yup.string().required()
     }),
     monday: Yup.number().positive().min(0).max(24),

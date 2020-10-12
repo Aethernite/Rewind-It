@@ -11,23 +11,13 @@ import Select from 'react-select';
 import {
     addActivity,
     deleteActivity,
-    fetchTimesheet, saveDayInStore,
+    saveDayInStore,
     saveProjectInStore,
     saveTaskInStore
 } from "../store/slices/timesheet";
 import { setErrors } from "../store/slices/timesheet";
 import {fetchAllProjects} from "../store/slices/projects";
 import moment from "moment";
-
-
-const Table = styled.table`
-border: 1px solid #2e2e2e;
-border-bottom: none;
-border-right: none;
-border-left: none;
-font-family: "Roboto", sans-serif;
-background-color: #fff;
-`;
 
 const Input = styled.input`
 text-align: center;
@@ -65,11 +55,7 @@ export const TimesheetRow = ({ hours ,submitted, activity, index}) => {
     const id = "row";
     const [selectedTaskOption, setSelectedTaskOption] = React.useState(activity.task.name?{label:activity?.task?.name, value: activity?.task?.id} : null);
     const [selectedProjectOption, setSelectedProjectOption] = React.useState(activity.project.name? {label:activity.project.name, value: activity.project.id}: null);
-    const [currentId, setCurrentId] = React.useState(timesheet.id);
 
-    // let temp = Object.assign({activities: timesheet.activities, statusType: timesheet.statusType, total: timesheet.total}, {activities: timesheet.activities, statusType: timesheet.statusType, total: timesheet.total});
-
-    // console.log(temp);
     const deleteActivityOfSheet = ({timesheetId, activityId}) => {
         dispatch(deleteActivity({timesheetId, activityId}));
     }
@@ -81,11 +67,11 @@ export const TimesheetRow = ({ hours ,submitted, activity, index}) => {
 
     const isSubmitted = submitted === "SUBMITTED";
 
-    const projectOptions = [] = projects.filter(project => project.name != '').map((project) => project = { value: project.id, label: project.name });
+    const projectOptions = projects.filter(project => project.name !== '').map((project) => project = { value: project.id, label: project.name });
     let taskOptions = [];
 
     if (!projects.isLoading) {
-        taskOptions = selectedProjectOption ? projects.filter(project => project.id === selectedProjectOption.value)[0]?.tasks.filter(task => task?.name != '').map((task) => task = { value: task?.id, label: task?.name }) : [];
+        taskOptions = selectedProjectOption ? projects.filter(project => project.id === selectedProjectOption.value)[0]?.tasks.filter(task => task?.name !== '').map((task) => task = { value: task?.id, label: task?.name }) : [];
     }
 
     const addOnChangeProject = ({project, id, index}) => {
@@ -127,6 +113,8 @@ export const TimesheetRow = ({ hours ,submitted, activity, index}) => {
                 day = 6;
                 formik.setFieldValue('sunday', value);
                 break;
+            default:
+                break;
         }
 
     
@@ -138,8 +126,6 @@ export const TimesheetRow = ({ hours ,submitted, activity, index}) => {
 
         dispatch(saveDayInStore({day, value, date, index}));
 
-        // temp.activities[index].timesheetDays[dayDate].hours = value;
-        // temp.activities[index].timesheetDays[dayDate].date = moment(activity.timesheetDays[dayDate].date).format("YYYY-MM-DD");
     }
 
     const formik = useFormik({
@@ -193,22 +179,22 @@ export const TimesheetRow = ({ hours ,submitted, activity, index}) => {
 
     const handleTaskChange = (e) => {
         setSelectedTaskOption(e);
-        formik.setFieldValue('task', e);
-
+        formik.setFieldValue('task', e.label);
+        dispatch(setErrors({activityId:activity.id, errors:formik.errors}));
         addOnChangeTask({task: e.label, id: e.value, index: index});
     }
 
-    if(Object.keys(formik.errors).length > 0){
-         dispatch(setErrors({activityId:activity.id, errors:formik.errors}));
-    }
+    
 
+    
+    dispatch(setErrors({activityId:activity.id, errors:formik.errors}));
     return (
         <>
             <tr>
                 <th>
                     <div className="mt-2">
                         <span className="d-inline-block ml-1">{index+1}</span>
-                        {index !== timesheet.activities.length-1 && 
+                        {(index !== timesheet.activities.length-1 && !isSubmitted) && 
                         <Icon onClick={() => deleteActivityOfSheet({timesheetId: timesheet.id, activityId: activity.id})} className="d-inline-block fa fa-trash pl-2"></Icon>
                         }
                     </div>
@@ -225,6 +211,9 @@ export const TimesheetRow = ({ hours ,submitted, activity, index}) => {
                         className="react-select"
                         isDisabled={isSubmitted}
                     />
+                     <Tippy content={"This inpuy is for selecting a project you worked on!"} arrow={true} placement='bottom' theme={"dark"} style={{ display: "inline-block" }}>
+                        <i class="fas fa-info-circle" style={{ color:"#2e2e2e" }}></i>
+                    </Tippy>
                 </td>
                 <td>
                     <Select
@@ -237,6 +226,9 @@ export const TimesheetRow = ({ hours ,submitted, activity, index}) => {
                         className={formik.errors.task? "react-invalid": "react-select"}                        
                         isDisabled={isSubmitted}
                     />
+                    <Tippy content={formik.errors.task ? "Please select a task!" : "This input is for selecting a task you worked on!"} arrow={true} placement='bottom' theme={formik.errors.task ? "danger" : "dark"} style={{ display: "inline-block" }}>
+                        <i class="fas fa-info-circle" style={{ color: formik.errors.task ? "red" : "#2e2e2e" }}></i>
+                    </Tippy>
                 </td>
                 <td>
                     <div>

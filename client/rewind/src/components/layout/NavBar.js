@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { Navbar, Nav } from "react-bootstrap";
-import { Link, NavLink, useHistory } from "react-router-dom";
+import { Link, NavLink } from "react-router-dom";
 import styled from "styled-components";
 import { useDispatch, useSelector } from 'react-redux';
 import { logout } from '../../store/slices/auth';
@@ -21,8 +21,6 @@ export const NavBar = () => {
     const [activeKey, setActiveKey] = useState({ activeKey: 1 });
     const dispatch = useDispatch();
     const userEmail = useSelector(state => state.auth.user);
-
-    const currentRoute = useHistory().location.pathname.toLowerCase();
 
     const emailMatch = /([@][a-zA-Z]+[.][a-zA-Z]+)/;
 

@@ -8,14 +8,11 @@ import TimesheetRow from './TimesheetRow';
 import { useDispatch, useSelector } from 'react-redux';
 import {
     deleteCurrentTimesheet,
-    resetTimesheet,
     saveCurrentTimesheet,
     submitCurrentTimesheet
 } from '../store/slices/timesheet';
 import { fetchAllProjects } from '../store/slices/projects';
 import moment from 'moment';
-import { useFormik } from 'formik';
-import { schema } from '../validations/schemas/TimesheetRowValidationSchema';
 import { useHistory } from "react-router-dom"
 import { fetchUserTimesheets } from '../store/slices/timesheets';
 
@@ -50,21 +47,14 @@ transition: transform 0.2s;
 }
 `;
 
-const sum = arr => {
-    let sum = 0;
-    arr.forEach(element => {
-        sum += element;
-    });
-
-    return sum;
-}
-
 export const TimesheetTable = () => {
     const dispatch = useDispatch();
     const timesheet = useSelector(state => state.timesheet.timesheet);
     const timesheetHours = useSelector(state => state?.timesheet);
     const history = useHistory();
-    const [errors,setErrors] = React.useState(false);
+    
+    const errors = useSelector(state => state.timesheet.errors);
+
 
 
 
@@ -73,15 +63,42 @@ export const TimesheetTable = () => {
             dispatch(fetchAllProjects());
         }
 
-    }, [dispatch])
+    }, [dispatch, timesheet])
 
     const [modalShow, setModalShow] = React.useState(false);
+    const [modalSaveShow, setModalSaveShow] = React.useState(false);
+    const [modalErrorsShow, setModalErrorsShow] = React.useState(false);
+    const [modalSubmitShow, setModalSubmitShow] = React.useState(false);
 
+    const handleModal = ({modal}) => {
+        if(hasErrors(errors, timesheet.activities)){
+            setModalErrorsShow(true);
+            
+        } else{
+            if(modal === "save"){
+                setModalSaveShow(true);
+            }
+            else if(modal === "submit"){
+                setModalSubmitShow(true);
+            }
+        }
+    }
 
-    const saveRequestBody = {
-        activities: timesheet.activities,
-        statusType: timesheet.statusType,
-
+    const hasErrors = (errors, activities) =>{
+        console.log(errors);
+        if(activities.length === 1){
+            return true;
+        }
+        if(errors.some((el) => {
+            if(el){
+            if(Object.keys(el).length > 0){
+                return true;
+            }
+        }
+        })){
+            return true;
+        };
+        return false;
     }
 
     return (
@@ -125,21 +142,89 @@ export const TimesheetTable = () => {
                                     </Modal>
 
                                     <i class="far fa-save mr-2 fa-2x" style={{ color: '#2e2e2e', transform: "translateY(5px)" }}></i>
-                                    <button type="button" class="btn btn-dark mr-3" onClick={async () => {
+                                    <button type="button" class="btn btn-dark mr-3" onClick={() => handleModal({modal: 'save'})}>SAVE</button>
+                                    <Modal
+                                        size="xs"
+                                        aria-labelledby="contained-modal-title-vcenter"
+                                        centered
+                                        show={modalSaveShow}
+                                    >
+                                        <Modal.Header>
+                                            <Modal.Title style={{ margin: '0 auto' }}>Save confirmation</Modal.Title>
+                                        </Modal.Header>
+                                        <Modal.Body style={{ display: "flex", height: "100%", justifyContent: "center", alignItems: "center" }}>
+                                            <h5 style={{ display: "flex", justifyContent: "center", alignItems: "center" }}>
+                                                <p style={{ justifyContent: "center", alignItems: "center", textAlign: 'center' }}>
+                                                    Are you sure you want to <br></br> save the timesheet for week <br></br> {timesheet.from + ' - ' + timesheet.to + "?"}
+                                                </p>
+                                            </h5>
+                                        </Modal.Body>
+                                        <Modal.Footer>
+                                            <div style={{ display: "flex", width: "100%", justifyContent: "space-evenly" }}>
+                                                <IconYes className="fas fa-check-circle fa-3x" onClick={async () => {
                                         await dispatch(saveCurrentTimesheet());
                                         dispatch(fetchUserTimesheets({ cursor: 0 }));
                                         let path = `/timesheet/home`;
                                         history.push(path);
-                                    }}>SAVE</button>
+                                    }}/>
+                                                <IconNo className="fas fa-times-circle fa-3x" onClick={() => setModalSaveShow(false)}></IconNo>
+                                            </div>
+                                        </Modal.Footer>
+                                    </Modal>
+
+                                    <Modal
+                                        size="xs"
+                                        aria-labelledby="contained-modal-title-vcenter"
+                                        centered
+                                        show={modalErrorsShow}
+                                    >
+                                        <Modal.Header style={{backgroundColor: "#dc3545"}}>
+                                            <Modal.Title style={{ margin: '0 auto', height: '5rem', color: 'white' }}><i className="far fa-times-circle fa-3x"></i></Modal.Title>
+                                        </Modal.Header>
+                                        <Modal.Body style={{ display: "flex", height: "100%", justifyContent: "center", alignItems: "center" }}>
+                                            <h5 style={{ display: "flex", justifyContent: "center", alignItems: "center" }}>
+                                                <p style={{ justifyContent: "center", alignItems: "center", textAlign: 'center' }}>
+                                                    Oh snap! <br></br> Try fixing your errors before trying to save again.
+                                                </p>
+                                            </h5>
+                                        </Modal.Body>
+                                        <Modal.Footer>
+                                                <button style={{margin: '0 auto', width:"8rem"}} type="button" onClick={() => setModalErrorsShow(false)} className="btn btn-outline-danger">Close</button>
+                                        </Modal.Footer>
+                                    </Modal>
 
                                     <i class="far fa-check-circle mr-2 fa-2x" style={{ color: '#2e2e2e', transform: "translateY(5px)" }}></i>
-                                    <button type="button" className="btn btn-dark mr-3" onClick={async () => {
+                                    <button type="button" className="btn btn-dark mr-3" onClick={() => handleModal({modal: 'submit'})}>SUBMIT
+                                    </button>
+
+                                    <Modal
+                                        size="xs"
+                                        aria-labelledby="contained-modal-title-vcenter"
+                                        centered
+                                        show={modalSubmitShow}
+                                    >
+                                        <Modal.Header>
+                                            <Modal.Title style={{ margin: '0 auto' }}>Submit confirmation</Modal.Title>
+                                        </Modal.Header>
+                                        <Modal.Body style={{ display: "flex", height: "100%", justifyContent: "center", alignItems: "center" }}>
+                                            <h5 style={{ display: "flex", justifyContent: "center", alignItems: "center" }}>
+                                                <p style={{ justifyContent: "center", alignItems: "center", textAlign: 'center' }}>
+                                                    Are you sure you want to <br></br> save and submit the timesheet for week <br></br> {timesheet.from + ' - ' + timesheet.to + "?"}
+                                                </p>
+                                            </h5>
+                                        </Modal.Body>
+                                        <Modal.Footer>
+                                            <div style={{ display: "flex", width: "100%", justifyContent: "space-evenly" }}>
+                                                <IconYes className="fas fa-check-circle fa-3x" onClick={async () => {
                                         await dispatch(submitCurrentTimesheet());
                                         dispatch(fetchUserTimesheets({ cursor: 0 }));
                                         let path = `/timesheet/home`;
                                         history.push(path);
-                                    }}>SUBMIT
-                                    </button>
+                                    }}/>
+                                                <IconNo className="fas fa-times-circle fa-3x" onClick={() => setModalSubmitShow(false)}></IconNo>
+                                            </div>
+                                        </Modal.Footer>
+                                    </Modal>
 
                                     <span>Status: {timesheet.statusType}</span>
                                 </div>
@@ -163,7 +248,7 @@ export const TimesheetTable = () => {
                     </thead>
                     <tbody className="text-center">
                         {timesheet && timesheet?.activities.map((activity, index) => (
-                                <TimesheetRow key={activity.id} index={index} activity={activity} errors={errors} setErrors={(val) => setErrors(val)}></TimesheetRow>
+                                <TimesheetRow key={activity.id} index={index} activity={activity}></TimesheetRow>
                             ))
                         }
                         <tr>

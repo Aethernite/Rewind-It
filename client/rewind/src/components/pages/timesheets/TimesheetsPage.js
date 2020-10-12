@@ -5,10 +5,8 @@ import styled from "styled-components";
 import { fetchUserTimesheets } from '../../../store/slices/timesheets';
 import Moment from 'react-moment';
 import ReactPaginate from 'react-paginate';
-import { ConfirmationBox } from "../../common/ConfirmationBox";
 import moment from 'moment';
 import { useHistory } from "react-router-dom";
-import { fetchTimesheetById } from "../../../api/AuthQueries";
 import { fetchTimesheet } from "../../../store/slices/timesheet";
 import { Modal } from 'react-bootstrap';
 import { deleteTimesheet } from '../../../store/slices/timesheets';
@@ -59,7 +57,6 @@ export const TimesheetsPage = () => {
 
     const timesheets = useSelector(state => state.timesheets.timesheets.content);
     const page = useSelector(state => state.timesheets.timesheets);
-    const hasMore = useSelector(state => state.timesheets.hasMore);
     const dispatch = useDispatch();
     const history = useHistory();
 

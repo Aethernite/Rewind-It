@@ -230,17 +230,13 @@ const { reducer: timesheetReducer, actions } = createSlice({
     },
 });
 
-export const createTimesheet = ({ from, to }) => {
+export const createTimesheet = ({ from }) => {
     return async (dispatch) => {
         dispatch(actions.createTimesheetStart());
         try {
             const split = from.split(/\//);
             const format = split[2] + "-" + split[1] + "-" + split[0];
             const timesheet = await api.createTimesheet({ fromDate: format });
-
-            let a = timesheet.activities[0].timesheetDays.map(day => {
-                day.date = moment(day.date).format("YYYY-MM-DD");
-            })
            
             dispatch(actions.createTimesheetSuccess(timesheet));
         } catch (err) {
@@ -270,14 +266,6 @@ export const addActivity = () => {
         dispatch(actions.addCurrentTimesheetActivityStart());
         try {
             const result = await api.addActivityToTimesheet({ id });
-
-
-            let a = result.activities.map(activity => activity.timesheetDays.map(day => {
-                day.date = moment(day.date).format("YYYY-MM-DD");
-            }))
-
-       
-
             dispatch(actions.addCurrentTimesheetActivitySuccess(result.activities));
         } catch (error) {
             dispatch(actions.addCurrentTimesheetActivityFailure(error?.response?.data?.message));
@@ -306,7 +294,11 @@ export const clearTimesheet = () => {
 
 export const submitCurrentTimesheet = () => {
     return async (dispatch, getState) => {
+        await dispatch(saveCurrentTimesheet());
         const id = getState().timesheet.timesheet.id;
+        const activities = getState().timesheet.timesheet.activities;
+        const activityId = activities[activities.length-1].id;
+        await dispatch(deleteActivity({timesheetId:id, activityId: activityId}));
         dispatch(actions.submitTimesheetStart());
         try {
             await api.submitTimesheet({id});
