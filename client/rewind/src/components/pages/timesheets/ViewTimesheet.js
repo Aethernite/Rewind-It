@@ -68,9 +68,9 @@ export const ViewTimesheet = ({ view }) => {
         }
     }, [dispatch, id])
 
-    const setFormikErrors = (newValue) => {
-        setErrors(newValue);
-    }
+    // const setFormikErrors = (newValue) => {
+    //     setErrors(newValue);
+    // }
 
     // console.log(errors);
 
@@ -122,7 +122,7 @@ export const ViewTimesheet = ({ view }) => {
                                         </Modal>
                                         {timesheet.statusType === "OPEN" && <i className="far fa-save mr-2 fa-2x"
                                            style={{color: '#2e2e2e', transform: "translateY(5px)"}}></i>}
-                                        {timesheet.statusType === "OPEN" && <button type="button" disabled={hasOneProject || errors} className="btn btn-dark mr-3" onClick={async () => {
+                                        {timesheet.statusType === "OPEN" && <button type="button" disabled={hasOneProject} className="btn btn-dark mr-3" onClick={async () => {
                                             await dispatch(saveCurrentTimesheet());
                                             dispatch(fetchUserTimesheets({ cursor: 0 }));
                                             let path = `/timesheet/home`;
@@ -131,7 +131,7 @@ export const ViewTimesheet = ({ view }) => {
                                         </button>}
                                         {timesheet.statusType === "OPEN" && <i className="far fa-check-circle mr-2 fa-2x"
                                            style={{color: '#2e2e2e', transform: "translateY(5px)"}}></i>}
-                                        {timesheet.statusType === "OPEN" && <button type="button" disabled={hasOneProject || errors} className="btn btn-dark mr-3" onClick={async () => {
+                                        {timesheet.statusType === "OPEN" && <button type="button" disabled={hasOneProject} className="btn btn-dark mr-3" onClick={async () => {
                                             await dispatch(submitCurrentTimesheet());
                                             dispatch(fetchUserTimesheets({ cursor: 0 }));
                                             let path = `/timesheet/home`;
@@ -172,7 +172,7 @@ export const ViewTimesheet = ({ view }) => {
                         </thead>
                         <tbody className="text-center">
                             {timesheet?.activities.map((activity, index) => (
-                                <TimesheetRow key={activity.id} setFormikErrors={setFormikErrors} submitted={timesheet.statusType} index={index} activity={activity}></TimesheetRow>
+                                <TimesheetRow key={activity.id} submitted={timesheet.statusType} index={index} activity={activity}></TimesheetRow>
                             ))
                             }
                             <tr>

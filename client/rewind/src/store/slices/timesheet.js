@@ -63,6 +63,7 @@ const { reducer: timesheetReducer, actions } = createSlice({
         },
         submitTimesheetSuccess: (state, action) => {
             state.isCreating = false;
+            console.log(action.payload);
             state.timesheet = action.payload;
             state.creationError = null;
         },
@@ -259,7 +260,12 @@ export const saveCurrentTimesheet = () => {
         const id = getState().timesheet.timesheet.id;
         dispatch(actions.saveTimesheetStart());
         try {
-            const activities = getState().timesheet.timesheet.activities.slice(0, getState().timesheet.timesheet.activities.length);
+            let activities;
+            if (getState().timesheet.timesheet.statusType === "SUBMITTED") {
+                activities = getState().timesheet.timesheet.activities.slice(0, getState().timesheet.timesheet.activities.length - 1);
+            } else {
+                activities = getState().timesheet.timesheet.activities.slice(0, getState().timesheet.timesheet.activities.length);
+            }
             const statusType = getState().timesheet.timesheet.statusType;
             const total = getState().timesheet.total;
 

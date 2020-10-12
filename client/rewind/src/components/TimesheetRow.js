@@ -234,7 +234,7 @@ export const TimesheetRow = ({setFormikErrors, submitted, activity, index}) => {
                         onChange={handleTaskChange}
                         value={selectedTaskOption || ''}
                         options={taskOptions}
-                        className={formik.errors.task? "react-invalid": "react-select"}
+                        className={formik.errors.task ? "react-invalid" : "react-select"}
                         isDisabled={isSubmitted}
                     />
                 </td>
