@@ -24,6 +24,6 @@ public class DayOfTimesheetResponseDTO {
     private LocalDate date;
 
     @Schema(name = "hours", description = "Hours of activity")
-    private Integer hours;
+    private Double hours;
 
 }

@@ -15,6 +15,7 @@ import javax.validation.constraints.Min;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 /**
@@ -35,11 +36,11 @@ public class DayOfTimesheetRequestDTO {
     @NotNull(message = "Start date must not be empty")
     @JsonSerialize(using = ToStringSerializer.class)
     @JsonDeserialize(using = ParseDeserializer.class)
-    private LocalDateTime date;
+    private LocalDate date;
 
     @NotBlank(message = "Hours must not be empty.")
     @Min(value = 0, message = "The hours must not be less than 0.")
     @Max(value = 24, message = "The hours must be less than 24.")
-    private Integer hours;
+    private Double hours;
 
 }

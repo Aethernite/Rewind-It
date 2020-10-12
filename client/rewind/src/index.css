@@ -52,3 +52,32 @@ background: linear-gradient(to bottom, #E5E5BE, #003973); /* W3C, IE 10+/ Edge, 
   font-size: 0.8rem;
 }
 
+.icon-submit{
+  background:linear-gradient( 135deg, #70F570 10%, #49C628 100%);
+background:linear-gradient( 135deg, #70F570 10%, #49C628 100%);
+background:linear-gradient( 135deg, #70F570 10%, #49C628 100%);
+-webkit-background-clip: text;
+-moz-background-clip: text;
+background-clip: text;
+-webkit-text-fill-color:transparent;
+}
+
+.icon-save{
+  background:linear-gradient( 135deg, #65FDF0 10%, #1D6FA3 100%);
+background: linear-gradient( 135deg, #65FDF0 10%, #1D6FA3 100%);
+background:linear-gradient( 135deg, #65FDF0 10%, #1D6FA3 100%);
+-webkit-background-clip: text;
+-moz-background-clip: text;
+background-clip: text;
+-webkit-text-fill-color:transparent;
+}
+
+.icon-delete{
+  background:linear-gradient( 135deg, #FF9D6C 10%, #BB4E75 100%);
+background: linear-gradient( 135deg, #FF9D6C 10%, #BB4E75 100%);
+background:linear-gradient( 135deg, #FF9D6C 10%, #BB4E75 100%);
+-webkit-background-clip: text;
+-moz-background-clip: text;
+background-clip: text;
+-webkit-text-fill-color:transparent;
+}

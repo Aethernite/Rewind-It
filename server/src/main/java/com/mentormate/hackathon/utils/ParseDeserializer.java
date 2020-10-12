@@ -6,6 +6,7 @@ import com.fasterxml.jackson.databind.DeserializationContext;
 import com.fasterxml.jackson.databind.deser.std.StdDeserializer;
 
 import java.io.IOException;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
@@ -17,9 +18,9 @@ import java.time.temporal.ChronoField;
  *
  * @author Polina Usheva
  */
-public class ParseDeserializer extends StdDeserializer<LocalDateTime> {
+public class ParseDeserializer extends StdDeserializer<LocalDate> {
     public ParseDeserializer() {
-        super(LocalDateTime.class);
+        super(LocalDate.class);
     }
 
     /**
@@ -32,7 +33,7 @@ public class ParseDeserializer extends StdDeserializer<LocalDateTime> {
      * @throws JsonProcessingException
      */
     @Override
-    public LocalDateTime deserialize(JsonParser p, DeserializationContext ctxt)
+    public LocalDate deserialize(JsonParser p, DeserializationContext ctxt)
             throws IOException, JsonProcessingException {
 
         DateTimeFormatter formatter = new DateTimeFormatterBuilder()
@@ -42,7 +43,7 @@ public class ParseDeserializer extends StdDeserializer<LocalDateTime> {
                 .parseDefaulting(ChronoField.SECOND_OF_MINUTE, 0)
                 .toFormatter();
 
-        LocalDateTime ldt = LocalDateTime.parse(p.getValueAsString(), formatter);
-        return ldt.atZone(ZoneId.of("UTC")).toLocalDateTime();
+        LocalDate ldt = LocalDate.parse(p.getValueAsString(), formatter);
+        return ldt;
     }
 }

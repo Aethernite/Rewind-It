@@ -51,8 +51,8 @@ public class TimesheetService {
         log.info("Start creating timesheet");
         User user = userService.checkIfUserExist(userEmail);
         Activity currentActivity = activityService.create(createTimesheetRequestDTO.getFromDate());
-        LocalDate fromTimesheetDay = currentActivity.getTimesheetDays().get(INDEX_OF_FIRST_DAY_OF_TIMESHEET).getDate().toLocalDate();
-        LocalDate toTimesheetDay = currentActivity.getTimesheetDays().get(INDEX_OF_LAST_DAY_OF_TIMESHEET).getDate().toLocalDate();
+        LocalDate fromTimesheetDay = currentActivity.getTimesheetDays().get(INDEX_OF_FIRST_DAY_OF_TIMESHEET).getDate();
+        LocalDate toTimesheetDay = currentActivity.getTimesheetDays().get(INDEX_OF_LAST_DAY_OF_TIMESHEET).getDate();
         Timesheet timesheet = Timesheet.builder()
                 .activities(List.of(currentActivity))
                 .statusType(StatusType.OPEN)
@@ -77,7 +77,7 @@ public class TimesheetService {
         log.info("Start creating timesheet");
         User user = userService.checkIfUserExist(userEmail);
         Timesheet timesheet = checkIfTimesheetExists(timesheetId, user.getId());
-        Activity currentActivity = activityService.create(timesheet.getFromDate().atStartOfDay());
+        Activity currentActivity = activityService.create(timesheet.getFromDate());
         timesheet.getActivities().add(currentActivity);
         TimesheetResponseDTO createTimesheetResponseDTO = modelMapper.map(timesheetRepository.save(timesheet), TimesheetResponseDTO.class);
         log.info("End creating timesheet and saved in database with id: {}", createTimesheetResponseDTO.getId());

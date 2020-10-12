@@ -7,6 +7,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.ArrayList;
@@ -26,7 +27,7 @@ import java.util.TimeZone;
 public class DayOfTimesheetService {
 
     private static final int DAYS_OF_WEEK = 7;
-    private static final int DEFAULT_HOURS = 0;
+    private static final double DEFAULT_HOURS = 0;
     private static final int INDEX_OF_INCREMENT_OF_DAY = 1;
 
     private final DayOfTimesheetRepository dayOfTimesheetRepository;
@@ -39,17 +40,16 @@ public class DayOfTimesheetService {
      * @param fromDate
      * @return the day of timesheet entity
      */
-    public List<DayOfTimesheet> create(LocalDateTime fromDate) {
-        Date convertedFromDateToDate = Date.from(fromDate.atZone(ZoneId.systemDefault()).toInstant());
+    public List<DayOfTimesheet> create(LocalDate fromDate) {
         List<DayOfTimesheet> dayOfTimesheets = new ArrayList<>();
         Calendar calend = Calendar.getInstance();
-        calend.setTime(convertedFromDateToDate);
+        calend.setTime(Date.from(fromDate.atStartOfDay(ZoneId.systemDefault()).toInstant()));
 
         for (int i = 0; i < DAYS_OF_WEEK; i++) {
-            TimeZone timeZone = calend.getTimeZone();
-            ZoneId zoneId = timeZone == null ? ZoneId.systemDefault() : timeZone.toZoneId();
-            LocalDateTime currentDate = LocalDateTime.ofInstant(calend.toInstant(), zoneId);
-            DayOfTimesheet currentDayOfTimesheet = new DayOfTimesheet(currentDate, DEFAULT_HOURS);
+//            TimeZone timeZone = calend.getTimeZone();
+//            ZoneId zoneId = timeZone == null ? ZoneId.systemDefault() : timeZone.toZoneId();
+//            LocalDate currentDate = LocalDate.ofInstant(calend.toInstant(), zoneId);
+            DayOfTimesheet currentDayOfTimesheet = new DayOfTimesheet(fromDate, DEFAULT_HOURS);
             dayOfTimesheets.add(currentDayOfTimesheet);
             calend.add(Calendar.DAY_OF_YEAR, INDEX_OF_INCREMENT_OF_DAY);
         }

@@ -13,6 +13,7 @@ import lombok.NoArgsConstructor;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Table;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 /**
@@ -31,8 +32,8 @@ public class DayOfTimesheet extends BaseEntity {
     @Column
     @JsonSerialize(using = ToStringSerializer.class)
     @JsonDeserialize(using = ParseDeserializer.class)
-    private LocalDateTime date;
+    private LocalDate date;
 
     @Column
-    private Integer hours;
+    private Double hours;
 }

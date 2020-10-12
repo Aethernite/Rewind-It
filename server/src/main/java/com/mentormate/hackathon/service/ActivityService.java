@@ -9,6 +9,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -33,7 +34,7 @@ public class ActivityService {
      *
      * @return the saved response dto
      */
-    public Activity create(LocalDateTime fromDate) {
+    public Activity create(LocalDate fromDate) {
         List<DayOfTimesheet> dayOfTimesheet = dayOfTimesheetService.create(fromDate);
         Task task = taskService.findByName("");
         Project project = projectService.findByName("");

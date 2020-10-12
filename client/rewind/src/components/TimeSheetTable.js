@@ -6,6 +6,7 @@ import '@fortawesome/free-solid-svg-icons';
 import styled from 'styled-components';
 import TimesheetRow from './TimesheetRow';
 import { useDispatch, useSelector } from 'react-redux';
+import Tippy from '@tippyjs/react';
 import {
     deleteCurrentTimesheet,
     saveCurrentTimesheet,
@@ -23,6 +24,18 @@ border-right: none;
 border-left: none;
 font-family: "Roboto", sans-serif;
 background-color: #fff;
+`;
+
+
+const Icon = styled.i`
+transform: translateY(5px);
+transition: transform 0.2s;
+margin-right: 1.5rem;
+
+&:hover{
+    transform: translateY(5px) scale(1.2);
+    cursor: pointer;
+}
 `;
 
 const IconYes = styled.i`
@@ -45,6 +58,11 @@ transition: transform 0.2s;
     transform: scale(1.1);
     cursor: pointer;
 }
+`;
+
+const Thead = styled.thead`
+background: radial-gradient( circle farthest-corner at 12.3% 19.3%,  rgb(76, 78, 199) 0%, rgb(95, 118, 249) 100.2% );
+color:white;
 `;
 
 export const TimesheetTable = () => {
@@ -110,8 +128,9 @@ export const TimesheetTable = () => {
                             <th colSpan="11" className="h-100">
                                 <span style={{ verticalAlign: 'top' }}>Timesheet for {moment(timesheet.from).format("DD/MM/YYYY")} - {moment(timesheet.to).format("DD/MM/YYYY")}</span>
                                 <div className="float-right">
-                                    <i class="far fa-trash-alt mr-2 fa-2x" style={{ color: '#2e2e2e', transform: "translateY(5px)" }}></i>
-                                    <button type="button" class="btn btn-dark mr-3" onClick={() => setModalShow(true)}>DELETE</button>
+                                <Tippy content={"Deletes the timesheet."} arrow={true} placement='top' theme={"dark"} style={{ display: "inline-block" }}>
+                                     <Icon className="far fa-trash-alt fa-2x icon-delete" onClick={() => setModalShow(true)}></Icon>
+                                    </Tippy>
                                     <Modal
                                         size="xs"
                                         aria-labelledby="contained-modal-title-vcenter"
@@ -141,8 +160,9 @@ export const TimesheetTable = () => {
                                         </Modal.Footer>
                                     </Modal>
 
-                                    <i class="far fa-save mr-2 fa-2x" style={{ color: '#2e2e2e', transform: "translateY(5px)" }}></i>
-                                    <button type="button" class="btn btn-dark mr-3" onClick={() => handleModal({modal: 'save'})}>SAVE</button>
+                                    <Tippy content={"Saves the timesheet."} arrow={true} placement='top' theme={"dark"} style={{ display: "inline-block" }}>
+                                    <Icon className="far fa-save fa-2x icon-save" onClick={() => handleModal({modal: 'save'})}></Icon>
+                                    </Tippy>
                                     <Modal
                                         size="xs"
                                         aria-labelledby="contained-modal-title-vcenter"
@@ -193,9 +213,9 @@ export const TimesheetTable = () => {
                                         </Modal.Footer>
                                     </Modal>
 
-                                    <i class="far fa-check-circle mr-2 fa-2x" style={{ color: '#2e2e2e', transform: "translateY(5px)" }}></i>
-                                    <button type="button" className="btn btn-dark mr-3" onClick={() => handleModal({modal: 'submit'})}>SUBMIT
-                                    </button>
+                                    <Tippy content={"Submits the timesheet."} arrow={true} placement='top' theme={"dark"} style={{ display: "inline-block" }}>
+                                   <Icon className="far fa-check-circle fa-2x icon-submit" onClick={() => handleModal({modal: 'submit'})}></Icon>
+                                    </Tippy>
 
                                     <Modal
                                         size="xs"
@@ -215,8 +235,8 @@ export const TimesheetTable = () => {
                                         </Modal.Body>
                                         <Modal.Footer>
                                             <div style={{ display: "flex", width: "100%", justifyContent: "space-evenly" }}>
-                                                <IconYes className="fas fa-check-circle fa-3x" onClick={async () => {
-                                        await dispatch(submitCurrentTimesheet());
+                                                <IconYes className="fas fa-check-circle fa-3x" onClick={() => {
+                                        dispatch(submitCurrentTimesheet({timesheetId:timesheet?.id}));
                                         dispatch(fetchUserTimesheets({ cursor: 0 }));
                                         let path = `/timesheet/home`;
                                         history.push(path);
@@ -231,7 +251,7 @@ export const TimesheetTable = () => {
                             </th>
                         </tr>
                     </thead>
-                    <thead className="thead-dark">
+                    <Thead>
                         <tr className="text-center">
                             <th scope="col" style={{ width: '60px' }}>#</th>
                             <th scope="col" style={{ width: '280px' }}>Client: Project</th>
@@ -245,7 +265,7 @@ export const TimesheetTable = () => {
                             <th scope="col" style={{ width: '60px' }}>{moment(timesheet.from).add(6, 'day').format('DD')} Sun</th>
                             <th scope="col" style={{ width: '60px' }}>Total</th>
                         </tr>
-                    </thead>
+                    </Thead>
                     <tbody className="text-center">
                         {timesheet && timesheet?.activities.map((activity, index) => (
                                 <TimesheetRow key={activity.id} index={index} activity={activity}></TimesheetRow>

@@ -12,6 +12,7 @@ import org.springframework.validation.annotation.Validated;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 /**
@@ -28,5 +29,5 @@ public class CreateTimesheetRequestDTO {
     @NotNull(message = "Start date must not be empty")
     @JsonSerialize(using = ToStringSerializer.class)
     @JsonDeserialize(using = ParseDeserializer.class)
-    private LocalDateTime fromDate;
+    private LocalDate fromDate;
 }

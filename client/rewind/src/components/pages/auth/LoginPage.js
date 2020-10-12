@@ -123,7 +123,7 @@ const LoginPage = () => {
                         {/*<p className="text-center">By signing up you accept our <a href="#TermsOfUse">Terms Of Use</a></p>*/}
                     {/*</FormGroup>*/}
                     <div className="col-md-12 text-center ">
-                        <a href="!# " onClick={handleSubmit} class="btn-flip mb-3" data-back="Login" data-front="Login" style={{ textDecoration: 'none', display: isLoading ? "none" : "" }}> </a>
+                        <a href="#" onClick={handleSubmit} class="btn-flip mb-3" data-back="Login" data-front="Login" style={{ textDecoration: 'none', display: isLoading ? "none" : "" }}> </a>
                         <button ref={submit} form="myform" type="submit" style={{ display: 'none' }}></button>
                         {isLoading && <Spinner animation="border" />}
                     </div>
