@@ -58,7 +58,7 @@ const sum = arr => {
     return sum;
 }
 
-export const TimesheetRow = ({setFormikErrors, submitted, activity, index}) => {
+export const TimesheetRow = ({ hours ,submitted, activity, index}) => {
     const projects = useSelector(state => state.projects.projects);
     const timesheet = useSelector(state => state.timesheet.timesheet);
     const dispatch = useDispatch();
@@ -70,7 +70,6 @@ export const TimesheetRow = ({setFormikErrors, submitted, activity, index}) => {
     // let temp = Object.assign({activities: timesheet.activities, statusType: timesheet.statusType, total: timesheet.total}, {activities: timesheet.activities, statusType: timesheet.statusType, total: timesheet.total});
 
     // console.log(temp);
-
     const deleteActivityOfSheet = ({timesheetId, activityId}) => {
         dispatch(deleteActivity({timesheetId, activityId}));
     }
@@ -84,9 +83,6 @@ export const TimesheetRow = ({setFormikErrors, submitted, activity, index}) => {
 
     const projectOptions = [] = projects.filter(project => project.name != '').map((project) => project = { value: project.id, label: project.name });
     let taskOptions = [];
-
-    const projectsSelect = projects.map(project => project = project.name);
-    console.log(projectsSelect);
 
     if (!projects.isLoading) {
         taskOptions = selectedProjectOption ? projects.filter(project => project.id === selectedProjectOption.value)[0]?.tasks.filter(task => task?.name != '').map((task) => task = { value: task?.id, label: task?.name }) : [];
@@ -133,10 +129,10 @@ export const TimesheetRow = ({setFormikErrors, submitted, activity, index}) => {
                 break;
         }
 
-
+    
 
         let date = moment(activity.timesheetDays[day].date).format("YYYY-MM-DD");
-
+       
 
         value = parseFloat(value);
 
@@ -184,22 +180,27 @@ export const TimesheetRow = ({setFormikErrors, submitted, activity, index}) => {
         }
 
         setSelectedProjectOption(e);
+        formik.setFieldValue('project', e);
         setSelectedTaskOption(null);
+        formik.setFieldValue('task', null);
 
         // taskOptions = projects[e.value - 1].tasks;
 
-
+       
 
         addOnChangeProject({project: e.label, id: e.value, index: index});
     }
 
     const handleTaskChange = (e) => {
         setSelectedTaskOption(e);
+        formik.setFieldValue('task', e);
 
         addOnChangeTask({task: e.label, id: e.value, index: index});
     }
 
-    let mondayHours = timesheet.activities[index].timesheetDays[0].hours;
+    if(Object.keys(formik.errors).length > 0){
+         dispatch(setErrors({activityId:activity.id, errors:formik.errors}));
+    }
 
     console.log(formik.errors.task);
     return (
@@ -208,7 +209,7 @@ export const TimesheetRow = ({setFormikErrors, submitted, activity, index}) => {
                 <th>
                     <div className="mt-2">
                         <span className="d-inline-block ml-1">{index+1}</span>
-                        {index !== timesheet.activities.length-1 &&
+                        {index !== timesheet.activities.length-1 && 
                         <Icon onClick={() => deleteActivityOfSheet({timesheetId: timesheet.id, activityId: activity.id})} className="d-inline-block fa fa-trash pl-2"></Icon>
                         }
                     </div>
@@ -234,7 +235,7 @@ export const TimesheetRow = ({setFormikErrors, submitted, activity, index}) => {
                         onChange={handleTaskChange}
                         value={selectedTaskOption || ''}
                         options={taskOptions}
-                        className={formik.errors.task ? "react-invalid" : "react-select"}
+                        className={formik.errors.task? "react-invalid": "react-select"}                        
                         isDisabled={isSubmitted}
                     />
                 </td>

@@ -15,7 +15,8 @@ const initialState = {
     saturdayTotal: 0,
     sundayTotal: 0,
     total: 0,
-    isFetching: false
+    isFetching: false,
+    errors: [],
 };
 
 const { reducer: timesheetReducer, actions } = createSlice({
@@ -50,7 +51,7 @@ const { reducer: timesheetReducer, actions } = createSlice({
         },
         addCurrentTimesheetActivitySuccess: (state, action) => {
             state.isCreating = false;
-
+            
             state.timesheet.activities.push(action.payload[action.payload.length - 1]);
             state.error = null;
         },
@@ -63,7 +64,6 @@ const { reducer: timesheetReducer, actions } = createSlice({
         },
         submitTimesheetSuccess: (state, action) => {
             state.isCreating = false;
-            console.log(action.payload);
             state.timesheet = action.payload;
             state.creationError = null;
         },
@@ -105,6 +105,7 @@ const { reducer: timesheetReducer, actions } = createSlice({
             state.timesheet.activities = state.timesheet.activities.filter(activity => activity.id !== action.payload);
 
             calculateHours(state);
+            state.errors[action.payload] = null;
 
             state.creationError = null;
         },
@@ -118,7 +119,7 @@ const { reducer: timesheetReducer, actions } = createSlice({
         saveProjectSuccess: (state, action) => {
             state.isCreating = false;
             // state.timesheet.activities
-
+            
             state.timesheet.activities[action.payload.index].project.name = action.payload.project;
             state.timesheet.activities[action.payload.index].project.id = action.payload.id;
 
@@ -134,7 +135,7 @@ const { reducer: timesheetReducer, actions } = createSlice({
         saveTaskSuccess: (state, action) => {
             state.isCreating = false;
             // state.timesheet.activities
-
+           
             state.timesheet.activities[action.payload.index].task.name = action.payload.task;
             state.timesheet.activities[action.payload.index].task.id = action.payload.id;
 
@@ -149,7 +150,7 @@ const { reducer: timesheetReducer, actions } = createSlice({
         },
         saveDaySuccess: (state, action) => {
             state.isCreating = false;
-
+         
             state.timesheet.activities[action.payload.index].timesheetDays[action.payload.day].date = action.payload.date;
             state.timesheet.activities[action.payload.index].timesheetDays[action.payload.day].hours = action.payload.value;
 
@@ -164,6 +165,9 @@ const { reducer: timesheetReducer, actions } = createSlice({
         reset: () => {
             return initialState;
         },
+        setErrors: (state, action) => {
+            state.errors[action.payload.activityId] = action.payload.errors;
+        }
     },
 });
 
@@ -178,7 +182,7 @@ export const createTimesheet = ({ from, to }) => {
             let a = timesheet.activities[0].timesheetDays.map(day => {
                 day.date = moment(day.date).format("YYYY-MM-DD");
             })
-
+           
             dispatch(actions.createTimesheetSuccess(timesheet));
         } catch (err) {
             dispatch(actions.createTimesheetFailure(err?.response?.data?.message));
@@ -203,7 +207,7 @@ export const deleteCurrentTimesheet = () => {
 export const addActivity = () => {
     return async (dispatch, getState) => {
         const id = getState().timesheet.timesheet.id;
-
+        
         dispatch(actions.addCurrentTimesheetActivityStart());
         try {
             const result = await api.addActivityToTimesheet({ id });
@@ -213,7 +217,7 @@ export const addActivity = () => {
                 day.date = moment(day.date).format("YYYY-MM-DD");
             }))
 
-
+       
 
             dispatch(actions.addCurrentTimesheetActivitySuccess(result.activities));
         } catch (error) {
@@ -228,7 +232,6 @@ export const deleteActivity = ({timesheetId, activityId}) => {
         dispatch(actions.deleteActivityStart());
         try {
             await api.deleteActivityOfTimesheet({timesheetId, activityId});
-
             dispatch(actions.deleteActivitySuccess(activityId));
         } catch (error) {
             dispatch(actions.deleteActivityFailure(error?.response?.data?.message));
@@ -260,12 +263,7 @@ export const saveCurrentTimesheet = () => {
         const id = getState().timesheet.timesheet.id;
         dispatch(actions.saveTimesheetStart());
         try {
-            let activities;
-            if (getState().timesheet.timesheet.statusType === "SUBMITTED") {
-                activities = getState().timesheet.timesheet.activities.slice(0, getState().timesheet.timesheet.activities.length - 1);
-            } else {
-                activities = getState().timesheet.timesheet.activities.slice(0, getState().timesheet.timesheet.activities.length);
-            }
+            const activities = getState().timesheet.timesheet.activities.slice(0, getState().timesheet.timesheet.activities.length);
             const statusType = getState().timesheet.timesheet.statusType;
             const total = getState().timesheet.total;
 
@@ -395,6 +393,13 @@ const calculateHours = (state) => {
 
     state.total = monday + tuesday + wednesday + thursday + friday + saturday + sunday;
 
+}
+
+export const setErrors = ({activityId, errors}) => {
+
+    return async (dispatch) => {
+        dispatch(actions.setErrors({activityId, errors}));
+    }
 }
 
 export const resetTimesheet = actions.reset;
