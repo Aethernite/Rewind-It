@@ -7,6 +7,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
+import java.sql.Time;
+import java.time.LocalDate;
 import java.util.Optional;
 
 /**
@@ -30,4 +32,6 @@ public interface TimesheetRepository extends JpaRepository<Timesheet, Long> {
      * @return {@link Page} with content all {@link Timesheet}s
      */
     Page<Timesheet> findAllByUser_Id(Pageable pageable, Long userId);
+    
+    Optional<Timesheet> findTimesheetByFromDate(LocalDate fromDate);
 }

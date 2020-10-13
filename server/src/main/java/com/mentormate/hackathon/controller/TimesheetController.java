@@ -5,6 +5,7 @@ import com.mentormate.hackathon.service.TimesheetService;
 import com.mentormate.hackathon.service.dto.request.CreateTimesheetRequestDTO;
 import com.mentormate.hackathon.service.dto.request.TimesheetUpdateRequestDTO;
 import com.mentormate.hackathon.service.dto.response.ActivityResponseDTO;
+import com.mentormate.hackathon.service.dto.response.TimesheetExistResponseDTO;
 import com.mentormate.hackathon.service.dto.response.TimesheetResponseDTO;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -149,6 +150,18 @@ public class TimesheetController {
             Principal principal) {
         checkIfUserExist(principal);
         return ResponseEntity.ok(timesheetService.deleteActivityFromTimesheet(timesheetId, activityId, principal.getName()));
+    }
+
+    @Operation(summary = "Check timesheet exist", description = "This request method is used for checking if timesheet exists", tags = {"Timesheet"})
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Timesheet exists"),
+            @ApiResponse(responseCode = "400", description = "The request body is not correct"),
+            @ApiResponse(responseCode = "500", description = "Internal Server Error")})
+    @PostMapping("/exists")
+    public ResponseEntity<TimesheetExistResponseDTO>checkTimesheetExists(@Valid @RequestBody CreateTimesheetRequestDTO createTimesheetRequestDTO,
+                                                                         Principal principal) {
+        checkIfUserExist(principal);
+        return ResponseEntity.ok(timesheetService.checkIfTimesheetExistsByFromDate(createTimesheetRequestDTO, principal.getName()));
     }
 
     /**
