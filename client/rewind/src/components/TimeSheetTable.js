@@ -107,16 +107,14 @@ export const TimesheetTable = () => {
         if(activities.length === 1){
             return true;
         }
-        if(errors.some((el) => {
-            if(el){
-            if(Object.keys(el).length > 0){
-                return true;
+        return !!errors.some((el) => {
+            if (el) {
+                if (Object.keys(el).length > 0) {
+                    console.log(Object.keys(el));
+                    return true;
+                }
             }
-        }
-        })){
-            return true;
-        };
-        return false;
+        });
     }
 
     return (
@@ -143,7 +141,7 @@ export const TimesheetTable = () => {
                                         <Modal.Body style={{ display: "flex", height: "100%", justifyContent: "center", alignItems: "center" }}>
                                             <h5 style={{ display: "flex", justifyContent: "center", alignItems: "center" }}>
                                                 <p style={{ justifyContent: "center", alignItems: "center", textAlign: 'center' }}>
-                                                    Are you sure you want to <br></br> delete the timesheet for week <br></br> {timesheet.from + ' - ' + timesheet.to + "?"}
+                                                    Are you sure you want to <br></br> delete the timesheet for week <br></br> {moment(timesheet.from).format("DD/MM/YYYY") + ' - ' + moment(timesheet.to).format("DD/MM/YYYY") + "?"}
                                                 </p>
                                             </h5>
                                         </Modal.Body>
@@ -175,7 +173,7 @@ export const TimesheetTable = () => {
                                         <Modal.Body style={{ display: "flex", height: "100%", justifyContent: "center", alignItems: "center" }}>
                                             <h5 style={{ display: "flex", justifyContent: "center", alignItems: "center" }}>
                                                 <p style={{ justifyContent: "center", alignItems: "center", textAlign: 'center' }}>
-                                                    Are you sure you want to <br></br> save the timesheet for week <br></br> {timesheet.from + ' - ' + timesheet.to + "?"}
+                                                    Are you sure you want to <br></br> save the timesheet for week <br></br> {moment(timesheet.from).format("DD/MM/YYYY") + ' - ' + moment(timesheet.to).format("DD/MM/YYYY") + "?"}
                                                 </p>
                                             </h5>
                                         </Modal.Body>
@@ -229,7 +227,7 @@ export const TimesheetTable = () => {
                                         <Modal.Body style={{ display: "flex", height: "100%", justifyContent: "center", alignItems: "center" }}>
                                             <h5 style={{ display: "flex", justifyContent: "center", alignItems: "center" }}>
                                                 <p style={{ justifyContent: "center", alignItems: "center", textAlign: 'center' }}>
-                                                    Are you sure you want to <br></br> save and submit the timesheet for week <br></br> {timesheet.from + ' - ' + timesheet.to + "?"}
+                                                    Are you sure you want to <br></br> save and submit the timesheet for week <br></br> {moment(timesheet.from).format("DD/MM/YYYY") + ' - ' + moment(timesheet.to).format("DD/MM/YYYY") + "?"}
                                                 </p>
                                             </h5>
                                         </Modal.Body>
@@ -256,13 +254,13 @@ export const TimesheetTable = () => {
                             <th scope="col" style={{ width: '60px' }}>#</th>
                             <th scope="col" style={{ width: '280px' }}>Client: Project</th>
                             <th scope="col" style={{ width: '140px' }}>Task</th>
-                            <th scope="col" style={{ width: '60px' }}>{moment(timesheet.from).format('DD')} Mon</th>
-                            <th scope="col" style={{ width: '60px' }}>{moment(timesheet.from).add(1, 'day').format('DD')} Tue</th>
-                            <th scope="col" style={{ width: '60px' }}>{moment(timesheet.from).add(2, 'day').format('DD')} Wed</th>
-                            <th scope="col" style={{ width: '60px' }}>{moment(timesheet.from).add(3, 'day').format('DD')} Thu</th>
-                            <th scope="col" style={{ width: '60px' }}>{moment(timesheet.from).add(4, 'day').format('DD')} Fri</th>
-                            <th scope="col" style={{ width: '60px' }}>{moment(timesheet.from).add(5, 'day').format('DD')} Sat</th>
-                            <th scope="col" style={{ width: '60px' }}>{moment(timesheet.from).add(6, 'day').format('DD')} Sun</th>
+                            <th scope="col" style={{ width: '60px' }}>{moment(timesheet.from).format('DD/MM')} Mon</th>
+                            <th scope="col" style={{ width: '60px' }}>{moment(timesheet.from).add(1, 'day').format('DD/MM')} Tue</th>
+                            <th scope="col" style={{ width: '60px' }}>{moment(timesheet.from).add(2, 'day').format('DD/MM')} Wed</th>
+                            <th scope="col" style={{ width: '60px' }}>{moment(timesheet.from).add(3, 'day').format('DD/MM')} Thu</th>
+                            <th scope="col" style={{ width: '60px' }}>{moment(timesheet.from).add(4, 'day').format('DD/MM')} Fri</th>
+                            <th scope="col" style={{ width: '60px' }}>{moment(timesheet.from).add(5, 'day').format('DD/MM')} Sat</th>
+                            <th scope="col" style={{ width: '60px' }}>{moment(timesheet.from).add(6, 'day').format('DD/MM')} Sun</th>
                             <th scope="col" style={{ width: '60px' }}>Total</th>
                         </tr>
                     </Thead>
