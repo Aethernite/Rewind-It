@@ -1,14 +1,13 @@
 import React from "react";
-import { Col, Container, Button } from "react-bootstrap";
+import {Col, Container, Button, Spinner} from "react-bootstrap";
 import styled from "styled-components";
 import moment from "moment";
-import { Week } from "../../common/Week";
+import {Week} from "../../common/Week";
 import "../../../css/forms.scss"
-import { useFormik } from 'formik';
-import { useDispatch, useSelector } from 'react-redux';
-import { clearTimesheet, createTimesheet } from "../../../store/slices/timesheet";
-import { Timesheet } from '../../Timesheet.js';
-import {fetchUserTimesheets} from "../../../store/slices/timesheets";
+import {useFormik} from 'formik';
+import {useDispatch, useSelector} from 'react-redux';
+import {clearTimesheet, createTimesheet} from "../../../store/slices/timesheet";
+import {Timesheet} from '../../Timesheet.js';
 
 const Form = styled.form`
  position: relative;
@@ -49,6 +48,7 @@ const StyledButton = styled(Button)`
 `;
 
 export const CreateTimesheet = () => {
+    const isCreating = useSelector(state => state.timesheet.isCreating);
 
     let fullWeek = [];
     let monday = moment()
@@ -77,7 +77,7 @@ export const CreateTimesheet = () => {
             const splitted = values.period.split(" - ");
             const from = splitted[0];
             const to = splitted[1];
-            dispatch(createTimesheet({ from, to }));
+            dispatch(createTimesheet({from, to}));
         },
     });
 
@@ -92,18 +92,24 @@ export const CreateTimesheet = () => {
                         </div>
 
                         <div>
-                            <select name="period" title="Choose week" className="form-control" onBlur={formik.handleBlur} onChange={formik.handleChange}>
+                            <select name="period" title="Choose week" className="form-control"
+                                    onBlur={formik.handleBlur} onChange={formik.handleChange}>
                                 <option value=''>Choose week...</option>
-                                {fullWeek.map((monday,index) => <Week key={index} week={monday} />)}
+                                {fullWeek.map((monday, index) => <Week key={index} week={monday}/>)}
                             </select>
                         </div>
-                        <StyledButton disabled={formik.values.period === ''} type="submit">Next</StyledButton>
+                        <StyledButton hidden={isCreating} disabled={formik.values.period === ''}
+                                      type="submit">Next</StyledButton>
+                        <div className="d-flex justify-content-center pt-2">
+                            <Spinner hidden={!isCreating} animation="border" role="status">
+                                <span className="sr-only">Loading...</span>
+                            </Spinner>
+                        </div>
                     </Form>
                 </Col>
             </Container>
         )
-    }
-    else {
+    } else {
         return (
             <Timesheet></Timesheet>
         );

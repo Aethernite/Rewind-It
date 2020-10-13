@@ -1,4 +1,5 @@
 import React from "react";
+import "../../../css/Loading.css";
 import { Button, Col, Container } from "react-bootstrap";
 import { useDispatch, useSelector } from "react-redux";
 import styled from "styled-components";
@@ -68,20 +69,20 @@ export const TimesheetsPage = () => {
 
 
     React.useEffect(() => {
-        dispatch(fetchUserTimesheets({ cursor: 0 }));
+        dispatch(fetchUserTimesheets({cursor: 0}));
     }, [dispatch]);
 
     const handlePageChange = e => {
-        dispatch(fetchUserTimesheets({ cursor: e.selected }));
+        dispatch(fetchUserTimesheets({cursor: e.selected}));
     }
 
-    const handleClick = ({ id }) => {
-        dispatch(fetchTimesheet({ id }));
+    const handleClick = ({id}) => {
+        dispatch(fetchTimesheet({id}));
         history.push(`/timesheet/view/${id}`);
     }
 
-    const handleClickEdit = ({ id }) => {
-        dispatch(fetchTimesheet({ id }));
+    const handleClickEdit = ({id}) => {
+        dispatch(fetchTimesheet({id}));
         history.push(`/timesheet/edit/${id}`);
     }
 
@@ -95,46 +96,49 @@ export const TimesheetsPage = () => {
     }
 
 
-
-    return (
-        <Container className="mt-5">
-            <Col className="d-flex justify-content-center">
-                <Modal show={show} onHide={handleClose} className="mt-5">
-                    <Modal.Header>
-                        <Modal.Title style={{ margin: '0 auto' }}>Delete confirmation</Modal.Title>
-                    </Modal.Header>
-                    <Modal.Body style={{ display: "flex", height: "100%", justifyContent: "center", alignItems: "center" }}>
-                        <h5 style={{ display: "flex", justifyContent: "center", alignItems: "center" }}>
-                            <p style={{ justifyContent: "center", alignItems: "center", textAlign: 'center' }}>
-                                Are you sure you want to <br></br> delete the timesheet for week <br></br> {moment(modalTimesheet?.from).format("DD/MM/YYYY")} - {moment(modalTimesheet?.to).format("DD/MM/YYYY")}?
-                    </p>
-                        </h5>
-                    </Modal.Body>
-                    <Modal.Footer>
-                        <div style={{ display: "flex", width: "100%", justifyContent: "space-evenly" }}>
-                            <IconYes className="fas fa-check-circle fa-3x" onClick={() => dispatch(deleteTimesheet({ id: modalTimesheet.id })) && handleClose()}></IconYes>
-                            <IconNo className="fas fa-times-circle fa-3x" onClick={handleClose}></IconNo>
-                        </div>
-                    </Modal.Footer>
-                </Modal>
-                <Table className="table" style={{ width: '1200px' }}>
-                    <thead style={{ height: '80px' }}>
-                        <tr style={{ height: '80px' }}>
+    if (timesheets) {
+        return (
+            <Container className="mt-5">
+                <Col className="d-flex justify-content-center">
+                    <Modal show={show} onHide={handleClose} className="mt-5">
+                        <Modal.Header>
+                            <Modal.Title style={{margin: '0 auto'}}>Delete confirmation</Modal.Title>
+                        </Modal.Header>
+                        <Modal.Body
+                            style={{display: "flex", height: "100%", justifyContent: "center", alignItems: "center"}}>
+                            <h5 style={{display: "flex", justifyContent: "center", alignItems: "center"}}>
+                                <p style={{justifyContent: "center", alignItems: "center", textAlign: 'center'}}>
+                                    Are you sure you want to <br></br> delete the timesheet for
+                                    week <br></br> {moment(modalTimesheet?.from).format("DD/MM/YYYY")} - {moment(modalTimesheet?.to).format("DD/MM/YYYY")}?
+                                </p>
+                            </h5>
+                        </Modal.Body>
+                        <Modal.Footer>
+                            <div style={{display: "flex", width: "100%", justifyContent: "space-evenly"}}>
+                                <IconYes className="fas fa-check-circle fa-3x"
+                                         onClick={() => dispatch(deleteTimesheet({id: modalTimesheet.id})) && handleClose()}></IconYes>
+                                <IconNo className="fas fa-times-circle fa-3x" onClick={handleClose}></IconNo>
+                            </div>
+                        </Modal.Footer>
+                    </Modal>
+                    <Table className="table" style={{width: '1200px'}}>
+                        <thead style={{height: '80px'}}>
+                        <tr style={{height: '80px'}}>
                             <th colSpan="11" className="h-100">
                                 <div className="col-md-12 text-center">
                                     <Header>Your Timesheets:</Header>
                                 </div>
                             </th>
                         </tr>
-                    </thead>
-                    <Thead>
-                        <tr className="text-center">
-                            <th scope="col" style={{ width: '560px' }}>Week</th>
-                            <th scope="col" style={{ width: '140px' }}>Status</th>
-                            <th scope="col" style={{ width: '140px' }}>Options</th>
-                        </tr>
-                    </Thead>
-                    <tbody className="text-center">
+                        </thead>
+                        <Thead>
+                            <tr className="text-center">
+                                <th scope="col" style={{width: '560px'}}>Week</th>
+                                <th scope="col" style={{width: '140px'}}>Status</th>
+                                <th scope="col" style={{width: '140px'}}>Options</th>
+                            </tr>
+                        </Thead>
+                        <tbody className="text-center">
                         {timesheets && timesheets?.map(timesheet => (
                             <tr key={timesheet.id}>
                                 <td>
@@ -149,14 +153,17 @@ export const TimesheetsPage = () => {
                                     </div>
                                 </td>
                                 <td>
-                                    <div style={{ display: "flex" }}>
+                                    <div style={{display: "flex"}}>
                                         {timesheet?.statusType === "SUBMITTED" ?
-                                            <Button variant="outline-dark" style={{ marginRight: "0.2rem" }}
-                                                className="form-control" onClick={() => handleClick({ id: timesheet?.id })}>View</Button> :
-                                            <Button variant="outline-dark" style={{ marginRight: "0.2rem" }}
-                                                className="form-control" onClick={() => handleClickEdit({ id: timesheet?.id })}>Edit</Button>}
+                                            <Button variant="outline-dark" style={{marginRight: "0.2rem"}}
+                                                    className="form-control"
+                                                    onClick={() => handleClick({id: timesheet?.id})}>View</Button> :
+                                            <Button variant="outline-dark" style={{marginRight: "0.2rem"}}
+                                                    className="form-control"
+                                                    onClick={() => handleClickEdit({id: timesheet?.id})}>Edit</Button>}
                                         <Button variant="outline-dark" className="form-control"
-                                            disabled={timesheet?.statusType === "SUBMITTED"} onClick={() => handleShow(timesheet)}>Delete</Button>
+                                                disabled={timesheet?.statusType === "SUBMITTED"}
+                                                onClick={() => handleShow(timesheet)}>Delete</Button>
                                     </div>
                                 </td>
                             </tr>)
@@ -185,9 +192,12 @@ export const TimesheetsPage = () => {
                                 </div>
                             </td>
                         </tr>
-                    </tbody>
-                </Table>
-            </Col>
-        </Container>
-    )
+                        </tbody>
+                    </Table>
+                </Col>
+            </Container>
+        )
+    } else {
+        return <div className="loading">Loading&#8230;</div>
+    }
 }
