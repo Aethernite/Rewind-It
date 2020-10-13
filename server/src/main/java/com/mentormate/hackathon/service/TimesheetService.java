@@ -198,8 +198,7 @@ public class TimesheetService {
     public TimesheetExistResponseDTO checkIfTimesheetExistsByFromDate(CreateTimesheetRequestDTO createTimesheetRequestDTO, String userEmail) {
         log.info("Fetch timesheet by from date");
         userService.checkIfUserExist(userEmail);
-        boolean isTimesheetExist = timesheetRepository.findTimesheetByFromDate(createTimesheetRequestDTO.getFromDate())
-                .orElse(null) != null;
+        boolean isTimesheetExist = !timesheetRepository.findTimesheetByFromDate(createTimesheetRequestDTO.getFromDate()).isEmpty();
         return new TimesheetExistResponseDTO(isTimesheetExist);
     }
 
