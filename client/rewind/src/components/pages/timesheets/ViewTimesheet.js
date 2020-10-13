@@ -161,8 +161,8 @@ export const ViewTimesheet = ({ view }) => {
                                         </Modal.Body>
                                         <Modal.Footer>
                                             <div style={{ display: "flex", width: "100%", justifyContent: "space-evenly" }}>
-                                                <IconYes className="fas fa-check-circle fa-3x" onClick={() => {
-                                                    dispatch(deleteCurrentTimesheet());
+                                                <IconYes className="fas fa-check-circle fa-3x" onClick={async () => {
+                                                    await dispatch(deleteCurrentTimesheet());
                                                     dispatch(fetchUserTimesheets({ cursor: 0 }));
                                                     let path = `/timesheet/home`;
                                                     history.push(path);
