@@ -9,6 +9,7 @@ import com.mentormate.hackathon.persistence.repository.ActivityRepository;
 import com.mentormate.hackathon.persistence.repository.TimesheetRepository;
 import com.mentormate.hackathon.service.dto.request.CreateTimesheetRequestDTO;
 import com.mentormate.hackathon.service.dto.request.TimesheetUpdateRequestDTO;
+import com.mentormate.hackathon.service.dto.response.TimesheetExistResponseDTO;
 import com.mentormate.hackathon.service.dto.response.TimesheetResponseDTO;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -186,6 +187,20 @@ public class TimesheetService {
         activityRepository.deleteById(activityId);
         log.info("Deleted timesheet with id: {}", timesheetId);
         return modelMapper.map(timesheet, TimesheetResponseDTO.class);
+    }
+
+    /**
+     * Check if {@link Timesheet} exist by fromDate
+     *
+     * @param userEmail email of current login user
+     * @return {@link TimesheetExistResponseDTO}
+     */
+    public TimesheetExistResponseDTO checkIfTimesheetExistsByFromDate(CreateTimesheetRequestDTO createTimesheetRequestDTO, String userEmail) {
+        log.info("Fetch timesheet by from date");
+        userService.checkIfUserExist(userEmail);
+        boolean isTimesheetExist = timesheetRepository.findTimesheetByFromDate(createTimesheetRequestDTO.getFromDate())
+                .orElse(null) != null;
+        return new TimesheetExistResponseDTO(isTimesheetExist);
     }
 
     /**
