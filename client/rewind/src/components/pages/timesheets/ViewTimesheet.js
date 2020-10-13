@@ -1,5 +1,6 @@
 import { useDispatch, useSelector } from "react-redux";
 import React from "react";
+import "../../../css/Loading.css";
 import { Col, Container, Modal } from "react-bootstrap";
 import { useHistory, useRouteMatch } from "react-router-dom";
 import moment from "moment";
@@ -80,6 +81,7 @@ export const ViewTimesheet = ({ view }) => {
 
         return () => {
             dispatch(resetTimesheets());
+            dispatch (resetTimesheet());
         }
     }, [dispatch, id])
 
@@ -124,9 +126,6 @@ export const ViewTimesheet = ({ view }) => {
             }
         });
     }
-
-
-
 
     if (timesheet) {
         return (
@@ -325,6 +324,6 @@ export const ViewTimesheet = ({ view }) => {
             </Container>
         )
     } else {
-        return <h1>Loading...</h1>
+        return <div className="loading">Loading&#8230;</div>
     }
 }
