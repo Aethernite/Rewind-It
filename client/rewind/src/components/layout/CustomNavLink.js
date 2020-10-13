@@ -33,11 +33,14 @@ const CustomNavLink = ({
                     className={moddedClassName}
                     style={isActive ? {
                             backgroundColor: "transparent",
+                            color: "white",
                             borderTop: "none",
                             borderLeft: "none",
-                            borderRight: "none" } :
+                            borderRight: "none"
+                        } :
                         { backgroundColor: "transparent",
                             borderTop: "none",
+                            color: "white",
                             borderLeft: "none",
                             borderRight: "none",
                             borderBottom: "none"
