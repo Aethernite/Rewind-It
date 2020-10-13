@@ -50,7 +50,7 @@ export const NavBar = () => {
                 <Navbar.Collapse>
                     <Nav fill variant="tabs" activeKey={activeKey} style={{ border: "none" }} onSelect={handleSelect}>
                         <CustomNavLink inactiveClassName="inactive" activeClassName="active" to="/timesheet/home" exact
-                            eventKey={2} as={NavLink}>
+                            eventKey={1} as={NavLink}>
                             <span>All Timesheets</span>
                         </CustomNavLink>
                         <CustomNavLink inactiveClassName="inactive" activeClassName="active" to="/timesheet/create"
