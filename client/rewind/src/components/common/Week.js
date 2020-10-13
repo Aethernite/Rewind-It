@@ -1,23 +1,16 @@
 import React from "react";
-import {useSelector} from 'react-redux';
-import moment from 'moment';
+import {useDispatch, useSelector} from 'react-redux';
+import { checkIfExists } from "../../store/slices/timesheet";
 
-export const Week = ({ week }) => {
-    // const timesheets = useSelector(state => state.timesheets.timesheets.content);
-    // const isAlreadyCreated = (week) => {
-    //     if(
-    //     timesheets.some((el) => {
-    //         console.log(week);
-    //       if(moment(el.from).format("DD/MM/YYYY") === week.split(" - ")[0]){
-    //           return true;
-    //       }
-    //       return false;
-    //     })){
-    //         return true;
-    //     }
-    //     return false;
-    // }
+export const Week = ({ week, index }) => {
+    const dispatch = useDispatch();
+    React.useEffect(() => {
+        dispatch(checkIfExists({week, index}));
+    },[dispatch, week, index]);
+
+    const exists = useSelector(state => state.timesheet.exists[index]);
+    
     return (
-        <option value={week}>{week}</option>
+    <option value={week}>{week}{exists ? " already exists" : ""}</option>
     )
 }

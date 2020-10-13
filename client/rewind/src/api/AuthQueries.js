@@ -75,6 +75,11 @@ export const deleteActivityOfTimesheet = async ({ timesheetId, activityId }) => 
     return res.data;
 }
 
+export const checkIfExists = async ({ date }) => {
+    const res = await instance.post(`/timesheets/exists`, {fromDate:date});
+    return res.data;
+}
+
 const token = localStorage.getItem('token');
 if (token) {
     instance.defaults.headers['Authorization'] = `Bearer ${token}`;

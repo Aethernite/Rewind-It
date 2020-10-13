@@ -6,6 +6,7 @@ const initialState = {
     isLoading: false,
     error: null,
     isSessionChecked: false,
+    success: false,
 };
 
 const { reducer: authReducer, actions } = createSlice({
@@ -42,6 +43,7 @@ const { reducer: authReducer, actions } = createSlice({
         },
         clearErrors: (state) => {
             state.error = null;
+            state.success = false;
         },
         logoutStart: (state) => {
             state.isLoading = true;
@@ -57,6 +59,9 @@ const { reducer: authReducer, actions } = createSlice({
             state.user = null;
             state.error = action.payload;
         },
+        creationSuccess: (state, action) => {
+            state.success = true;
+        }
     },
 });
 
@@ -73,6 +78,7 @@ export const register = ({ email, password }) => {
             dispatch(actions.registerStart());
             const user = await api.register({ email, password });
             dispatch(actions.registerSuccess(user));
+            dispatch(actions.creationSuccess());
         } catch (err) {
             dispatch(actions.registerFailure(err?.response?.data?.message));
         }

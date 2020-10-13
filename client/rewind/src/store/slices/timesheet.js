@@ -18,6 +18,7 @@ const initialState = {
     total: 0,
     isFetching: false,
     errors: [],
+    exists: [],
 };
 
 const { reducer: timesheetReducer, actions } = createSlice({
@@ -168,6 +169,12 @@ const { reducer: timesheetReducer, actions } = createSlice({
         },
         setErrors: (state, action) => {
             state.errors[action.payload.activityId] = action.payload.errors;
+        },
+        checkIfExists: (state,action) => {
+            state.exists[action.payload.index] = action.payload.exists;
+        },
+        resetExist: (state,action) => {
+            state.exists = false;
         }
     },
 });
@@ -398,6 +405,22 @@ export const setErrors = ({activityId, errors}) => {
         dispatch(actions.setErrors({activityId, errors}));
     }
 }
+
+export const checkIfExists = ({week, index}) => {
+    return async (dispatch) => {
+        const date = week.split(" - ")[0].split('/').reverse().join("-");
+        const res = await api.checkIfExists({date});
+        dispatch(actions.checkIfExists({exists:res.timesheetExist, index: index}));
+    }
+}
+
+export const resetExist = () => {
+    return async (dispatch) => {
+        dispatch(actions.resetExist());
+    }
+}
+
+
 
 export const resetTimesheet = actions.reset;
 

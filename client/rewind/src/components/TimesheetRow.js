@@ -15,7 +15,6 @@ import {
     saveProjectInStore,
     saveTaskInStore, setErrors
 } from "../store/slices/timesheet";
-import { setDay } from "../store/slices/timesheet";
 import {fetchAllProjects} from "../store/slices/projects";
 import moment from "moment";
 

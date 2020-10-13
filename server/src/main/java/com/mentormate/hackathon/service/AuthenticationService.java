@@ -62,11 +62,11 @@ public class AuthenticationService {
     public RegisterResponseDTO signUp(RegisterRequestDTO registerRequestDTO) {
         Role role = ROLES.get(RoleType.ROLE_REGULAR);
         if (userRepository.findByEmail(registerRequestDTO.getEmail()).isPresent()) {
-            throw new EntityAlreadyExists(String.format("Username %s already exist", registerRequestDTO.getEmail()));
+            throw new EntityAlreadyExists(String.format("Account with email %s already exist", registerRequestDTO.getEmail()));
         }
         User user = new User(registerRequestDTO.getEmail(), passwordEncoder.encode(registerRequestDTO.getPassword()), Set.of(role));
         user = userRepository.save(user);
-        log.info("Created user with username: {}", user.getUsername());
+        log.info("Created user with email: {}", user.getUsername());
         return modelMapper.map(user, RegisterResponseDTO.class);
     }
 

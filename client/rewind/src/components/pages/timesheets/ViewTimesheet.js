@@ -7,7 +7,6 @@ import {
     deleteCurrentTimesheet, fetchTimesheet,
     saveCurrentTimesheet,
     submitCurrentTimesheet,
-    resetTimesheet
 } from "../../../store/slices/timesheet";
 import styled from "styled-components";
 import TimesheetRow from "../../TimesheetRow";
@@ -83,15 +82,6 @@ export const ViewTimesheet = ({ view }) => {
         }
     }, [dispatch, id])
 
-    // const setFormikErrors = (newValue) => {
-    //     setErrors(newValue);
-    // }
-
-    // console.log(errors);
-
-    const hasOneProject = timesheet?.activities?.length <= 1;
-
-
     const [modalShow, setModalShow] = React.useState(false);
     const [modalSaveShow, setModalSaveShow] = React.useState(false);
     const [modalErrorsShow, setModalErrorsShow] = React.useState(false);
@@ -122,11 +112,9 @@ export const ViewTimesheet = ({ view }) => {
                     return true;
                 }
             }
+            return false;
         });
     }
-
-
-
 
     if (timesheet) {
         return (
@@ -172,7 +160,6 @@ export const ViewTimesheet = ({ view }) => {
                                         </Modal.Footer>
                                     </Modal>
 
-                                
                                     {timesheet.statusType === "OPEN" &&
                                     <>
                                     <Tippy content={"Saves the timesheet."} arrow={true} placement='top' theme={"dark"} style={{ display: "inline-block" }}>
@@ -229,8 +216,6 @@ export const ViewTimesheet = ({ view }) => {
                                                 <button style={{margin: '0 auto', width:"8rem"}} type="button" onClick={() => setModalErrorsShow(false)} className="btn btn-outline-danger">Close</button>
                                         </Modal.Footer>
                                     </Modal>
-
-                                    
 
                                     {timesheet.statusType === "OPEN" &&
                                     <>

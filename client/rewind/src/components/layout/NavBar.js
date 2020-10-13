@@ -17,18 +17,6 @@ const Title = styled.div`
   margin-left: 0.2rem;
 `
 
-const CstNavLink = styled(NavLink)`
- margin: 1em;
-  font-size: 2em;
-  font-family: 'Roboto', sans-serif;
-  cursor: pointer;
-  text-decoration: none;
-  letter-spacing: .3em;
-  text-indent: .3em;
-  color: #181818;
-  border-bottom: 3px solid transparent;
-`
-
 export const NavBar = () => {
     const [activeKey, setActiveKey] = useState({ activeKey: 1 });
     const dispatch = useDispatch();

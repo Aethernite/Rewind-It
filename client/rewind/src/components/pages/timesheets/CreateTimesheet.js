@@ -8,7 +8,6 @@ import { useFormik } from 'formik';
 import { useDispatch, useSelector } from 'react-redux';
 import { clearTimesheet, createTimesheet } from "../../../store/slices/timesheet";
 import { Timesheet } from '../../Timesheet.js';
-import {fetchUserTimesheets} from "../../../store/slices/timesheets";
 
 const Form = styled.form`
  position: relative;
@@ -80,7 +79,7 @@ export const CreateTimesheet = () => {
             dispatch(createTimesheet({ from, to }));
         },
     });
-
+    
     const timesheet = useSelector(state => state.timesheet.timesheet);
     if (!timesheet) {
         return (
@@ -93,8 +92,11 @@ export const CreateTimesheet = () => {
 
                         <div>
                             <select name="period" title="Choose week" className="form-control" onBlur={formik.handleBlur} onChange={formik.handleChange}>
-                                <option value=''>Choose week...</option>
-                                {fullWeek.map((monday,index) => <Week key={index} week={monday} />)}
+                                <option value=''>Choose week...</option>            
+                                <Week key={"last"} week={fullWeek[0]} index={0} />
+                                <Week key={"now"} week={fullWeek[1]} index={1}/>
+                                <Week key={"next"} week={fullWeek[2]} index={2}/>
+                                <Week key={"after-next"} week={fullWeek[3]} index={3}/>
                             </select>
                         </div>
                         <StyledButton disabled={formik.values.period === ''} type="submit">Next</StyledButton>

@@ -114,6 +114,7 @@ export const TimesheetTable = () => {
                     return true;
                 }
             }
+            return false;
         });
     }
 

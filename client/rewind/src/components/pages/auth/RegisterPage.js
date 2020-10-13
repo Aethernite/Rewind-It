@@ -8,8 +8,8 @@ import classNames from 'classnames';
 import { RegisterValidationSchema } from "../../../validations/schemas/RegisterValidationSchema";
 import "../../../css/forms.scss";
 import { useDispatch, useSelector } from 'react-redux';
-import { register } from '../../../store/slices/auth';
-import { Link, useHistory } from "react-router-dom";
+import { register, clearErrors } from '../../../store/slices/auth';
+import { Link } from "react-router-dom";
 
 const Title = styled.h1`
   font-family: 'Lobster', cursive;
@@ -64,7 +64,7 @@ export const RegisterPage = () => {
     const isLoading = useSelector(state => state.auth.isLoading);
     const dispatch = useDispatch();
     const submit = React.useRef();
-    const history = useHistory();
+    const success = useSelector(state => state.auth.success);
 
     const handleSubmit = () => {
         submit.current.click();
@@ -82,6 +82,10 @@ export const RegisterPage = () => {
         },
         validationSchema: RegisterValidationSchema,
     });
+ 
+    React.useEffect(() => {
+        dispatch(clearErrors());
+    },[dispatch])
 
     return (
         <Container className="mt-5">
@@ -96,6 +100,7 @@ export const RegisterPage = () => {
                     {error &&
                         <Alert variant="danger">{error}</Alert>
                     }
+                    {success && <Alert variant="info">{"User successfully registered!"}</Alert>}
 
                     <FormGroup className="form-group">
                         {formik.touched.email && formik.errors.email &&
@@ -155,10 +160,7 @@ export const RegisterPage = () => {
                     <FormGroup className="form-group">
                         <div className="col-md-12 text-center ">
                             <a href="# " onClick={handleSubmit} className="btn-flip mb-3" data-back="Register" data-front="Register" style={{ textDecoration: 'none', display: isLoading ? "none" : "" }}> </a>
-                            <button ref={submit} form="myform" type="submit" style={{ display: 'none' }} onClick={() => {
-                                let path = `/login`;
-                                history.push(path);
-                            }}></button>
+                            <button ref={submit} form="myform" type="submit" style={{ display: 'none' }}></button>
                             {isLoading && <Spinner animation="border" />}
                         </div>
                     </FormGroup>
