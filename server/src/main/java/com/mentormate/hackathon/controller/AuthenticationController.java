@@ -30,7 +30,7 @@ import java.util.Map;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/v1/auth")
-@CrossOrigin(origins = "http://localhost:3000")
+@CrossOrigin(origins = {"http://localhost:3000","http://80.208.228.216","http://rewind-it.eu","https://rewind-it.eu","http://www.rewind-it.eu"})
 public class AuthenticationController {
 
     private final AuthenticationService authenticationService;

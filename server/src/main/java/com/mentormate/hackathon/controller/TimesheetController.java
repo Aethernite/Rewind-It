@@ -34,7 +34,7 @@ import java.security.Principal;
 /**
  * Created by Vladislav Penchev on 2020/10/02
  */
-@CrossOrigin(origins = "http://localhost:3000")
+@CrossOrigin(origins = {"http://localhost:3000","http://80.208.228.216","http://rewind-it.eu","https://rewind-it.eu","http://www.rewind-it.eu"})
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/v1/timesheets")

@@ -1,8 +1,8 @@
 import React from "react";
-import { Col, Container, Button } from "react-bootstrap";
+import {Col, Container, Button, Spinner} from "react-bootstrap";
 import styled from "styled-components";
 import moment from "moment";
-import { Week } from "../../common/Week";
+import {Week} from "../../common/Week";
 import "../../../css/forms.scss"
 import { useFormik } from 'formik';
 import { useDispatch, useSelector } from 'react-redux';
@@ -48,6 +48,7 @@ const StyledButton = styled(Button)`
 `;
 
 export const CreateTimesheet = () => {
+    const isCreating = useSelector(state => state.timesheet.isCreating);
 
     let fullWeek = [];
     let monday = moment()
@@ -76,7 +77,7 @@ export const CreateTimesheet = () => {
             const splitted = values.period.split(" - ");
             const from = splitted[0];
             const to = splitted[1];
-            dispatch(createTimesheet({ from, to }));
+            dispatch(createTimesheet({from, to}));
         },
     });
     
@@ -99,13 +100,18 @@ export const CreateTimesheet = () => {
                                 <Week key={"after-next"} week={fullWeek[3]} index={3}/>
                             </select>
                         </div>
-                        <StyledButton disabled={formik.values.period === ''} type="submit">Next</StyledButton>
+                        <StyledButton hidden={isCreating} disabled={formik.values.period === ''}
+                                      type="submit">Next</StyledButton>
+                        <div className="d-flex justify-content-center pt-2">
+                            <Spinner hidden={!isCreating} animation="border" role="status">
+                                <span className="sr-only">Loading...</span>
+                            </Spinner>
+                        </div>
                     </Form>
                 </Col>
             </Container>
         )
-    }
-    else {
+    } else {
         return (
             <Timesheet></Timesheet>
         );

@@ -1,5 +1,6 @@
 import { useDispatch, useSelector } from "react-redux";
 import React from "react";
+import "../../../css/Loading.css";
 import { Col, Container, Modal } from "react-bootstrap";
 import { useHistory, useRouteMatch } from "react-router-dom";
 import moment from "moment";
@@ -7,6 +8,7 @@ import {
     deleteCurrentTimesheet, fetchTimesheet,
     saveCurrentTimesheet,
     submitCurrentTimesheet,
+    resetTimesheet
 } from "../../../store/slices/timesheet";
 import styled from "styled-components";
 import TimesheetRow from "../../TimesheetRow";
@@ -79,6 +81,7 @@ export const ViewTimesheet = ({ view }) => {
 
         return () => {
             dispatch(resetTimesheets());
+            dispatch (resetTimesheet());
         }
     }, [dispatch, id])
 
@@ -149,8 +152,8 @@ export const ViewTimesheet = ({ view }) => {
                                         </Modal.Body>
                                         <Modal.Footer>
                                             <div style={{ display: "flex", width: "100%", justifyContent: "space-evenly" }}>
-                                                <IconYes className="fas fa-check-circle fa-3x" onClick={() => {
-                                                    dispatch(deleteCurrentTimesheet());
+                                                <IconYes className="fas fa-check-circle fa-3x" onClick={async () => {
+                                                    await dispatch(deleteCurrentTimesheet());
                                                     dispatch(fetchUserTimesheets({ cursor: 0 }));
                                                     let path = `/timesheet/home`;
                                                     history.push(path);
@@ -310,6 +313,6 @@ export const ViewTimesheet = ({ view }) => {
             </Container>
         )
     } else {
-        return <h1>Loading...</h1>
+        return <div className="loading">Loading&#8230;</div>
     }
 }

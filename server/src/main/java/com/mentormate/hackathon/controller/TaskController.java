@@ -24,7 +24,7 @@ import java.util.List;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/v1/tasks")
-@CrossOrigin(origins = "http://localhost:3000")
+@CrossOrigin(origins = {"http://localhost:3000","http://80.208.228.216","http://rewind-it.eu","https://rewind-it.eu","http://www.rewind-it.eu"})
 public class TaskController {
 
     private final TaskService taskService;
