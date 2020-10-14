@@ -8,7 +8,7 @@ import Moment from 'react-moment';
 import ReactPaginate from 'react-paginate';
 import moment from 'moment';
 import { useHistory } from "react-router-dom";
-import { fetchTimesheet } from "../../../store/slices/timesheet";
+import {fetchTimesheet, resetTimesheet} from "../../../store/slices/timesheet";
 import { Modal } from 'react-bootstrap';
 import { deleteTimesheet } from '../../../store/slices/timesheets';
 

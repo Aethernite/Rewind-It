@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { Navbar, Nav } from "react-bootstrap";
-import { Link, NavLink } from "react-router-dom";
+import { Link, NavLink, useHistory } from "react-router-dom";
 import styled from "styled-components";
 import { useDispatch, useSelector } from 'react-redux';
 import { logout } from '../../store/slices/auth';
@@ -21,10 +21,9 @@ export const NavBar = () => {
     const [activeKey, setActiveKey] = useState({ activeKey: 1 });
     const dispatch = useDispatch();
     const userEmail = useSelector(state => state.auth.user);
+    const history = useHistory();
 
     const emailMatch = /([@][a-zA-Z]+[.][a-zA-Z]+)/;
-
-
 
     let userNameFromEmail = userEmail.replace(emailMatch, "");
 
@@ -61,8 +60,8 @@ export const NavBar = () => {
                         </CustomNavLink>
                     </Nav>
                     <Navbar.Collapse className="justify-content-end">
-                        <Nav.Link className="text-center" style={{ textDecoration: 'none', color: '#2e2e2e' }}>
-                            <span style={{ color: "white" }}>Signed in as: {userNameFromEmail}</span>
+                        <Nav.Link className="text-center" style={{ cursor: "default", textDecoration: 'none', color: '#2e2e2e' }}>
+                            <span style={{ color: "lightgray" }}>Signed in as: <span style={{ color: "white" }}>{userNameFromEmail}</span></span>
                         </Nav.Link>
                         <Nav fill variant="tabs" className="ml-2" style={{ border: "none" }} activeKey={activeKey}
                             onSelect={handleSelect}>

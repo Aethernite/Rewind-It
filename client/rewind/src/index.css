@@ -47,13 +47,13 @@ background: linear-gradient(to bottom, #E5E5BE, #003973); /* W3C, IE 10+/ Edge, 
   min-width: 130px;
 }
 
-/*.select-project{*/
-/*  min-width: 200px;*/
-/*}*/
+.select-project{
+  min-width: 200px;
+}
 
-/*.select-task{*/
-/*  min-width: 130px;*/
-/*}*/
+.select-task{
+  min-width: 130px;
+}
 
 .react-invalid{
   border: 1px solid #dc3545;

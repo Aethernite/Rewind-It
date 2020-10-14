@@ -183,9 +183,6 @@ export const TimesheetRow = ({ hours ,submitted, activity, index}) => {
         addOnChangeTask({task: e.label, id: e.value, index: index});
     }
 
-    
-
-    
     dispatch(setErrors({activityId:activity.id, errors:formik.errors}));
     return (
         <>
