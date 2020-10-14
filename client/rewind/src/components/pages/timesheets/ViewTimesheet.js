@@ -14,8 +14,9 @@ import styled from "styled-components";
 import TimesheetRow from "../../TimesheetRow";
 import {fetchUserTimesheets, resetTimesheets} from "../../../store/slices/timesheets";
 import Tippy from '@tippyjs/react';
+import {Table as TableB} from "react-bootstrap"
 
-const Table = styled.table`
+const Table = styled(TableB)`
 border: 1px solid #2e2e2e;
 border-bottom: none;
 border-right: none;
@@ -81,7 +82,6 @@ export const ViewTimesheet = ({ view }) => {
 
         return () => {
             dispatch(resetTimesheets());
-            dispatch (resetTimesheet());
         }
     }, [dispatch, id])
 
@@ -123,7 +123,7 @@ export const ViewTimesheet = ({ view }) => {
         return (
             <Container className="mt-5">
                 <Col className="d-flex justify-content-center">
-                    <Table className="table" style={{ width: '1200px' }}>
+                    <Table style={{paddingBottom: "200px"}} responsive>
                         <thead style={{ height: '80px' }}>
                             <tr style={{ height: '80px' }}>
                                 <th colSpan="11" className="h-100">

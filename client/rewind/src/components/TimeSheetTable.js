@@ -8,7 +8,7 @@ import TimesheetRow from './TimesheetRow';
 import { useDispatch, useSelector } from 'react-redux';
 import Tippy from '@tippyjs/react';
 import {
-    deleteCurrentTimesheet, resetTimesheet,
+    deleteCurrentTimesheet,
     saveCurrentTimesheet,
     submitCurrentTimesheet
 } from '../store/slices/timesheet';
@@ -73,15 +73,8 @@ export const TimesheetTable = () => {
     
     const errors = useSelector(state => state.timesheet.errors);
 
-
-
-
     React.useEffect(() => {
         dispatch(fetchAllProjects());
-        
-        return () => {
-            dispatch(resetTimesheet());
-        }
 
     }, [dispatch])
 

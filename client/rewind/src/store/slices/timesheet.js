@@ -416,7 +416,7 @@ export const checkIfExists = ({week, index}) => {
 
 export const resetExist = () => {
     return async (dispatch) => {
-        dispatch(actions.resetExist());
+        await dispatch(actions.resetExist());
     }
 }
 

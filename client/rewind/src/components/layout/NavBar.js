@@ -43,7 +43,7 @@ export const NavBar = () => {
                     <Navbar.Brand href="#home">
                         <Link to={"/"} style={{ textDecoration: "none", color: "white" }} onClick={handleSelect}>
                             <i style={{ color: "cornflowerblue", display: "inline-block" }}
-                                className="fa mt-1 fa-history"></i>
+                                className="fa mt-1 fa-history"/>
                             <Title style={{ display: "inline-block" }}>REWIND</Title>
                         </Link>
                     </Navbar.Brand>

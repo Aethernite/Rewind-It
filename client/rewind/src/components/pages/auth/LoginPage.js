@@ -127,7 +127,7 @@ const LoginPage = () => {
                     {/*</FormGroup>*/}
                     <div className="col-md-12 text-center ">
                         <a href="# " onClick={handleSubmit} class="btn-flip mb-3" data-back="Login" data-front="Login" style={{ textDecoration: 'none', display: isLoading ? "none" : "" }}> </a>
-                        <button ref={submit} form="myform" type="submit" style={{ display: 'none' }}></button>
+                        <button ref={submit} form="myform" type="submit" style={{ display: 'none' }}/>
                         {isLoading && <Spinner animation="border" />}
                     </div>
                     <div className="form-group">
