@@ -2,7 +2,6 @@
   "name": "timesheet-application",
   "version": "0.1.0",
   "private": true,
-  "proxy": "http://localhost:8080",
   "dependencies": {
     "@fortawesome/fontawesome-free": "^5.15.0",
     "@fortawesome/fontawesome-svg-core": "^1.2.31",
@@ -56,5 +55,11 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
+  },
+  "proxy": {
+    "/api": {
+      "target": "http://localhost:8080",
+      "ws": true
+    }
   }
 }
