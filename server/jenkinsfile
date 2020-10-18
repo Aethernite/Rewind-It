@@ -9,16 +9,9 @@ pipeline {
                 }
             }
         }
-        stage('Test') {
-            steps {
-			    dir("server") {
-                  sh 'mvn test'
-                }
-            }
-        }
         stage('Deliver') {
             steps {
-                sh './server/jenkins/scripts/deliver.sh'
+                sh './server/Jenkins/scripts/deliver.sh'
             }
         }
     }
