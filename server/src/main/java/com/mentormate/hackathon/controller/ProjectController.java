@@ -24,7 +24,7 @@ import java.util.List;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/v1/projects")
-@CrossOrigin(origins = {"http://localhost:3000","http://80.208.228.216","http://rewind-it.eu","https://rewind-it.eu","http://www.rewind-it.eu"})
+@CrossOrigin(origins = {"http://localhost:3000","http://localhost:8080","http://80.208.228.216","http://rewind-it.eu","https://rewind-it.eu","http://www.rewind-it.eu","https://www.rewind-it.eu"})
 public class ProjectController {
 
     private final ProjectService projectService;

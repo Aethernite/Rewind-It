@@ -37,5 +37,5 @@ public interface TimesheetRepository extends JpaRepository<Timesheet, Long> {
      * @param fromDate from date of {@link Timesheet}
      * @return all {@link Timesheet}s with same from date
      */
-    List<Timesheet> findTimesheetByFromDate(LocalDate fromDate);
+    List<Timesheet> findOneTimesheetByFromDateAndUser(LocalDate fromDate, User user);
 }

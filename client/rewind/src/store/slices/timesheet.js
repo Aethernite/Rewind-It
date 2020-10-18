@@ -99,10 +99,10 @@ const { reducer: timesheetReducer, actions } = createSlice({
             state.creationError = action.payload;
         },
         deleteActivityStart: (state) => {
-            state.isFetching = true;
+            state.isDeleting = true;
         },
         deleteActivitySuccess: (state, action) => {
-            state.isFetching = false;
+            state.isDeleting = false;
             // state.timesheet.activities
             state.timesheet.activities = state.timesheet.activities.filter(activity => activity.id !== action.payload);
 
@@ -112,7 +112,7 @@ const { reducer: timesheetReducer, actions } = createSlice({
             state.creationError = null;
         },
         deleteActivityFailure: (state, action) => {
-            state.isFetching = false;
+            state.isDeleting = false;
             state.creationError = action.payload;
         },
         saveProjectStart: (state) => {
@@ -413,14 +413,6 @@ export const checkIfExists = ({week, index}) => {
         dispatch(actions.checkIfExists({exists:res.timesheetExist, index: index}));
     }
 }
-
-export const resetExist = () => {
-    return async (dispatch) => {
-        dispatch(actions.resetExist());
-    }
-}
-
-
 
 export const resetTimesheet = actions.reset;
 

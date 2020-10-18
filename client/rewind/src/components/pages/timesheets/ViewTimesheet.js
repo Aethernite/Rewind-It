@@ -8,14 +8,14 @@ import {
     deleteCurrentTimesheet, fetchTimesheet,
     saveCurrentTimesheet,
     submitCurrentTimesheet,
-    resetTimesheet
 } from "../../../store/slices/timesheet";
 import styled from "styled-components";
 import TimesheetRow from "../../TimesheetRow";
 import {fetchUserTimesheets, resetTimesheets} from "../../../store/slices/timesheets";
 import Tippy from '@tippyjs/react';
+import {Table as TableB} from "react-bootstrap"
 
-const Table = styled.table`
+const Table = styled(TableB)`
 border: 1px solid #2e2e2e;
 border-bottom: none;
 border-right: none;
@@ -71,17 +71,19 @@ export const ViewTimesheet = ({ view }) => {
 
     const timesheet = useSelector(state => state?.timesheet?.timesheet);
     const timesheetHours = useSelector(state => state?.timesheet);
+    const isFetching = useSelector(state => state.timesheet.isFetching);
     const history = useHistory();
     const errors = useSelector(state => state.timesheet.errors);
 
     React.useEffect(() => {
-        if (id !== null) {
-            dispatch(fetchTimesheet({ id }));
-        }
+
+            async function fetchTimesheetById() {
+                await dispatch(fetchTimesheet({ id }));
+            }
+            fetchTimesheetById().then();
 
         return () => {
             dispatch(resetTimesheets());
-            dispatch (resetTimesheet());
         }
     }, [dispatch, id])
 
@@ -119,18 +121,18 @@ export const ViewTimesheet = ({ view }) => {
         });
     }
 
-    if (timesheet) {
+    if (!isFetching) {
         return (
             <Container className="mt-5">
                 <Col className="d-flex justify-content-center">
-                    <Table className="table" style={{ width: '1200px' }}>
+                    <Table style={{marginBottom: "200px", width: '1200px'}}>
                         <thead style={{ height: '80px' }}>
                             <tr style={{ height: '80px' }}>
                                 <th colSpan="11" className="h-100">
                                     <span
                                         style={{ verticalAlign: 'top' }}>Timesheet for {moment(timesheet?.from).format('DD/MM/YYYY')} - {moment(timesheet?.to).format('DD/MM/YYYY')}</span>
                                         <div className="float-right">
-                                    {timesheet.statusType === "OPEN" && (
+                                    {timesheet?.statusType === "OPEN" && (
                                      <Tippy content={"Deletes the timesheet."} arrow={true} placement='top' theme={"dark"} style={{ display: "inline-block" }}>
                                      <Icon className="far fa-trash-alt fa-2x icon-delete" onClick={() => setModalShow(true)}></Icon>
                                     </Tippy>)}
@@ -146,7 +148,7 @@ export const ViewTimesheet = ({ view }) => {
                                         <Modal.Body style={{ display: "flex", height: "100%", justifyContent: "center", alignItems: "center" }}>
                                             <h5 style={{ display: "flex", justifyContent: "center", alignItems: "center" }}>
                                                 <p style={{ justifyContent: "center", alignItems: "center", textAlign: 'center' }}>
-                                                    Are you sure you want to <br></br> delete the timesheet for week <br></br> {moment(timesheet.from).format("DD/MM/YYYY") + ' - ' + moment(timesheet.to).format("DD/MM/YYYY") + "?"}
+                                                    Are you sure you want to <br></br> delete the timesheet for week <br></br> {moment(timesheet?.from).format("DD/MM/YYYY") + ' - ' + moment(timesheet?.to).format("DD/MM/YYYY") + "?"}
                                                 </p>
                                             </h5>
                                         </Modal.Body>
@@ -163,7 +165,7 @@ export const ViewTimesheet = ({ view }) => {
                                         </Modal.Footer>
                                     </Modal>
 
-                                    {timesheet.statusType === "OPEN" &&
+                                    {timesheet?.statusType === "OPEN" &&
                                     <>
                                     <Tippy content={"Saves the timesheet."} arrow={true} placement='top' theme={"dark"} style={{ display: "inline-block" }}>
                                     <Icon className="far fa-save fa-2x icon-save" onClick={() => handleModal({modal: 'save'})}></Icon>
@@ -182,7 +184,7 @@ export const ViewTimesheet = ({ view }) => {
                                         <Modal.Body style={{ display: "flex", height: "100%", justifyContent: "center", alignItems: "center" }}>
                                             <h5 style={{ display: "flex", justifyContent: "center", alignItems: "center" }}>
                                                 <p style={{ justifyContent: "center", alignItems: "center", textAlign: 'center' }}>
-                                                    Are you sure you want to <br></br> save the timesheet for week <br></br> {moment(timesheet.from).format("DD/MM/YYYY") + ' - ' + moment(timesheet.to).format("DD/MM/YYYY") + "?"}
+                                                    Are you sure you want to <br></br> save the timesheet for week <br></br> {moment(timesheet?.from).format("DD/MM/YYYY") + ' - ' + moment(timesheet?.to).format("DD/MM/YYYY") + "?"}
                                                 </p>
                                             </h5>
                                         </Modal.Body>
@@ -220,7 +222,7 @@ export const ViewTimesheet = ({ view }) => {
                                         </Modal.Footer>
                                     </Modal>
 
-                                    {timesheet.statusType === "OPEN" &&
+                                    {timesheet?.statusType === "OPEN" &&
                                     <>
                                 
                                    <Tippy content={"Submits the timesheet."} arrow={true} placement='top' theme={"dark"} style={{ display: "inline-block" }}>
@@ -241,7 +243,7 @@ export const ViewTimesheet = ({ view }) => {
                                         <Modal.Body style={{ display: "flex", height: "100%", justifyContent: "center", alignItems: "center" }}>
                                             <h5 style={{ display: "flex", justifyContent: "center", alignItems: "center" }}>
                                                 <p style={{ justifyContent: "center", alignItems: "center", textAlign: 'center' }}>
-                                                    Are you sure you want to <br></br> save and submit the timesheet for week <br></br> {moment(timesheet.from).format("DD/MM/YYYY") + ' - ' + moment(timesheet.to).format("DD/MM/YYYY") + "?"}
+                                                    Are you sure you want to <br></br> save and submit the timesheet for week <br></br> {moment(timesheet?.from).format("DD/MM/YYYY") + ' - ' + moment(timesheet?.to).format("DD/MM/YYYY") + "?"}
                                                 </p>
                                             </h5>
                                         </Modal.Body>
@@ -258,7 +260,7 @@ export const ViewTimesheet = ({ view }) => {
                                         </Modal.Footer>
                                     </Modal>
 
-                                    <span>Status: {timesheet.statusType}</span>
+                                    <span>Status: {timesheet?.statusType}</span>
                                 </div>
                                 </th>
                             </tr>
@@ -292,7 +294,7 @@ export const ViewTimesheet = ({ view }) => {
                         </Thead>
                         <tbody className="text-center">
                             {timesheet?.activities.map((activity, index) => (
-                                <TimesheetRow key={activity.id} submitted={timesheet.statusType} index={index} activity={activity}></TimesheetRow>
+                                <TimesheetRow key={activity.id} submitted={timesheet?.statusType} index={index} activity={activity}></TimesheetRow>
                             ))
                             }
                             <tr>

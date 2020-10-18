@@ -24,8 +24,6 @@ export const NavBar = () => {
 
     const emailMatch = /([@][a-zA-Z]+[.][a-zA-Z]+)/;
 
-
-
     let userNameFromEmail = userEmail.replace(emailMatch, "");
 
     const handleSelect = (selectedKey) => {
@@ -43,7 +41,7 @@ export const NavBar = () => {
                     <Navbar.Brand href="#home">
                         <Link to={"/"} style={{ textDecoration: "none", color: "white" }} onClick={handleSelect}>
                             <i style={{ color: "cornflowerblue", display: "inline-block" }}
-                                className="fa mt-1 fa-history"></i>
+                                className="fa mt-1 fa-history"/>
                             <Title style={{ display: "inline-block" }}>REWIND</Title>
                         </Link>
                     </Navbar.Brand>
@@ -61,8 +59,8 @@ export const NavBar = () => {
                         </CustomNavLink>
                     </Nav>
                     <Navbar.Collapse className="justify-content-end">
-                        <Nav.Link className="text-center" style={{ textDecoration: 'none', color: '#2e2e2e' }}>
-                            <span style={{ color: "white" }}>Signed in as: {userNameFromEmail}</span>
+                        <Nav.Link className="text-center" style={{ cursor: "default", textDecoration: 'none', color: '#2e2e2e' }}>
+                            <span style={{ color: "lightgray" }}>Signed in as: <span style={{ color: "white" }}>{userNameFromEmail}</span></span>
                         </Nav.Link>
                         <Nav fill variant="tabs" className="ml-2" style={{ border: "none" }} activeKey={activeKey}
                             onSelect={handleSelect}>

@@ -4,8 +4,13 @@ import { checkIfExists } from "../../store/slices/timesheet";
 
 export const Week = ({ week, index }) => {
     const dispatch = useDispatch();
-    React.useEffect(() => {
-        dispatch(checkIfExists({week, index}));
+    React.useEffect( () => {
+        async function checkExists() {
+            await dispatch(checkIfExists({week, index}));
+        }
+
+        checkExists();
+
     },[dispatch, week, index]);
 
     const exists = useSelector(state => state.timesheet.exists[index]);

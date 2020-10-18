@@ -1,6 +1,6 @@
 html, body {
     height: 100%;
-    overflow: hidden;
+    overflow-x: hidden;
 }
 body {
     /*background-image: radial-gradient( circle farthest-corner at 10% 20%,  rgba(69,86,102,1) 0%, rgba(34,34,34,1) 90% );*/
@@ -8,10 +8,10 @@ body {
     background-image: radial-gradient( circle farthest-corner at 12.3% 19.3%,  rgba(85,88,218,1) 0%, rgba(95,209,249,1) 100.2% );
     /*background-image: linear-gradient(to right, rgb(182, 244, 146), rgb(51, 139, 147));*/
     /*background: linear-gradient(25deg,#d64c7f,#ee4758 50%);*/
-    
     position: relative;
     margin: 0;
     padding: 0;
+    overflow-y: scroll;
 }
 
 .ocean {

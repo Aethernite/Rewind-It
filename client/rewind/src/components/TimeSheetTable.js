@@ -8,16 +8,17 @@ import TimesheetRow from './TimesheetRow';
 import { useDispatch, useSelector } from 'react-redux';
 import Tippy from '@tippyjs/react';
 import {
-    deleteCurrentTimesheet, resetTimesheet,
+    deleteCurrentTimesheet,
     saveCurrentTimesheet,
-    submitCurrentTimesheet
+    submitCurrentTimesheet,
 } from '../store/slices/timesheet';
 import { fetchAllProjects } from '../store/slices/projects';
 import moment from 'moment';
 import { useHistory } from "react-router-dom"
 import { fetchUserTimesheets } from '../store/slices/timesheets';
+import {Table as TableB} from "react-bootstrap"
 
-const Table = styled.table`
+const Table = styled(TableB)`
 border: 1px solid #2e2e2e;
 border-bottom: none;
 border-right: none;
@@ -25,7 +26,6 @@ border-left: none;
 font-family: "Roboto", sans-serif;
 background-color: #fff;
 `;
-
 
 const Icon = styled.i`
 transform: translateY(5px);
@@ -73,15 +73,8 @@ export const TimesheetTable = () => {
     
     const errors = useSelector(state => state.timesheet.errors);
 
-
-
-
     React.useEffect(() => {
         dispatch(fetchAllProjects());
-        
-        return () => {
-            dispatch(resetTimesheet());
-        }
 
     }, [dispatch])
 
@@ -123,7 +116,7 @@ export const TimesheetTable = () => {
     return (
         <Container className="mt-5">
             <Col className="d-flex justify-content-center">
-                <Table className="table" style={{ width: '1200px' }}>
+                <Table style={{marginBottom: "200px", width: '1200px'}}>
                     <thead style={{ height: '80px' }}>
                         <tr style={{ height: '80px' }}>
                             <th colSpan="11" className="h-100">

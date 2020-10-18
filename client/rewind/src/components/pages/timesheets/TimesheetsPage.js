@@ -8,7 +8,7 @@ import Moment from 'react-moment';
 import ReactPaginate from 'react-paginate';
 import moment from 'moment';
 import { useHistory } from "react-router-dom";
-import { fetchTimesheet } from "../../../store/slices/timesheet";
+import {fetchTimesheet} from "../../../store/slices/timesheet";
 import { Modal } from 'react-bootstrap';
 import { deleteTimesheet } from '../../../store/slices/timesheets';
 
@@ -121,7 +121,7 @@ export const TimesheetsPage = () => {
                             </div>
                         </Modal.Footer>
                     </Modal>
-                    <Table className="table" style={{width: '1200px'}}>
+                    <Table className="table" responsive>
                         <thead style={{height: '80px'}}>
                         <tr style={{height: '80px'}}>
                             <th colSpan="11" className="h-100">
@@ -142,7 +142,7 @@ export const TimesheetsPage = () => {
                         {timesheets && timesheets?.map(timesheet => (
                             <tr key={timesheet.id}>
                                 <td>
-                                    <div classname="mt-2">
+                                    <div className="mt-2">
                                         <span>Week <Moment format={"DD/MM/YYYY"}>{timesheet?.from}</Moment> - <Moment
                                             format={"DD/MM/YYYY"}>{timesheet?.to}</Moment></span>
                                     </div>

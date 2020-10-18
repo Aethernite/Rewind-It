@@ -4,7 +4,7 @@ import '../css/Animation.css';
 const Background = () => {
 
     return (
-        <div className="ocean">
+        <div style={{position: "fixed"}} className="ocean">
             <div className="wave" />
             <div className="wave" />
             <div className="wave" />

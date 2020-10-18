@@ -7,6 +7,7 @@ import com.mentormate.hackathon.persistence.entity.Timesheet;
 import com.mentormate.hackathon.persistence.entity.User;
 import com.mentormate.hackathon.persistence.repository.ActivityRepository;
 import com.mentormate.hackathon.persistence.repository.TimesheetRepository;
+import com.mentormate.hackathon.persistence.repository.UserRepository;
 import com.mentormate.hackathon.service.dto.request.CreateTimesheetRequestDTO;
 import com.mentormate.hackathon.service.dto.request.TimesheetUpdateRequestDTO;
 import com.mentormate.hackathon.service.dto.response.TimesheetExistResponseDTO;
@@ -40,6 +41,7 @@ public class TimesheetService {
     private final ModelMapper modelMapper;
     private final UserService userService;
     private final ActivityRepository activityRepository;
+    private final UserRepository userRepository;
 
     /**
      * Create new {@link Timesheet} in our application
@@ -198,7 +200,8 @@ public class TimesheetService {
     public TimesheetExistResponseDTO checkIfTimesheetExistsByFromDate(CreateTimesheetRequestDTO createTimesheetRequestDTO, String userEmail) {
         log.info("Fetch timesheet by from date");
         userService.checkIfUserExist(userEmail);
-        boolean isTimesheetExist = !timesheetRepository.findTimesheetByFromDate(createTimesheetRequestDTO.getFromDate()).isEmpty();
+        User user = userRepository.findByEmail(userEmail).orElse(null);
+        boolean isTimesheetExist = !timesheetRepository.findOneTimesheetByFromDateAndUser(createTimesheetRequestDTO.getFromDate(), user).isEmpty();
         return new TimesheetExistResponseDTO(isTimesheetExist);
     }
 
