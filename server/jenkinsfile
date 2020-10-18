@@ -2,6 +2,11 @@ pipeline {
     agent any
       
     stages {
+	    stage('Initialize'){
+	        steps{
+	            sh 'cd server'
+	        }
+	    }
         stage('Build') {
             steps {
                 sh 'mvn -B -DskipTests clean package'
