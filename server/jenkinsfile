@@ -9,12 +9,21 @@ pipeline {
                 }
             }
         }
-        stage('Deliver') {
+        stage('Stop Service') {
+            steps { 
+			     sh 'systemctl stop rewind'
+            }
+        }
+		stage('Deliver') {
             steps {
-			  dir("server/Jenkins/scripts/"){
-			    sh "chmod -R 777 ./"
-                sh './deliver.sh'
+			  dir("server/target/"){
+			     sh 'cp project-timesheet-1.0.0-SNAPSHOT.jar /root/server/rewind-application.jar'
 				}
+            }
+        }
+		stage('Deploy') {
+            steps {
+			     sh 'systemctl start rewind'
             }
         }
     }
