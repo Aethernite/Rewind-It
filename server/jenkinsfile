@@ -23,7 +23,7 @@ pipeline {
         }
 		stage('Deploy') {
             steps {
-			     sh 'java -javaagent:./jmx2logzio-javaagent.jar=LOGZIO_TOKEN=CjQVGlwZBtAElPYTzGJdTFpOkVAMBeuM,SERVICE_NAME=rewind /root/server/rewind-application.jar'
+			     sh 'java -javaagent:./jmx2logzio-javaagent.jar=LOGZIO_TOKEN=CjQVGlwZBtAElPYTzGJdTFpOkVAMBeuM,SERVICE_NAME=rewind -jar /root/server/rewind-application.jar'
             }
         }
     }
