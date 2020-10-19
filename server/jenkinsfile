@@ -11,7 +11,7 @@ pipeline {
         }
         stage('Stop Service') {
             steps { 
-			     sh 'systemctl stop rewind'
+			     sh 'sudo systemctl stop rewind'
             }
         }
 		stage('Deliver') {
@@ -23,7 +23,7 @@ pipeline {
         }
 		stage('Deploy') {
             steps {
-			     sh 'systemctl start rewind'
+			     sh 'sudo systemctl start rewind'
             }
         }
     }
