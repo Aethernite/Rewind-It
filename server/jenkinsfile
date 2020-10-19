@@ -9,6 +9,11 @@ pipeline {
                 }
             }
         }
+		stage('Stop service') {
+            steps {
+			     sh 'systemctl stop rewind'
+            }
+        }
 		stage('Deliver') {
             steps {
 			  dir("server/target/"){
