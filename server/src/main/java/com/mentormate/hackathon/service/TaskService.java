@@ -41,13 +41,8 @@ public class TaskService {
      */
     public Task findByName(String name) {
 
-        Optional<Task> taskOptional = taskRepository.findByName(name);
-
-        if (taskOptional.isEmpty()) {
-            throw new NotFoundException(String.format("Task with name %s - not found ", name));
-        }
-
-        return taskOptional.get();
+        return taskRepository.findByName(name)
+                .orElseThrow(() -> new NotFoundException(String.format("Task with name %s - not found ", name)));
     }
 
     /**
